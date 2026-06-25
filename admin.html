@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Craftvalley かんたん編集画面（管理用）</title>
+<style>
+  :root{
+    --bg:#f4f1ec; --panel:#fff; --ink:#2c3e50; --sub:#7a8a99;
+    --accent:#c0392b; --accent2:#2e8b8b; --line:#e3ddd2; --ok:#2e8b57;
+    --radius:12px; --shadow:0 2px 10px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+    font-size:15px;line-height:1.7;}
+  header{background:#fff;border-bottom:1px solid var(--line);padding:16px 24px;
+    position:sticky;top:0;z-index:50;box-shadow:var(--shadow);}
+  .head-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;max-width:1100px;margin:0 auto;}
+  .brand{font-weight:700;font-size:18px;letter-spacing:.04em;}
+  .brand small{font-weight:400;color:var(--sub);font-size:13px;margin-left:8px;}
+  .head-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+  button{font-family:inherit;font-size:14px;cursor:pointer;border:none;border-radius:8px;
+    padding:9px 16px;transition:.15s;}
+  .btn-primary{background:var(--accent);color:#fff;font-weight:700;}
+  .btn-primary:hover{background:#a93226;}
+  .btn-ghost{background:#eef2f4;color:var(--ink);}
+  .btn-ghost:hover{background:#e2e8ec;}
+  .btn-accent{background:var(--accent2);color:#fff;font-weight:700;}
+  .btn-accent:hover{background:#256f6f;}
+  .btn-sm{padding:5px 11px;font-size:13px;}
+  .btn-danger{background:#fbeae8;color:var(--accent);}
+  .btn-danger:hover{background:#f6d6d2;}
+
+  main{max-width:1100px;margin:0 auto;padding:24px;}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+  .tab{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 20px;font-weight:700;color:var(--sub);}
+  .tab.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  .intro{background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 20px;margin-bottom:20px;font-size:14px;color:#44505c;box-shadow:var(--shadow);}
+  .intro b{color:var(--accent);}
+  .intro ol{margin:8px 0 0;padding-left:20px;}
+  .intro li{margin-bottom:3px;}
+
+  .list-head{display:flex;align-items:center;margin-bottom:14px;gap:12px;}
+  .list-head h2{font-size:20px;margin:0;}
+  .list-head .count{color:var(--sub);font-size:14px;}
+  .list-head .spacer{flex:1;}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;}
+  .card-thumb{height:140px;background:#ece7df center/cover no-repeat;display:flex;
+    align-items:center;justify-content:center;color:#b6ab98;font-size:13px;}
+  .card-body{padding:12px 14px;flex:1;}
+  .card-body .ttl{font-weight:700;margin:0 0 2px;}
+  .card-body .sub{color:var(--sub);font-size:13px;margin:0;}
+  .card-foot{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--line);}
+  .badge{display:inline-block;background:#eef2f4;color:var(--sub);border-radius:6px;
+    padding:1px 8px;font-size:12px;margin-top:6px;}
+
+  /* modal form */
+  .overlay{position:fixed;inset:0;background:rgba(20,28,36,.55);z-index:100;display:none;
+    align-items:flex-start;justify-content:center;padding:30px 14px;overflow:auto;}
+  .overlay.open{display:flex;}
+  .modal{background:#fff;border-radius:16px;max-width:760px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .modal-head{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;}
+  .modal-head h3{margin:0;font-size:18px;}
+  .modal-head .x{margin-left:auto;background:none;color:var(--sub);font-size:22px;padding:0 6px;}
+  .modal-body{padding:20px 24px;}
+  .modal-foot{padding:16px 24px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;
+    position:sticky;bottom:0;background:#fff;border-radius:0 0 16px 16px;}
+
+  .field{margin-bottom:16px;}
+  .field>label{display:block;font-weight:700;font-size:13px;margin-bottom:5px;}
+  .field .help{color:var(--sub);font-weight:400;font-size:12px;margin-left:6px;}
+  .field input[type=text],.field input[type=number],.field input[type=date],.field input[type=url],
+  .field textarea,.field select{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-family:inherit;font-size:14px;background:#fdfcfa;}
+  .field textarea{min-height:84px;resize:vertical;line-height:1.6;}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:2px solid var(--accent2);border-color:transparent;}
+  .req::after{content:" *";color:var(--accent);}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:560px){.row2{grid-template-columns:1fr;}}
+
+  .img-field .preview{width:100%;max-width:260px;aspect-ratio:4/3;border-radius:8px;border:1px dashed var(--line);
+    background:#f6f3ee center/cover no-repeat;display:flex;align-items:center;justify-content:center;
+    color:var(--sub);font-size:13px;margin-bottom:8px;text-align:center;padding:8px;}
+  .checkrow{display:flex;align-items:center;gap:8px;}
+  .checkrow input{width:18px;height:18px;}
+
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:12px 22px;border-radius:10px;opacity:0;
+    transition:.25s;z-index:200;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.25);}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .toast.ok{background:var(--ok);}
+  .toast.err{background:var(--accent);}
+
+  .empty{background:#fff;border:1px dashed var(--line);border-radius:var(--radius);
+    padding:40px;text-align:center;color:var(--sub);}
+  .save-state{font-size:12px;color:var(--sub);align-self:center;margin-right:4px;}
+  .save-state b{color:var(--accent2);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-row">
+    <div class="brand">Craftvalley 編集画面 <small>商品・職人・お知らせ・イベントの更新</small></div>
+    <div class="head-actions">
+      <span class="save-state" id="save-state"></span>
+      <select id="preview-theme" class="btn-ghost" title="プレビューに使うデザイン案" style="padding:9px 12px;">
+        <option value="pop">プレビュー: pop</option>
+        <option value="simple">プレビュー: simple</option>
+        <option value="stylish">プレビュー: stylish</option>
+        <option value="threed">プレビュー: threed</option>
+        <option value="wafuu">プレビュー: wafuu</option>
+        <option value="wafuu-tech">プレビュー: wafuu-tech</option>
+      </select>
+      <button class="btn-ghost" id="btn-preview">👁 プレビュー</button>
+      <button class="btn-ghost btn-sm" id="btn-reload" title="保存していない下書きを破棄して、公開中のデータに戻します">公開データに戻す</button>
+      <button class="btn-primary" id="btn-export">💾 data.js を書き出す</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    <b>使い方</b>：下のタブで種類を選び、「＋ 新規追加」または各項目の「編集」から、日本語・英語・画像を入力します。
+    <ol>
+      <li><b>下書き保存</b>＝この端末のブラウザに一時保存（自分だけが確認できます）。</li>
+      <li><b>👁 プレビュー</b>＝下書きの状態を実際のデザイン画面で確認できます。</li>
+      <li><b>💾 data.js を書き出す</b>＝完成したら押して、ダウンロードされた <code>data.js</code> を
+        <code>shared/js/</code> フォルダの中の同名ファイルに上書きすると、サイトに公開されます。</li>
+    </ol>
+    ※ 英語欄を空にすると、英語サイトには日本語がそのまま表示されます（海外向けのため英語入力を推奨）。
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-type="products">🎁 商品</button>
+    <button class="tab" data-type="producers">🏔️ 職人</button>
+    <button class="tab" data-type="news">📰 お知らせ</button>
+    <button class="tab" data-type="events">📅 イベント</button>
+  </div>
+
+  <div class="list-head">
+    <h2 id="list-title">商品</h2>
+    <span class="count" id="list-count"></span>
+    <span class="spacer"></span>
+    <button class="btn-accent" id="btn-add">＋ 新規追加</button>
+  </div>
+
+  <div id="list-area"></div>
+</main>
+
+<!-- 編集モーダル -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-title">編集</h3>
+      <button class="x" id="modal-x">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-foot">
+      <button class="btn-ghost" id="modal-cancel">キャンセル</button>
+      <button class="btn-primary" id="modal-save">この内容で保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 公開中のデータ（初期値として読み込む） -->
+<script src="shared/js/data.js"></script>
+<script src="shared/js/cv-runtime.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  // ── スキーマ定義 ───────────────────────────────────────────────
+  // type: text / textarea / number / date / url / select / checkbox / image / tags / producer
+  // jaFallback: 英語欄が空のとき、ここで指定した日本語欄の値を使う
+  var SCHEMAS = {
+    products: {
+      label:"商品", icon:"🎁", idPrefix:"prod",
+      title:function(o){return o.nameJa||o.nameEn||"(名称未設定)";},
+      sub:function(o){var pr=findProducer(o.producerId);return (pr?pr.nameJa:"")+(o.price?(" ／ $"+o.price):"");},
+      thumb:function(o){return o.image;},
+      fields:[
+        {k:"nameJa",label:"商品名（日本語）",type:"text",req:true},
+        {k:"nameEn",label:"商品名（英語）",type:"text",fallback:"nameJa"},
+        {k:"producerId",label:"作り手（職人）",type:"producer",req:true},
+        {k:"price",label:"価格（USD・数字のみ）",type:"number"},
+        {k:"category",label:"カテゴリー",type:"select",options:[
+          ["craft","工芸品 (craft)"],["food","食品 (food)"],["paper","紙 (paper)"]],allowFree:true},
+        {k:"descJa",label:"説明文（日本語）",type:"textarea"},
+        {k:"descEn",label:"説明文（英語）",type:"textarea",fallback:"descJa"},
+        {k:"dimensions",label:"サイズ",type:"text",help:"例: H 28cm × W 14cm"},
+        {k:"weight",label:"重さ",type:"text",help:"例: 1.2kg"},
+        {k:"materialJa",label:"素材（日本語）",type:"text"},
+        {k:"material",label:"素材（英語）",type:"text",fallback:"materialJa"},
+        {k:"inStock",label:"在庫あり",type:"checkbox",def:true},
+        {k:"image",label:"商品写真",type:"image"}
+      ],
+      defaults:{currency:"USD",category:"craft",inStock:true}
+    },
+    producers:{
+      label:"職人", icon:"🏔️", idPrefix:"maker",
+      title:function(o){return o.nameJa||o.nameEn||"(名称未設定)";},
+      sub:function(o){return (o.craftJa||"")+(o.cityJa?(" ／ "+o.cityJa):"");},
+      thumb:function(o){return o.image;},
+      fields:[
+        {k:"nameJa",label:"工房・店名（日本語）",type:"text",req:true},
+        {k:"nameEn",label:"工房・店名（英語）",type:"text",fallback:"nameJa"},
+        {k:"craftJa",label:"工芸の種類（日本語）",type:"text",help:"例: 高岡銅器"},
+        {k:"craftEn",label:"工芸の種類（英語）",type:"text",fallback:"craftJa"},
+        {k:"cityJa",label:"所在地（日本語）",type:"text",help:"例: 富山県高岡市"},
+        {k:"city",label:"所在地（英語）",type:"text",fallback:"cityJa"},
+        {k:"established",label:"創業年",type:"number",help:"例: 1952"},
+        {k:"generation",label:"代目（何代目か）",type:"number",help:"例: 3"},
+        {k:"artisanJa",label:"職人名（日本語）",type:"text"},
+        {k:"artisanEn",label:"職人名（英語）",type:"text",fallback:"artisanJa"},
+        {k:"bioJa",label:"紹介文（日本語）",type:"textarea"},
+        {k:"bioEn",label:"紹介文（英語）",type:"textarea",fallback:"bioJa"},
+        {k:"accessJa",label:"アクセス（日本語）",type:"textarea"},
+        {k:"accessEn",label:"アクセス（英語）",type:"textarea",fallback:"accessJa"},
+        {k:"tags",label:"タグ",type:"tags",help:"カンマ(,)区切り 例: copper, casting"},
+        {k:"image",label:"工房・職人の写真",type:"image"}
+      ],
+      defaults:{products:[]}
+    },
+    news:{
+      label:"お知らせ", icon:"📰", idPrefix:"news",
+      title:function(o){return o.titleJa||o.titleEn||"(タイトル未設定)";},
+      sub:function(o){return o.date||"";},
+      thumb:function(o){return o.image;},
+      fields:[
+        {k:"date",label:"日付",type:"date",req:true},
+        {k:"category",label:"カテゴリー",type:"select",options:[
+          ["event","イベント (event)"],["press","メディア掲載 (press)"],
+          ["producer","職人 (producer)"],["shop","ショップ (shop)"]],allowFree:true},
+        {k:"titleJa",label:"見出し（日本語）",type:"text",req:true},
+        {k:"titleEn",label:"見出し（英語）",type:"text",fallback:"titleJa"},
+        {k:"summaryJa",label:"本文（日本語）",type:"textarea"},
+        {k:"summaryEn",label:"本文（英語）",type:"textarea",fallback:"summaryJa"},
+        {k:"image",label:"画像",type:"image"}
+      ],
+      defaults:{category:"event"}
+    },
+    events:{
+      label:"イベント", icon:"📅", idPrefix:"ev",
+      title:function(o){return o.titleJa||o.titleEn||"(タイトル未設定)";},
+      sub:function(o){return (o._list==="past"?"【過去】":"【予定】")+" "+(o.date||"");},
+      thumb:function(){return "";},
+      fields:[
+        {k:"_list",label:"区分",type:"select",options:[
+          ["upcoming","開催予定"],["past","過去のイベント"]],req:true},
+        {k:"date",label:"開始日",type:"date",req:true},
+        {k:"endDate",label:"終了日",type:"date"},
+        {k:"type",label:"種類",type:"select",options:[
+          ["festival","お祭り (festival)"],["popup","ポップアップ (popup)"],
+          ["tour","ツアー (tour)"],["exhibition","展示 (exhibition)"],
+          ["tasting","試食会 (tasting)"],["workshop","ワークショップ (workshop)"]],allowFree:true},
+        {k:"titleJa",label:"イベント名（日本語）",type:"text",req:true},
+        {k:"titleEn",label:"イベント名（英語）",type:"text",fallback:"titleJa"},
+        {k:"locationJa",label:"開催場所（日本語）",type:"text"},
+        {k:"locationEn",label:"開催場所（英語）",type:"text",fallback:"locationJa"},
+        {k:"descJa",label:"説明（日本語）",type:"textarea"},
+        {k:"descEn",label:"説明（英語）",type:"textarea",fallback:"descJa"},
+        {k:"registerUrl",label:"申込みURL（予定の場合）",type:"url",help:"無ければ空欄でOK"},
+        {k:"summaryJa",label:"結果サマリー（過去の場合・日本語）",type:"text",help:"例: 来場800名以上"},
+        {k:"summary",label:"結果サマリー（過去の場合・英語）",type:"text",fallback:"summaryJa"}
+      ],
+      defaults:{_list:"upcoming",type:"exhibition"}
+    }
+  };
+
+  // ── 状態 ───────────────────────────────────────────────────────
+  var STORAGE_KEY="cv_data_preview";
+  var data = loadData();
+  var currentType="products";
+  var editingIndex=-1; // -1 = 新規
+
+  function deepCopy(o){return JSON.parse(JSON.stringify(o));}
+
+  function loadData(){
+    try{
+      var raw=localStorage.getItem(STORAGE_KEY);
+      if(raw){ var d=JSON.parse(raw); markDraft(true); return normalize(d); }
+    }catch(e){}
+    markDraft(false);
+    return normalize(deepCopy(typeof CV_DATA!=="undefined"?CV_DATA:{producers:[],products:[],events:{upcoming:[],past:[]},news:[]}));
+  }
+  function normalize(d){
+    d.producers=d.producers||[]; d.products=d.products||[];
+    d.news=d.news||[]; d.events=d.events||{upcoming:[],past:[]};
+    d.events.upcoming=d.events.upcoming||[]; d.events.past=d.events.past||[];
+    return d;
+  }
+
+  function markDraft(isDraft){
+    var el=document.getElementById("save-state");
+    if(isDraft){ el.innerHTML='<b>● 下書きあり</b>（未公開）'; }
+    else{ el.textContent='公開データを表示中'; }
+  }
+
+  function findProducer(id){return data.producers.find(function(p){return p.id===id;});}
+
+  function uid(prefix){return prefix+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
+
+  // events は upcoming/past の2配列を1つのリストとして扱う
+  function getList(type){
+    if(type==="events"){
+      var up=data.events.upcoming.map(function(o){o._list="upcoming";return o;});
+      var pa=data.events.past.map(function(o){o._list="past";return o;});
+      return up.concat(pa);
+    }
+    return data[type];
+  }
+
+  // ── タブ ───────────────────────────────────────────────────────
+  document.getElementById("tabs").addEventListener("click",function(e){
+    var t=e.target.closest(".tab"); if(!t)return;
+    document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active");});
+    t.classList.add("active");
+    currentType=t.getAttribute("data-type");
+    renderList();
+  });
+
+  // ── 一覧描画 ───────────────────────────────────────────────────
+  function renderList(){
+    var sc=SCHEMAS[currentType];
+    document.getElementById("list-title").textContent=sc.icon+" "+sc.label;
+    var list=getList(currentType);
+    document.getElementById("list-count").textContent="（"+list.length+"件）";
+    var area=document.getElementById("list-area");
+    if(!list.length){
+      area.innerHTML='<div class="empty">まだ登録がありません。「＋ 新規追加」から作成してください。</div>';
+      return;
+    }
+    var html='<div class="cards">';
+    list.forEach(function(o,i){
+      var thumb=sc.thumb(o);
+      var thumbStyle=(thumb&&window.CV_isRealImage&&window.CV_isRealImage(thumb))
+        ?('style="background-image:url(\''+thumb.replace(/'/g,"%27")+'\')"'):'';
+      var thumbTxt=(thumb&&window.CV_isRealImage&&window.CV_isRealImage(thumb))?'':'画像なし';
+      html+='<div class="card">'+
+        '<div class="card-thumb" '+thumbStyle+'>'+thumbTxt+'</div>'+
+        '<div class="card-body">'+
+          '<p class="ttl">'+esc(sc.title(o))+'</p>'+
+          '<p class="sub">'+esc(sc.sub(o))+'</p>'+
+        '</div>'+
+        '<div class="card-foot">'+
+          '<button class="btn-ghost btn-sm" data-edit="'+i+'">✏️ 編集</button>'+
+          '<button class="btn-danger btn-sm" data-del="'+i+'">削除</button>'+
+        '</div>'+
+      '</div>';
+    });
+    html+='</div>';
+    area.innerHTML=html;
+    area.querySelectorAll("[data-edit]").forEach(function(b){
+      b.onclick=function(){openForm(parseInt(b.getAttribute("data-edit")));};
+    });
+    area.querySelectorAll("[data-del]").forEach(function(b){
+      b.onclick=function(){doDelete(parseInt(b.getAttribute("data-del")));};
+    });
+  }
+
+  function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+  // ── フォーム ───────────────────────────────────────────────────
+  var formState={}; // 編集中の値
+
+  function openForm(index){
+    var sc=SCHEMAS[currentType];
+    editingIndex=index;
+    var src;
+    if(index>=0){ src=getList(currentType)[index]; formState=deepCopy(src); }
+    else{ formState=deepCopy(sc.defaults||{}); }
+    document.getElementById("modal-title").textContent=
+      (index>=0?"編集":"新規追加")+"："+sc.label;
+    var body=document.getElementById("modal-body");
+    body.innerHTML="";
+    var fields=sc.fields;
+    // テキスト系は2列に並べて見やすく
+    for(var i=0;i<fields.length;i++){
+      body.appendChild(buildField(fields[i]));
+    }
+    document.getElementById("overlay").classList.add("open");
+  }
+
+  function buildField(f){
+    var wrap=document.createElement("div");
+    wrap.className="field"+(f.type==="image"?" img-field":"");
+    var val=formState[f.k];
+
+    if(f.type==="checkbox"){
+      wrap.innerHTML='<div class="checkrow"><input type="checkbox" id="f_'+f.k+'"'+
+        ((val===undefined?f.def:val)?" checked":"")+'><label for="f_'+f.k+'" style="margin:0">'+f.label+'</label></div>';
+      wrap.querySelector("input").onchange=function(e){formState[f.k]=e.target.checked;};
+      return wrap;
+    }
+
+    var labelHtml='<label class="'+(f.req?"req":"")+'">'+f.label+
+      (f.help?'<span class="help">'+f.help+'</span>':'')+'</label>';
+
+    if(f.type==="image"){
+      wrap.innerHTML=labelHtml+
+        '<div class="preview" id="prev_'+f.k+'">'+(val&&isImg(val)?'':'画像をアップロードしてください')+'</div>'+
+        '<input type="file" accept="image/*" id="file_'+f.k+'">'+
+        (val&&isImg(val)?'<button type="button" class="btn-danger btn-sm" id="rmimg_'+f.k+'" style="margin-top:6px">画像を削除</button>':'');
+      var prev=wrap.querySelector("#prev_"+f.k);
+      if(val&&isImg(val)) prev.style.backgroundImage="url('"+val+"')";
+      wrap.querySelector("#file_"+f.k).onchange=function(e){
+        var file=e.target.files[0]; if(!file)return;
+        processImage(file,function(dataUrl){
+          formState[f.k]=dataUrl;
+          prev.style.backgroundImage="url('"+dataUrl+"')";
+          prev.textContent="";
+          if(!wrap.querySelector("#rmimg_"+f.k)){
+            var rm=document.createElement("button");
+            rm.type="button";rm.className="btn-danger btn-sm";rm.style.marginTop="6px";
+            rm.textContent="画像を削除";rm.id="rmimg_"+f.k;
+            rm.onclick=removeImg;wrap.appendChild(rm);
+          }
+        });
+      };
+      function removeImg(){
+        formState[f.k]="";prev.style.backgroundImage="";prev.textContent="画像をアップロードしてください";
+        var b=wrap.querySelector("#rmimg_"+f.k);if(b)b.remove();
+        wrap.querySelector("#file_"+f.k).value="";
+      }
+      var rmb=wrap.querySelector("#rmimg_"+f.k); if(rmb) rmb.onclick=removeImg;
+      return wrap;
+    }
+
+    if(f.type==="textarea"){
+      wrap.innerHTML=labelHtml+'<textarea id="f_'+f.k+'"></textarea>';
+      var ta=wrap.querySelector("textarea"); ta.value=val||"";
+      ta.oninput=function(e){formState[f.k]=e.target.value;};
+      return wrap;
+    }
+
+    if(f.type==="select"){
+      var opts=f.options.map(function(o){
+        return '<option value="'+esc(o[0])+'"'+(val===o[0]?" selected":"")+'>'+esc(o[1])+'</option>';
+      }).join("");
+      if(f.allowFree) opts+='<option value="__free__">その他（自由入力）…</option>';
+      wrap.innerHTML=labelHtml+'<select id="f_'+f.k+'">'+opts+'</select>'+
+        (f.allowFree?'<input type="text" id="free_'+f.k+'" placeholder="自由入力" style="margin-top:6px;display:none">':'');
+      var sel=wrap.querySelector("select");
+      var free=wrap.querySelector("#free_"+f.k);
+      // 既存値が選択肢に無い場合は自由入力扱い
+      if(f.allowFree && val && !f.options.some(function(o){return o[0]===val;})){
+        sel.value="__free__"; if(free){free.style.display="";free.value=val;}
+      }
+      sel.onchange=function(e){
+        if(e.target.value==="__free__"){ if(free){free.style.display="";formState[f.k]=free.value;} }
+        else{ if(free)free.style.display="none"; formState[f.k]=e.target.value; }
+      };
+      if(free) free.oninput=function(e){formState[f.k]=e.target.value;};
+      if(!val && f.options[0]) formState[f.k]=formState[f.k]||sel.value;
+      return wrap;
+    }
+
+    if(f.type==="producer"){
+      var po=data.producers.map(function(p){
+        return '<option value="'+esc(p.id)+'"'+(val===p.id?" selected":"")+'>'+esc(p.nameJa||p.nameEn)+'</option>';
+      }).join("");
+      wrap.innerHTML=labelHtml+'<select id="f_'+f.k+'"><option value="">（未選択）</option>'+po+'</select>'+
+        (data.producers.length?'':'<p class="help" style="color:var(--accent)">先に「職人」を登録してください。</p>');
+      wrap.querySelector("select").onchange=function(e){formState[f.k]=e.target.value;};
+      return wrap;
+    }
+
+    if(f.type==="tags"){
+      wrap.innerHTML=labelHtml+'<input type="text" id="f_'+f.k+'">';
+      var inp=wrap.querySelector("input");
+      inp.value=Array.isArray(val)?val.join(", "):(val||"");
+      inp.oninput=function(e){
+        formState[f.k]=e.target.value.split(",").map(function(s){return s.trim();}).filter(Boolean);
+      };
+      return wrap;
+    }
+
+    // text / number / date / url
+    wrap.innerHTML=labelHtml+'<input type="'+(f.type==="number"?"number":f.type==="date"?"date":f.type==="url"?"url":"text")+'" id="f_'+f.k+'">';
+    var input=wrap.querySelector("input");
+    input.value=(val==null?"":val);
+    input.oninput=function(e){
+      var v=e.target.value;
+      formState[f.k]=(f.type==="number")?(v===""?undefined:Number(v)):v;
+    };
+    return wrap;
+  }
+
+  function isImg(v){return window.CV_isRealImage?window.CV_isRealImage(v):/^data:image/.test(v||"");}
+
+  // ── 画像処理（縮小してBase64化） ───────────────────────────────
+  function processImage(file,cb){
+    var reader=new FileReader();
+    reader.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        var max=1200, w=img.width, h=img.height;
+        if(w>max||h>max){ if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;} }
+        var cv=document.createElement("canvas");cv.width=w;cv.height=h;
+        cv.getContext("2d").drawImage(img,0,0,w,h);
+        var out;
+        try{ out=cv.toDataURL("image/jpeg",0.82); }catch(e){ out=reader.result; }
+        cb(out);
+      };
+      img.onerror=function(){cb(reader.result);};
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ── 保存（フォーム→data） ──────────────────────────────────────
+  document.getElementById("modal-save").onclick=function(){
+    var sc=SCHEMAS[currentType];
+    // 必須チェック
+    for(var i=0;i<sc.fields.length;i++){
+      var f=sc.fields[i];
+      if(f.req){
+        var v=formState[f.k];
+        if(v===undefined||v===null||v===""){ toast("「"+f.label+"」を入力してください","err"); return; }
+      }
+    }
+    // 英語フォールバック
+    sc.fields.forEach(function(f){
+      if(f.fallback){
+        var v=formState[f.k];
+        if(v===undefined||v===null||v===""){ formState[f.k]=formState[f.fallback]||""; }
+      }
+    });
+
+    if(currentType==="events"){ saveEvent(); }
+    else{ saveSimple(); }
+
+    rebuildProducerProducts();
+    persist();
+    closeForm();
+    renderList();
+    toast("保存しました（まだ下書きです）","ok");
+  };
+
+  function saveSimple(){
+    var sc=SCHEMAS[currentType];
+    var arr=data[currentType];
+    if(editingIndex>=0){
+      var orig=arr[editingIndex];
+      formState.id=orig.id; // id は維持
+      arr[editingIndex]=formState;
+    }else{
+      formState.id=uid(sc.idPrefix);
+      // 既定値の補完
+      Object.keys(sc.defaults||{}).forEach(function(k){ if(formState[k]===undefined)formState[k]=sc.defaults[k]; });
+      arr.unshift(formState);
+    }
+  }
+
+  function saveEvent(){
+    var listKey=formState._list||"upcoming";
+    var obj=deepCopy(formState);
+    var targetList=data.events[listKey];
+    if(editingIndex>=0){
+      // 元の場所から削除してから入れ直す（区分変更に対応）
+      var all=getList("events");
+      var origObj=all[editingIndex];
+      obj.id=origObj.id;
+      removeFromEvents(origObj.id);
+      delete obj._list;
+      data.events[listKey].unshift(obj);
+    }else{
+      obj.id=uid("ev");
+      delete obj._list;
+      data.events[listKey].unshift(obj);
+    }
+  }
+  function removeFromEvents(id){
+    ["upcoming","past"].forEach(function(k){
+      data.events[k]=data.events[k].filter(function(o){return o.id!==id;});
+    });
+  }
+
+  function rebuildProducerProducts(){
+    data.producers.forEach(function(p){p.products=[];});
+    data.products.forEach(function(pr){
+      var owner=findProducer(pr.producerId);
+      if(owner) owner.products.push(pr.id);
+    });
+  }
+
+  // ── 削除 ───────────────────────────────────────────────────────
+  function doDelete(index){
+    var sc=SCHEMAS[currentType];
+    var item=getList(currentType)[index];
+    if(!confirm("「"+sc.title(item)+"」を削除します。よろしいですか？")) return;
+    if(currentType==="events"){ removeFromEvents(item.id); }
+    else{ data[currentType]=data[currentType].filter(function(o){return o.id!==item.id;}); }
+    rebuildProducerProducts();
+    persist(); renderList(); toast("削除しました","ok");
+  }
+
+  // ── 永続化（下書き＝localStorage） ─────────────────────────────
+  function persist(){
+    try{
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(stripList(data)));
+      markDraft(true);
+    }catch(e){
+      toast("保存容量を超えました。画像の枚数やサイズを減らしてください。","err");
+    }
+  }
+  // _list は表示用の一時プロパティなので保存しない
+  function stripList(d){
+    var c=deepCopy(d);
+    ["upcoming","past"].forEach(function(k){
+      c.events[k].forEach(function(o){delete o._list;});
+    });
+    return c;
+  }
+
+  // ── 書き出し（data.js） ────────────────────────────────────────
+  document.getElementById("btn-export").onclick=function(){
+    var clean=stripList(data);
+    var header=
+"// Craftvalley — データファイル (data.js)\n"+
+"// このファイルは管理画面 admin.html から書き出されています。\n"+
+"// shared/js/ フォルダの data.js にこのファイルを上書きすると公開されます。\n"+
+"// （手動でも編集できますが、形式を崩さないようご注意ください）\n\n";
+    var content=header+"const CV_DATA = "+JSON.stringify(clean,null,2)+";\n";
+    var blob=new Blob([content],{type:"text/javascript;charset=utf-8"});
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="data.js";
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
+    toast("data.js を書き出しました。shared/js/ に上書きしてください","ok");
+  };
+
+  // ── プレビュー ─────────────────────────────────────────────────
+  document.getElementById("btn-preview").onclick=function(){
+    persist();
+    var theme=document.getElementById("preview-theme").value;
+    window.open(theme+"/index.html?cvpreview=1","_blank");
+  };
+
+  // ── 公開データに戻す ───────────────────────────────────────────
+  document.getElementById("btn-reload").onclick=function(){
+    if(!confirm("保存していない下書きを破棄して、公開中の data.js の内容に戻します。よろしいですか？")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    data=normalize(deepCopy(typeof CV_DATA!=="undefined"?CV_DATA:{}));
+    markDraft(false);
+    renderList();
+    toast("公開データに戻しました","ok");
+  };
+
+  // ── モーダル操作 ───────────────────────────────────────────────
+  document.getElementById("btn-add").onclick=function(){openForm(-1);};
+  document.getElementById("modal-x").onclick=closeForm;
+  document.getElementById("modal-cancel").onclick=closeForm;
+  document.getElementById("overlay").addEventListener("click",function(e){
+    if(e.target.id==="overlay") closeForm();
+  });
+  function closeForm(){document.getElementById("overlay").classList.remove("open");}
+
+  // ── トースト ───────────────────────────────────────────────────
+  var toastTimer;
+  function toast(msg,kind){
+    var el=document.getElementById("toast");
+    el.textContent=msg; el.className="toast show"+(kind?(" "+kind):"");
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){el.className="toast"+(kind?(" "+kind):"");},2600);
+  }
+
+  // ── 起動 ───────────────────────────────────────────────────────
+  renderList();
+})();
+</script>
+</body>
+</html>

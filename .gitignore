@@ -1,0 +1,9 @@
+# ローカル開発用（プレビュー）設定 — GitHubには含めない
+.claude/
+
+# OS / エディタの一時ファイル
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+.vscode/
