@@ -3,13 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upcoming Events | 和風 — Craftvalley</title>
-  <meta name="description" content="Upcoming Craftvalley events — festivals, pop-up shops, artisan tours and exhibitions in Japan and overseas.">
+  <title>Social | 和風 — Craftvalley</title>
+  <meta name="description" content="Craftvalley on social media — posts from visitors and fans around the world. Share your moment with #Craftvalley.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* SNS grid — masonry-style columns */
+    .sns-grid { column-count: 2; column-gap: 24px; }
+    @media (max-width: 900px) { .sns-grid { column-count: 1; } }
+    .sns-item { break-inside: avoid; margin-bottom: 24px; }
+    .sns-item blockquote { margin: 0 auto !important; }
+    .sns-card {
+      background: #fff; border: 1px solid rgba(0,0,0,.08);
+      border-radius: 8px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    }
+    .sns-card .image-placeholder { aspect-ratio: 4/3; min-height: 200px; height: auto; border-radius: 0; }
+    .sns-card-body { padding: 16px 18px; }
+    .sns-card-platform { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--vermillion, #c0392b); margin-bottom: 6px; }
+    .sns-card-comment { font-size: 14px; line-height: 1.8; margin-bottom: 10px; }
+    .sns-card-date { font-size: 12px; opacity: .55; }
+    .sns-card a.sns-link { display: inline-block; margin-top: 8px; font-size: 12px; letter-spacing: .1em; }
+    .sns-hashtag-banner {
+      text-align: center; margin: 0 0 32px; padding: 18px 20px;
+      border: 1px dashed rgba(192,57,43,.45); border-radius: 8px;
+      font-size: 14px; letter-spacing: .06em;
+    }
+  </style>
 </head>
-<body data-page-type="events-upcoming">
+<body data-page-type="sns">
 
 <button class="sidebar-hamburger" id="sidebar-hamburger" aria-label="Menu">
   <span></span><span></span><span></span>
@@ -27,9 +50,9 @@
       <li><a href="about.html"><span class="nav-ja">概要</span><span class="nav-en">About</span></a></li>
       <li><a href="producers.html"><span class="nav-ja">職人</span><span class="nav-en">Artisans</span></a></li>
       <li><a href="products.html"><span class="nav-ja">商品</span><span class="nav-en">Shop</span></a></li>
-      <li><a href="events-upcoming.html" class="active"><span class="nav-ja">催事</span><span class="nav-en">Events</span></a></li>
+      <li><a href="events-upcoming.html"><span class="nav-ja">催事</span><span class="nav-en">Events</span></a></li>
       <li><a href="news.html"><span class="nav-ja">情報</span><span class="nav-en">News</span></a></li>
-      <li><a href="sns.html"><span class="nav-ja">交流</span><span class="nav-en">Social</span></a></li>
+      <li><a href="sns.html" class="active"><span class="nav-ja">交流</span><span class="nav-en">Social</span></a></li>
       <li><a href="contact.html"><span class="nav-ja">問合</span><span class="nav-en">Contact</span></a></li>
     </ul>
     <div class="sidebar-bottom">
@@ -39,35 +62,25 @@
 
   <div class="main-content">
 
-    <div class="page-hero" data-kanji="祭">
+    <div class="page-hero" data-kanji="繋">
       <div class="container">
-        <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Home</a><span>›</span><span data-i18n="nav.events">Events</span><span>›</span><span data-i18n="nav.eventsUpcoming">Upcoming Events</span></div>
-        <div class="section-label">Events — 催事</div>
-        <h1 data-i18n="events.upcomingHeading">Upcoming Events</h1>
+        <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Home</a><span>›</span><span data-i18n="nav.sns">Social</span></div>
+        <div class="section-label">Social — 交流</div>
+        <h1 data-i18n="sns.heading">Craftvalley on Social Media</h1>
       </div>
     </div>
 
-    <div class="events-page">
+    <div class="news-page">
       <div class="container">
 
-        <!-- Events sub-navigation -->
-        <nav class="subnav">
-          <a href="events-upcoming.html" class="active" data-i18n="nav.eventsUpcoming">Upcoming Events</a>
-          <a href="events-past.html" data-i18n="nav.eventsPast">Past Events</a>
-          <a href="calendar.html" data-i18n="nav.calendar">Calendar</a>
-        </nav>
+        <p style="margin-bottom:24px" data-i18n="sns.subheading">Posts from visitors and fans around the world.</p>
 
-        <div id="full-events-list">
-          <!-- Populated by JS via data-page-type="events-upcoming" -->
+        <div class="sns-hashtag-banner">
+          <span data-i18n="sns.hashtagLine">Share your Craftvalley moment with #Craftvalley</span>
         </div>
 
-        <div class="cta-block" style="margin-top:48px">
-          <div class="section-label">暦 — Calendar</div>
-          <h3 data-i18n="calendar.heading">Event Calendar</h3>
-          <div class="cta-actions">
-            <a href="calendar.html" class="btn-outline" data-i18n="ui.openCalendar">Open Calendar</a>
-          </div>
-        </div>
+        <!-- SNS posts — populated by JS -->
+        <div class="sns-grid" id="sns-grid"></div>
 
       </div>
     </div>

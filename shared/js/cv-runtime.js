@@ -91,6 +91,7 @@
         if (parsed.products) CV_DATA.products = parsed.products;
         if (parsed.events) CV_DATA.events = parsed.events;
         if (parsed.news) CV_DATA.news = parsed.news;
+        if (parsed.sns) CV_DATA.sns = parsed.sns;
         // 画面上にプレビュー中バナーを表示
         document.addEventListener("DOMContentLoaded", function () {
           var bar = document.createElement("div");
@@ -107,9 +108,110 @@
     /* プレビュー失敗は無視（通常表示にフォールバック） */
   }
 
+  // ── SNSまとめページ (#sns-grid) の描画 ──────────────────────────
+  // wafuu / simple 共通。X(Twitter)・Instagram は公式埋め込み、
+  // その他は画像＋コメントのカードで表示する。
+  function escHtml(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function snsT(key) {
+    try {
+      var lang = window.CV_LANG || "en";
+      return (T[lang] && T[lang].sns && T[lang].sns[key]) || key;
+    } catch (e) { return key; }
+  }
+
+  function loadScriptOnce(id, src, onload) {
+    if (document.getElementById(id)) { if (onload) onload(); return; }
+    var s = document.createElement("script");
+    s.id = id; s.async = true; s.src = src;
+    if (onload) s.onload = onload;
+    document.body.appendChild(s);
+  }
+
+  function populateSns() {
+    var grid = document.getElementById("sns-grid");
+    if (!grid || typeof CV_DATA === "undefined") return;
+    var posts = (CV_DATA.sns || []).slice().sort(function (a, b) {
+      return (b.date || "").localeCompare(a.date || "");
+    });
+    var lang = window.CV_LANG || "en";
+    grid.innerHTML = "";
+
+    if (!posts.length) {
+      grid.innerHTML = '<p style="opacity:.6;padding:24px 0">' + escHtml(snsT("empty")) + "</p>";
+      return;
+    }
+
+    var needTwitter = false, needInsta = false;
+    posts.forEach(function (p) {
+      var url = (p.url || "").trim();
+      var comment = lang === "ja" ? (p.commentJa || "") : (p.commentEn || p.commentJa || "");
+      var item = document.createElement("div");
+      item.className = "sns-item";
+
+      if (/^https?:\/\/(www\.)?(twitter\.com|x\.com)\//i.test(url)) {
+        // X (Twitter) 公式埋め込み — widgets.js は twitter.com 形式のURLを要求
+        var twUrl = url.replace(/^https?:\/\/(www\.)?x\.com\//i, "https://twitter.com/");
+        item.innerHTML = '<blockquote class="twitter-tweet" data-dnt="true"><a href="' +
+          escHtml(twUrl) + '"></a></blockquote>';
+        needTwitter = true;
+      } else if (/^https?:\/\/(www\.)?instagram\.com\//i.test(url)) {
+        // Instagram 公式埋め込み
+        item.innerHTML = '<blockquote class="instagram-media" data-instgrm-permalink="' +
+          escHtml(url) + '" data-instgrm-version="14" style="max-width:540px;width:100%"></blockquote>';
+        needInsta = true;
+      } else {
+        // その他 → カード表示（画像は cv-runtime が実画像に昇格）
+        var imgHtml = p.image
+          ? '<div class="image-placeholder"><span class="image-placeholder-label">📱</span>' +
+            '<div class="image-placeholder-note">' + escHtml(p.image) + "</div></div>"
+          : "";
+        item.innerHTML =
+          '<div class="sns-card">' + imgHtml +
+          '<div class="sns-card-body">' +
+          '<p class="sns-card-platform">Social</p>' +
+          (comment ? '<p class="sns-card-comment">' + escHtml(comment) + "</p>" : "") +
+          '<p class="sns-card-date">' + escHtml(p.date || "") + "</p>" +
+          (url ? '<a class="sns-link" href="' + escHtml(url) + '" target="_blank" rel="noopener">' +
+            escHtml(snsT("viewPost")) + " →</a>" : "") +
+          "</div></div>";
+      }
+      grid.appendChild(item);
+      // 画像プレースホルダーを実画像へ昇格
+      var ph = item.querySelector(".image-placeholder");
+      if (ph) upgradePlaceholder(ph);
+    });
+
+    if (needTwitter) {
+      loadScriptOnce("cv-twitter-wjs", "https://platform.twitter.com/widgets.js", function () {
+        if (window.twttr && window.twttr.widgets) window.twttr.widgets.load(grid);
+      });
+      if (window.twttr && window.twttr.widgets) window.twttr.widgets.load(grid);
+    }
+    if (needInsta) {
+      loadScriptOnce("cv-instagram-ejs", "https://www.instagram.com/embed.js", function () {
+        if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
+      });
+      if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
+    }
+  }
+
+  function startSns() {
+    populateSns();
+    document.addEventListener("cv-lang-change", populateSns);
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", startImageUpgrade);
+    document.addEventListener("DOMContentLoaded", function () {
+      startImageUpgrade();
+      startSns();
+    });
   } else {
     startImageUpgrade();
+    startSns();
   }
 })();

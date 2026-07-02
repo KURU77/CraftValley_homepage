@@ -111,12 +111,8 @@
     <div class="head-actions">
       <span class="save-state" id="save-state"></span>
       <select id="preview-theme" class="btn-ghost" title="プレビューに使うデザイン案" style="padding:9px 12px;">
-        <option value="pop">プレビュー: pop</option>
+        <option value="wafuu">プレビュー: 和風</option>
         <option value="simple">プレビュー: simple</option>
-        <option value="stylish">プレビュー: stylish</option>
-        <option value="threed">プレビュー: threed</option>
-        <option value="wafuu">プレビュー: wafuu</option>
-        <option value="wafuu-tech">プレビュー: wafuu-tech</option>
       </select>
       <button class="btn-ghost" id="btn-preview">👁 プレビュー</button>
       <button class="btn-ghost btn-sm" id="btn-reload" title="保存していない下書きを破棄して、公開中のデータに戻します">公開データに戻す</button>
@@ -142,6 +138,7 @@
     <button class="tab" data-type="producers">🏔️ 職人</button>
     <button class="tab" data-type="news">📰 お知らせ</button>
     <button class="tab" data-type="events">📅 イベント</button>
+    <button class="tab" data-type="sns">📱 SNS投稿</button>
   </div>
 
   <div class="list-head">
@@ -273,6 +270,22 @@
         {k:"summary",label:"結果サマリー（過去の場合・英語）",type:"text",fallback:"summaryJa"}
       ],
       defaults:{_list:"upcoming",type:"exhibition"}
+    },
+    sns:{
+      label:"SNS投稿", icon:"📱", idPrefix:"sns",
+      title:function(o){return o.commentJa||o.url||"(SNS投稿)";},
+      sub:function(o){return o.date||"";},
+      thumb:function(o){return o.image;},
+      fields:[
+        {k:"date",label:"日付",type:"date",req:true},
+        {k:"url",label:"投稿のURL",type:"url",
+         help:"X(Twitter)・Instagram の投稿URLを貼ると、実際の投稿がそのままページに埋め込まれます"},
+        {k:"commentJa",label:"コメント（日本語）",type:"textarea",
+         help:"URLが無い場合のカード表示や補足に使われます"},
+        {k:"commentEn",label:"コメント（英語）",type:"textarea",fallback:"commentJa"},
+        {k:"image",label:"画像（URLが無い場合のカード用）",type:"image"}
+      ],
+      defaults:{}
     }
   };
 
@@ -296,6 +309,7 @@
     d.producers=d.producers||[]; d.products=d.products||[];
     d.news=d.news||[]; d.events=d.events||{upcoming:[],past:[]};
     d.events.upcoming=d.events.upcoming||[]; d.events.past=d.events.past||[];
+    d.sns=d.sns||[];
     return d;
   }
 

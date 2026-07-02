@@ -3,12 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Past Events — Craftvalley</title>
+  <title>Simple | Social — Craftvalley</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* SNS grid — masonry-style columns */
+    .sns-grid { column-count: 2; column-gap: 24px; }
+    @media (max-width: 900px) { .sns-grid { column-count: 1; } }
+    .sns-item { break-inside: avoid; margin-bottom: 24px; }
+    .sns-item blockquote { margin: 0 auto !important; }
+    .sns-card {
+      background: #fff; border: 1px solid #e6e0d8;
+      border-radius: var(--radius-lg, 12px); overflow: hidden;
+      box-shadow: var(--shadow, 0 2px 10px rgba(0,0,0,.06));
+    }
+    .sns-card .image-placeholder { aspect-ratio: 4/3; min-height: 200px; height: auto; border-radius: 0; }
+    .sns-card-body { padding: 16px 18px; }
+    .sns-card-platform { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--red, #c0392b); font-weight: 700; margin-bottom: 6px; }
+    .sns-card-comment { font-size: 14px; line-height: 1.8; margin-bottom: 10px; }
+    .sns-card-date { font-size: 12px; color: var(--textm, #777); }
+    .sns-card a.sns-link { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--red, #c0392b); }
+    .sns-hashtag-banner {
+      text-align: center; margin: 0 0 32px; padding: 18px 20px;
+      border: 2px dashed var(--red, #c0392b); border-radius: var(--radius-lg, 12px);
+      font-size: 14px; font-weight: 700;
+    }
+  </style>
 </head>
-<body data-page-type="events-past">
+<body data-page-type="sns">
 <nav class="nav" id="main-nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo"><span class="nav-logo-en">Craft<span>valley</span></span><span class="nav-logo-ja">クラフトバレー</span></a>
@@ -17,7 +40,7 @@
       <li><a href="about.html" data-i18n="nav.about">About Craftvalley</a></li>
       <li><a href="producers.html" data-i18n="nav.producers">Artisans</a></li>
       <li><a href="products.html" data-i18n="nav.products">Shop</a></li>
-      <li class="nav-dropdown"><a href="events-upcoming.html" class="active" data-i18n="nav.events">Events</a>
+      <li class="nav-dropdown"><a href="events-upcoming.html" data-i18n="nav.events">Events</a>
         <ul class="nav-dropdown-menu">
           <li><a href="events-upcoming.html" data-i18n="nav.eventsUpcoming">Upcoming Events</a></li>
           <li><a href="events-past.html" data-i18n="nav.eventsPast">Past Events</a></li>
@@ -25,6 +48,7 @@
         </ul>
       </li>
       <li><a href="news.html" data-i18n="nav.news">News</a></li>
+      <li><a href="sns.html" class="active" data-i18n="nav.sns">Social</a></li>
       <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
     <div class="nav-actions" style="display:flex;align-items:center;gap:10px">
@@ -42,48 +66,29 @@
   <a href="events-past.html" data-i18n="nav.eventsPast">Past Events</a>
   <a href="calendar.html" data-i18n="nav.calendar">Calendar</a>
   <a href="news.html" data-i18n="nav.news">News</a>
+  <a href="sns.html" data-i18n="nav.sns">Social</a>
   <a href="contact.html" data-i18n="nav.contact">Contact</a>
   <button class="mobile-lang">日本語</button>
 </div>
 
-<div class="page-hero" data-kanji="歴">
+<div class="page-hero" data-kanji="繋">
   <div class="container">
-    <div class="breadcrumb"><a href="index.html">Home</a><span>›</span><span data-i18n="nav.events">Events</span><span>›</span><span data-i18n="nav.eventsPast">Past Events</span></div>
-    <div class="section-label">📸 Event History</div>
-    <h1 data-i18n="events.pastHeading">Event History</h1>
-    <p style="color:var(--textm);font-size:15px;margin-top:10px">Look back at our past gatherings and celebrations.</p>
+    <div class="breadcrumb"><a href="index.html">Home</a><span>›</span><span data-i18n="nav.sns">Social</span></div>
+    <div class="section-label">📱 Social</div>
+    <h1 data-i18n="sns.heading">Craftvalley on Social Media</h1>
+    <p style="color:var(--textm);font-size:15px;margin-top:10px" data-i18n="sns.subheading">Posts from visitors and fans around the world.</p>
   </div>
 </div>
 
-<div class="events-page">
+<div class="news-page">
   <div class="container">
 
-    <div style="display:flex;gap:8px;margin-bottom:40px;flex-wrap:wrap">
-      <a href="events-upcoming.html" class="btn-outline" style="border-radius:50px;padding:10px 24px;font-size:13px" data-i18n="nav.eventsUpcoming">Upcoming Events</a>
-      <a href="events-past.html" class="btn-primary" style="border-radius:50px;padding:10px 24px;font-size:13px" data-i18n="nav.eventsPast">Past Events</a>
-      <a href="calendar.html" class="btn-outline" style="border-radius:50px;padding:10px 24px;font-size:13px" data-i18n="nav.calendar">Calendar</a>
+    <div class="sns-hashtag-banner">
+      <span data-i18n="sns.hashtagLine">Share your Craftvalley moment with #Craftvalley</span>
     </div>
 
-    <!-- Photo montage -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px">
-      <div style="border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;box-shadow:var(--shadow)">
-        <div class="image-placeholder" style="height:100%;border-radius:0"><span class="image-placeholder-label">📸</span><div class="image-placeholder-note">EVENT PHOTO — Craftvalley Launch Exhibition, Takaoka Oct 2024. Crowd and copper displays.</div></div>
-      </div>
-      <div style="border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;box-shadow:var(--shadow)">
-        <div class="image-placeholder" style="height:100%;border-radius:0"><span class="image-placeholder-label">📸</span><div class="image-placeholder-note">EVENT PHOTO — NYC Chelsea Market pop-up Dec 2024. Booth with products and artisan.</div></div>
-      </div>
-      <div style="border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;box-shadow:var(--shadow)">
-        <div class="image-placeholder" style="height:100%;border-radius:0"><span class="image-placeholder-label">📸</span><div class="image-placeholder-note">EVENT PHOTO — Spring Workshop Hida Apr 2025. Hands-on lacquerware session.</div></div>
-      </div>
-    </div>
-
-    <div id="full-events-list">
-      <!-- Populated by JS via data-page-type="events-past" -->
-    </div>
-
-    <div style="text-align:center;margin-top:40px">
-      <a href="events-upcoming.html" class="btn-primary" data-i18n="nav.eventsUpcoming">See What's Next →</a>
-    </div>
+    <!-- SNS posts — populated by JS -->
+    <div class="sns-grid" id="sns-grid"></div>
 
   </div>
 </div>
@@ -102,6 +107,7 @@
 <script src="../shared/js/translations.js"></script>
 <script src="../shared/js/data.js"></script>
 <script src="../shared/js/cv-runtime.js"></script>
+<script src="../shared/js/cv-intro.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

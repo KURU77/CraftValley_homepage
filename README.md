@@ -1,7 +1,7 @@
 # Craftvalley 海外消費者向けホームページ
 
 日本の工芸品・食品を海外のお客様に紹介する、多言語（英語/日本語）の静的サイトです。
-6つのデザイン案を比較でき、**商品・職人・お知らせ・イベントは管理画面から非エンジニアでも更新**できます。
+2つのデザイン案（和風 / Simple）を比較でき、**商品・職人・お知らせ・イベントは管理画面から非エンジニアでも更新**できます。
 
 ---
 
@@ -9,7 +9,7 @@
 
 ```
 .
-├── index.html            … デザイン案を選ぶトップ（6案の入口）
+├── index.html            … デザイン案を選ぶトップ（和風 / Simple の入口）
 ├── admin.html            … ★編集画面（管理用・日本語UI）
 ├── 編集の手引き.md        … 非エンジニア向けの操作マニュアル
 │
@@ -18,11 +18,11 @@
 │   ├── cv-runtime.js     … 画像表示・プレビューの共通プログラム（さわらない）
 │   └── translations.js   … UIの多言語テキスト
 │
-├── pop/  simple/  stylish/  threed/  wafuu/  wafuu-tech/
-│       … 6つのデザイン案（各 css/style.css, js/main.js を持つ）
+├── wafuu/  simple/
+│       … 2つのデザイン案（各 css/style.css, js/main.js を持つ）
 ```
 
-**6案すべてが共通の `shared/js/data.js` を読み込みます。** データを1か所更新すれば全案に反映されます。
+**両案とも共通の `shared/js/data.js` を読み込みます。** データを1か所更新すれば両方に反映されます。
 
 ---
 
@@ -47,14 +47,14 @@
 ブラウザのタブを2つ開くだけです。
 
 - タブA … `admin.html`（編集画面）
-- タブB … `pop/index.html` など（公開サイトの見た目）
+- タブB … `wafuu/index.html` など（公開サイトの見た目）
 
 ローカルで確認する場合は、フォルダ直下で簡易サーバーを起動してから開くと画像も正しく表示されます。
 
 ```bash
 # 例: Python の簡易サーバー
 python -m http.server 8123
-# → http://localhost:8123/admin.html  と  http://localhost:8123/pop/index.html
+# → http://localhost:8123/admin.html  と  http://localhost:8123/wafuu/index.html
 ```
 
 ---

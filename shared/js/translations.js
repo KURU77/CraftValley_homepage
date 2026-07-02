@@ -13,8 +13,16 @@ const T = {
       eventsPast: "Past Events",
       calendar: "Calendar",
       news: "News",
+      sns: "Social",
       contact: "Contact",
       menuOpen: "Menu",
+    },
+    sns: {
+      heading: "Craftvalley on Social Media",
+      subheading: "Posts from visitors and fans around the world.",
+      hashtagLine: "Share your Craftvalley moment with #Craftvalley",
+      viewPost: "View post",
+      empty: "No posts yet — check back soon!",
     },
     hero: {
       tagline: "Where Ancient Craft Meets the Modern World",
@@ -196,8 +204,16 @@ const T = {
       eventsPast: "過去のイベント",
       calendar: "カレンダー",
       news: "お知らせ",
+      sns: "SNS",
       contact: "お問い合わせ",
       menuOpen: "メニュー",
+    },
+    sns: {
+      heading: "SNSでのクラフトバレー",
+      subheading: "世界中のお客様・ファンの投稿をご紹介します。",
+      hashtagLine: "#Craftvalley を付けてあなたの一枚をシェアしてください",
+      viewPost: "投稿を見る",
+      empty: "まだ投稿がありません。",
     },
     hero: {
       tagline: "伝統の技が、世界へ羽ばたく谷",
