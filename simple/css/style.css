@@ -352,3 +352,27 @@ h3{font-size:clamp(18px,2.5vw,26px)}
   .hero-visual,.hero-stats{display:none}
 }
 @media(max-width:480px){.products-grid,.products-page-grid{grid-template-columns:1fr}}
+
+
+/* ================================================================
+   商品を主役に (Products-first redesign)
+   ================================================================ */
+/* トップの商品セクションを目立たせる */
+.section-products{
+  background:var(--white);
+  border-top:4px solid var(--red);
+  border-bottom:1px solid var(--border);
+}
+/* カードを大きく・くっきり */
+.product-card{position:relative}
+.product-card-img{background:var(--xlgrey)}
+.product-card-img img{transition:transform .45s ease}
+.product-card:hover{background:var(--white);box-shadow:0 10px 28px rgba(0,0,0,.12);z-index:1}
+.product-card:hover .product-card-img img{transform:scale(1.06)}
+.product-card-body{padding:16px 16px 18px}
+.product-name{font-size:16px}
+.product-name-ja{font-size:12px}
+.product-price{font-size:22px;color:var(--red)}
+.product-price span{font-size:12px}
+/* 在庫・カテゴリの視認性 */
+.product-category{color:var(--red)}

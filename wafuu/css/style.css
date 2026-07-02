@@ -76,9 +76,8 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 .sidebar::-webkit-scrollbar-thumb{background:rgba(196,162,64,.3);border-radius:3px}
 .sidebar::before{
   content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(
-    90deg,transparent,transparent 18px,rgba(139,105,20,.06) 18px,rgba(139,105,20,.06) 19px
-  );
+  background-image:conic-gradient(rgba(196,162,64,.05) 25%,transparent 0 50%,rgba(196,162,64,.05) 0 75%,transparent 0);
+  background-size:26px 26px;
   pointer-events:none;
 }
 
@@ -202,7 +201,7 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 /* ── Image placeholder ── */
 .image-placeholder{
   width:100%;height:100%;
-  background:repeating-linear-gradient(45deg,rgba(139,105,20,.04),rgba(139,105,20,.04) 10px,transparent 10px,transparent 20px);
+  background-color:transparent;background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2244.00%22 height=%2276.21%22%3E%3Cpath d=%22M-22 38.11L0 25.4 M-22 38.11L0 50.81 M-22 38.11L22 38.11 M0 0L0 25.4 M0 0L22 12.7 M0 0L44 0 M0 76.21L0 50.81 M0 76.21L22 63.51 M22 38.11L0 0 M22 38.11L0 25.4 M22 38.11L0 50.81 M22 38.11L0 76.21 M22 38.11L22 12.7 M22 38.11L22 63.51 M44 0L22 12.7 M44 0L22 38.11 M44 76.21L22 38.11 M44 76.21L22 63.51%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.08)%22 stroke-width=%221%22/%3E%3C/svg%3E");
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
   position:relative;
 }
@@ -269,14 +268,11 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
   position:relative;overflow:hidden;
 }
 
-/* Seigaiha (青海波) pattern */
+/* Seigaiha (青海波) pattern — 正確な青海波文様 */
 .hero::before{
-  content:'';position:absolute;inset:0;opacity:.06;
-  background-image:
-    radial-gradient(circle at 50% 100%,transparent 60%,rgba(244,237,216,.8) 61%,rgba(244,237,216,.8) 70%,transparent 71%),
-    radial-gradient(circle at 0% 100%,transparent 60%,rgba(244,237,216,.8) 61%,rgba(244,237,216,.8) 70%,transparent 71%),
-    radial-gradient(circle at 100% 100%,transparent 60%,rgba(244,237,216,.8) 61%,rgba(244,237,216,.8) 70%,transparent 71%);
-  background-size:80px 40px;
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2272%22 height=%2236%22%3E%3Ccircle cx=%2236%22 cy=%22-18%22 r=%2236%22 fill=%22%232D0A00%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%22-18%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%22-18%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%22-18%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2236%22 fill=%22%232D0A00%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%220%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%220%22 r=%2236%22 fill=%22%232D0A00%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%220%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%220%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%220%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2218%22 r=%2236%22 fill=%22%232D0A00%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2218%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2218%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2218%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%2236%22 r=%2236%22 fill=%22%232D0A00%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%2236%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%2236%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%2236%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%2236%22 r=%2236%22 fill=%22%232D0A00%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%2236%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%2236%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%2236%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2254%22 r=%2236%22 fill=%22%232D0A00%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2254%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2254%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2254%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(244,237,216,0.12)%22 stroke-width=%221%22/%3E%3C/svg%3E");
+  background-size:72px 36px;
 }
 .hero::after{
   content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
@@ -802,3 +798,24 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 
 /* ── Container for inner pages ── */
 .container{max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,48px);position:relative;z-index:1}
+
+
+/* ================================================================
+   日本伝統文様 (麻の葉・青海波・市松)
+   ================================================================ */
+/* 和紙色セクション: 麻の葉 */
+.section-concept,
+.section-producers,
+.news-page{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2244.00%22 height=%2276.21%22%3E%3Cpath d=%22M-22 38.11L0 25.4 M-22 38.11L0 50.81 M-22 38.11L22 38.11 M0 0L0 25.4 M0 0L22 12.7 M0 0L44 0 M0 76.21L0 50.81 M0 76.21L22 63.51 M22 38.11L0 0 M22 38.11L0 25.4 M22 38.11L0 50.81 M22 38.11L0 76.21 M22 38.11L22 12.7 M22 38.11L22 63.51 M44 0L22 12.7 M44 0L22 38.11 M44 76.21L22 38.11 M44 76.21L22 63.51%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.08)%22 stroke-width=%221%22/%3E%3C/svg%3E");
+}
+/* ページヒーロー: 青海波 */
+.page-hero{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2272%22 height=%2236%22%3E%3Ccircle cx=%2236%22 cy=%22-18%22 r=%2236%22 fill=%22%23EAE0C4%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%22-18%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%22-18%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%22-18%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2236%22 fill=%22%23EAE0C4%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%220%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%220%22 r=%2236%22 fill=%22%23EAE0C4%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%220%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%220%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%220%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2218%22 r=%2236%22 fill=%22%23EAE0C4%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2218%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2218%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2218%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%2236%22 r=%2236%22 fill=%22%23EAE0C4%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%2236%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%2236%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%220%22 cy=%2236%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%2236%22 r=%2236%22 fill=%22%23EAE0C4%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%2236%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%2236%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2272%22 cy=%2236%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2254%22 r=%2236%22 fill=%22%23EAE0C4%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2254%22 r=%2225.2%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2254%22 r=%2215.12%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3Ccircle cx=%2236%22 cy=%2254%22 r=%225.4%22 fill=%22none%22 stroke=%22rgba(139,105,20,0.16)%22 stroke-width=%221%22/%3E%3C/svg%3E");
+  background-size:72px 36px;
+}
+/* フッター: 市松 */
+.footer{
+  background-image:conic-gradient(rgba(196,162,64,.04) 25%,transparent 0 50%,rgba(196,162,64,.04) 0 75%,transparent 0);
+  background-size:30px 30px;
+}
