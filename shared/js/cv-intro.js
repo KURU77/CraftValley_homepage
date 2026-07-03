@@ -72,6 +72,14 @@
     "  box-shadow:inset 0 0 60px rgba(90,61,43,.18);}" +
     ".cv-intro-wafuu .cv-intro-left{border-right:14px solid #5a3d2b;}" +
     ".cv-intro-wafuu .cv-intro-right{border-left:14px solid #5a3d2b;}" +
+    /* 日の丸 — 閉じた障子の中央に描かれ、開くと左右に割れる */
+    ".cv-intro-wafuu .cv-intro-panel{overflow:hidden;}" +
+    ".cv-intro-wafuu .cv-intro-panel::after{content:'';position:absolute;top:50%;" +
+    "  width:min(38vmin,320px);height:min(38vmin,320px);border-radius:50%;" +
+    "  background:#bc002d;" +
+    "  box-shadow:0 0 0 10px rgba(188,0,45,.10),0 4px 24px rgba(90,61,43,.25);}" +
+    ".cv-intro-wafuu .cv-intro-left::after{right:0;transform:translate(50%,-50%);}" +
+    ".cv-intro-wafuu .cv-intro-right::after{left:0;transform:translate(-50%,-50%);}" +
     /* simple: ミニマルな白い扉 */
     ".cv-intro-simple .cv-intro-panel{background:#fafafa;}" +
     ".cv-intro-simple .cv-intro-left{border-right:6px solid #111;}" +
