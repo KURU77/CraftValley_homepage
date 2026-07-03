@@ -139,6 +139,7 @@
     <button class="tab" data-type="news">📰 お知らせ</button>
     <button class="tab" data-type="events">📅 イベント</button>
     <button class="tab" data-type="sns">📱 SNS投稿</button>
+    <button class="tab" data-type="diary">📔 関係者日記</button>
   </div>
 
   <div class="list-head">
@@ -283,7 +284,26 @@
         {k:"commentJa",label:"コメント（日本語）",type:"textarea",
          help:"URLが無い場合のカード表示や補足に使われます"},
         {k:"commentEn",label:"コメント（英語）",type:"textarea",fallback:"commentJa"},
+        {k:"tags",label:"タグ（内部管理用・複数可）",type:"tags",
+         help:"カンマ(,)区切りで複数指定可。サイト上には一切表示されません"},
         {k:"image",label:"画像（URLが無い場合のカード用）",type:"image"}
+      ],
+      defaults:{tags:[]}
+    },
+    diary:{
+      label:"関係者日記", icon:"📔", idPrefix:"diary",
+      title:function(o){return o.titleJa||o.titleEn||"(無題)";},
+      sub:function(o){return (o.date||"")+(o.authorJa?("　"+o.authorJa):"");},
+      thumb:function(o){return o.image;},
+      fields:[
+        {k:"date",label:"日付",type:"date",req:true},
+        {k:"authorJa",label:"筆者名（日本語）",type:"text",help:"例: 松本（醸造所）"},
+        {k:"authorEn",label:"筆者名（英語）",type:"text",fallback:"authorJa"},
+        {k:"titleJa",label:"タイトル（日本語）",type:"text",req:true},
+        {k:"titleEn",label:"タイトル（英語）",type:"text",fallback:"titleJa"},
+        {k:"bodyJa",label:"本文（日本語）",type:"textarea"},
+        {k:"bodyEn",label:"本文（英語）",type:"textarea",fallback:"bodyJa"},
+        {k:"image",label:"写真（任意）",type:"image"}
       ],
       defaults:{}
     }
@@ -309,7 +329,7 @@
     d.producers=d.producers||[]; d.products=d.products||[];
     d.news=d.news||[]; d.events=d.events||{upcoming:[],past:[]};
     d.events.upcoming=d.events.upcoming||[]; d.events.past=d.events.past||[];
-    d.sns=d.sns||[];
+    d.sns=d.sns||[]; d.diary=d.diary||[];
     return d;
   }
 

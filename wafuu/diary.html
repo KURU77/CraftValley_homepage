@@ -3,13 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop | 和風 — Craftvalley</title>
-  <meta name="description" content="The Craftvalley collection — authentic Japanese craft objects, food and drink, shipped worldwide from Toyama, Japan.">
+  <title>Journal | 和風 — Craftvalley</title>
+  <meta name="description" content="Notes from the Valley — occasional journal entries from the people behind Craftvalley.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .diary-entry{
+      background:#fff;border:1px solid rgba(0,0,0,.08);
+      margin-bottom:28px;box-shadow:0 2px 10px rgba(0,0,0,.05);
+      display:grid;grid-template-columns:280px 1fr;
+    }
+    .diary-entry:nth-child(even){grid-template-columns:1fr 280px}
+    .diary-entry:nth-child(even) .diary-img{order:2}
+    .diary-img .image-placeholder{aspect-ratio:4/3;min-height:220px;height:100%}
+    .diary-body{padding:24px 28px}
+    .diary-meta{font-size:12px;letter-spacing:.1em;color:var(--textm,#6B5840);margin-bottom:8px}
+    .diary-author{color:#8B1A1A}
+    .diary-title{font-size:20px;font-weight:700;margin-bottom:12px;font-family:var(--ff-ja)}
+    .diary-text{font-size:14px;line-height:2;color:var(--textm,#4a3d2c)}
+    @media(max-width:800px){.diary-entry,.diary-entry:nth-child(even){grid-template-columns:1fr}
+      .diary-entry:nth-child(even) .diary-img{order:0}}
+  </style>
 </head>
-<body>
+<body data-page-type="diary">
 
 <button class="sidebar-hamburger" id="sidebar-hamburger" aria-label="Menu">
   <span></span><span></span><span></span>
@@ -26,11 +43,11 @@
       <li><a href="index.html"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></a></li>
       <li><a href="about.html"><span class="nav-ja">概要</span><span class="nav-en">About</span></a></li>
       <li><a href="producers.html"><span class="nav-ja">職人</span><span class="nav-en">Artisans</span></a></li>
-      <li><a href="products.html" class="active"><span class="nav-ja">商品</span><span class="nav-en">Shop</span></a></li>
+      <li><a href="products.html"><span class="nav-ja">商品</span><span class="nav-en">Shop</span></a></li>
       <li><a href="events-upcoming.html"><span class="nav-ja">催事</span><span class="nav-en">Events</span></a></li>
       <li><a href="news.html"><span class="nav-ja">情報</span><span class="nav-en">News</span></a></li>
       <li><a href="sns.html"><span class="nav-ja">交流</span><span class="nav-en">Social</span></a></li>
-      <li><a href="diary.html"><span class="nav-ja">日記</span><span class="nav-en">Journal</span></a></li>
+      <li><a href="diary.html" class="active"><span class="nav-ja">日記</span><span class="nav-en">Journal</span></a></li>
       <li><a href="contact.html"><span class="nav-ja">問合</span><span class="nav-en">Contact</span></a></li>
     </ul>
     <div class="sidebar-bottom">
@@ -40,48 +57,21 @@
 
   <div class="main-content">
 
-    <div class="page-hero" data-kanji="品">
+    <div class="page-hero" data-kanji="記">
       <div class="container">
-        <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Home</a><span>›</span><span data-i18n="nav.products">Shop</span></div>
-        <div class="section-label">Collection — 蒐集</div>
-        <h1 data-i18n="products.heading">The Collection</h1>
-        <p class="lead" data-i18n="products.subheading">Authentic Japanese craft — available worldwide.</p>
+        <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Home</a><span>›</span><span data-i18n="nav.diary">Journal</span></div>
+        <div class="section-label">Journal — 日記</div>
+        <h1 data-i18n="diary.heading">Notes from the Valley</h1>
       </div>
     </div>
 
-    <div class="products-page">
+    <div class="news-page">
       <div class="container">
 
-        <!-- Shipping banner -->
-        <div class="info-banner">
-          <span class="info-banner-icon">✈️</span>
-          <div>
-            <p class="info-banner-title" data-i18n="ui.shippingTitle">Free shipping to the US on orders over $150</p>
-            <p class="info-banner-sub" data-i18n="ui.shippingSub">DHL Express, 3–5 business days · Ships from Toyama, Japan</p>
-          </div>
-        </div>
+        <p style="margin-bottom:24px" data-i18n="diary.subheading">Occasional journal entries from the people behind Craftvalley.</p>
 
-        <!-- Filter -->
-        <div class="products-filter" id="products-filter-bar">
-          <button class="filter-btn active" data-filter="all" data-i18n="products.filterAll">All</button>
-          <button class="filter-btn" data-filter="craft" data-i18n="products.filterCraft">Craft Objects</button>
-          <button class="filter-btn" data-filter="food" data-i18n="products.filterFood">Food &amp; Drink</button>
-          <button class="filter-btn" data-filter="paper" data-i18n="products.filterPaper">Paper &amp; Textile</button>
-        </div>
-
-        <div class="products-page-grid" id="products-grid">
-          <!-- Populated by JS -->
-        </div>
-
-        <!-- Wholesale CTA -->
-        <div class="cta-block">
-          <div class="section-label">商い — Business</div>
-          <h3 data-i18n="ui.wholesaleTitle">Wholesale &amp; B2B Inquiries</h3>
-          <p data-i18n="ui.wholesaleDesc">Retailers, restaurants and interior designers — we offer wholesale pricing and custom procurement. All products are export-certified.</p>
-          <div class="cta-actions">
-            <a href="contact.html" class="btn-primary" data-i18n="ui.wholesaleCta">Contact for Wholesale</a>
-          </div>
-        </div>
+        <!-- Diary entries — populated by JS -->
+        <div id="diary-list"></div>
 
       </div>
     </div>
@@ -141,26 +131,5 @@
 <script src="../shared/js/cv-runtime.js"></script>
 <script src="../shared/js/cv-intro.js"></script>
 <script src="js/main.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  function applyFilter(cat) {
-    document.querySelectorAll("#products-grid .product-card").forEach(function(card) {
-      card.style.display = (cat === "all" || card.getAttribute("data-category") === cat) ? "" : "none";
-    });
-  }
-  document.querySelectorAll("#products-filter-bar .filter-btn").forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      document.querySelectorAll("#products-filter-bar .filter-btn").forEach(function(b){ b.classList.remove("active"); });
-      btn.classList.add("active");
-      applyFilter(btn.getAttribute("data-filter"));
-    });
-  });
-  // Cards are rebuilt on language change — re-apply the active filter
-  document.addEventListener("cv-lang-change", function() {
-    var active = document.querySelector("#products-filter-bar .filter-btn.active");
-    applyFilter(active ? active.getAttribute("data-filter") : "all");
-  });
-});
-</script>
 </body>
 </html>

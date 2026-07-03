@@ -97,15 +97,9 @@
         document.body.style.overflow = open ? "hidden" : "";
       });
       backdrop.addEventListener("click", closeSidebar);
-      // Close sidebar on nav link click (mobile)
+      // Close sidebar on nav link click (drawer is universal now)
       sidebar.querySelectorAll("a").forEach(function (a) {
-        a.addEventListener("click", function () {
-          if (window.innerWidth < 900) closeSidebar();
-        });
-      });
-      // Reset state if the viewport grows back to desktop
-      window.addEventListener("resize", function () {
-        if (window.innerWidth >= 900) closeSidebar();
+        a.addEventListener("click", closeSidebar);
       });
     }
 

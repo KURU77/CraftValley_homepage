@@ -92,6 +92,7 @@
         if (parsed.events) CV_DATA.events = parsed.events;
         if (parsed.news) CV_DATA.news = parsed.news;
         if (parsed.sns) CV_DATA.sns = parsed.sns;
+        if (parsed.diary) CV_DATA.diary = parsed.diary;
         // 画面上にプレビュー中バナーを表示
         document.addEventListener("DOMContentLoaded", function () {
           var bar = document.createElement("div");
@@ -205,13 +206,67 @@
     document.addEventListener("cv-lang-change", populateSns);
   }
 
+  // ── 関係者日記ページ (#diary-list) の描画 ───────────────────────
+  function diaryT(key) {
+    try {
+      var lang = window.CV_LANG || "en";
+      return (T[lang] && T[lang].diary && T[lang].diary[key]) || key;
+    } catch (e) { return key; }
+  }
+
+  function populateDiary() {
+    var list = document.getElementById("diary-list");
+    if (!list || typeof CV_DATA === "undefined") return;
+    var entries = (CV_DATA.diary || []).slice().sort(function (a, b) {
+      return (b.date || "").localeCompare(a.date || "");
+    });
+    var lang = window.CV_LANG || "en";
+    list.innerHTML = "";
+
+    if (!entries.length) {
+      list.innerHTML = '<p style="opacity:.6;padding:24px 0">' + escHtml(diaryT("empty")) + "</p>";
+      return;
+    }
+
+    entries.forEach(function (d) {
+      var title = lang === "ja" ? (d.titleJa || d.titleEn || "") : (d.titleEn || d.titleJa || "");
+      var body = lang === "ja" ? (d.bodyJa || "") : (d.bodyEn || d.bodyJa || "");
+      var author = lang === "ja" ? (d.authorJa || "") : (d.authorEn || d.authorJa || "");
+      var art = document.createElement("article");
+      art.className = "diary-entry";
+      var imgHtml = d.image
+        ? '<div class="diary-img"><div class="image-placeholder"><span class="image-placeholder-label">📔</span>' +
+          '<div class="image-placeholder-note">' + escHtml(d.image) + "</div></div></div>"
+        : "";
+      art.innerHTML =
+        imgHtml +
+        '<div class="diary-body">' +
+        '<p class="diary-meta">' + escHtml(d.date || "") +
+        (author ? '　<span class="diary-author">' + escHtml(diaryT("by")) + " " + escHtml(author) + "</span>" : "") +
+        "</p>" +
+        '<h2 class="diary-title">' + escHtml(title) + "</h2>" +
+        '<div class="diary-text">' + escHtml(body).replace(/\n/g, "<br>") + "</div>" +
+        "</div>";
+      list.appendChild(art);
+      var ph = art.querySelector(".image-placeholder");
+      if (ph) upgradePlaceholder(ph);
+    });
+  }
+
+  function startDiary() {
+    populateDiary();
+    document.addEventListener("cv-lang-change", populateDiary);
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function () {
       startImageUpgrade();
       startSns();
+      startDiary();
     });
   } else {
     startImageUpgrade();
     startSns();
+    startDiary();
   }
 })();

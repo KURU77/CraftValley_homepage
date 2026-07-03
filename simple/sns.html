@@ -24,11 +24,6 @@
     .sns-card-comment { font-size: 14px; line-height: 1.8; margin-bottom: 10px; }
     .sns-card-date { font-size: 12px; color: var(--textm, #777); }
     .sns-card a.sns-link { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--red, #c0392b); }
-    .sns-hashtag-banner {
-      text-align: center; margin: 0 0 32px; padding: 18px 20px;
-      border: 2px dashed var(--red, #c0392b); border-radius: var(--radius-lg, 12px);
-      font-size: 14px; font-weight: 700;
-    }
   </style>
 </head>
 <body data-page-type="sns">
@@ -49,6 +44,7 @@
       </li>
       <li><a href="news.html" data-i18n="nav.news">News</a></li>
       <li><a href="sns.html" class="active" data-i18n="nav.sns">Social</a></li>
+      <li><a href="diary.html" data-i18n="nav.diary">Journal</a></li>
       <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
     <div class="nav-actions" style="display:flex;align-items:center;gap:10px">
@@ -67,6 +63,7 @@
   <a href="calendar.html" data-i18n="nav.calendar">Calendar</a>
   <a href="news.html" data-i18n="nav.news">News</a>
   <a href="sns.html" data-i18n="nav.sns">Social</a>
+  <a href="diary.html" data-i18n="nav.diary">Journal</a>
   <a href="contact.html" data-i18n="nav.contact">Contact</a>
   <button class="mobile-lang">日本語</button>
 </div>
@@ -82,10 +79,6 @@
 
 <div class="news-page">
   <div class="container">
-
-    <div class="sns-hashtag-banner">
-      <span data-i18n="sns.hashtagLine">Share your Craftvalley moment with #Craftvalley</span>
-    </div>
 
     <!-- SNS posts — populated by JS -->
     <div class="sns-grid" id="sns-grid"></div>

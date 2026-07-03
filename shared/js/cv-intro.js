@@ -34,7 +34,7 @@
     { ja: "職人の技、すごいよ", en: "Handmade in Japan!" },
     { ja: "富山から来ました", en: "Straight from Toyama!" },
     { ja: "いい器あるよ〜", en: "Lovely crafts inside!" },
-    { ja: "#Craftvalley で投稿してね", en: "Tag us #Craftvalley!" }
+    { ja: "催事もやってるよ", en: "Check our events!" }
   ];
 
   // ── スタイル ────────────────────────────────────────────────
