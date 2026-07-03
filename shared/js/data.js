@@ -505,5 +505,62 @@ const CV_DATA = {
       "commentEn": "",
       "tags": ["富山"]
     }
+  ],
+  "diary": [
+    {
+      "id": "diary-demo-5",
+      "date": "2026-07-01",
+      "authorJa": "松本（越中麦酒醸造所）",
+      "authorEn": "Matsumoto (Ecchu Craft Brewery)",
+      "titleJa": "夏限定エールの仕込みが始まりました",
+      "titleEn": "Brewing our summer-limited ale",
+      "bodyJa": "今年も立山の雪解け水で夏限定エールの仕込みを始めました。\n麹の甘い香りが醸造所いっぱいに広がっています。\n7月の夏まつりで初お披露目の予定です。お楽しみに！",
+      "bodyEn": "We've started brewing this year's summer-limited ale with Tateyama snowmelt water.\nThe sweet aroma of koji fills the brewery.\nWe plan to debut it at the Summer Festival in July — stay tuned!",
+      "image": ""
+    },
+    {
+      "id": "diary-demo-4",
+      "date": "2026-06-21",
+      "authorJa": "田中（白峰紙工房）",
+      "authorEn": "Tanaka (Hakuho Paper Studio)",
+      "titleJa": "紫陽花を漉き込んだ和紙ができました",
+      "titleEn": "Washi with pressed hydrangea petals",
+      "bodyJa": "梅雨の合間に摘んだ紫陽花を、一枚一枚和紙に漉き込みました。\n同じものは二つとない、この季節だけの紙です。\n工房の前の利賀川は、今日も雨で少し増水しています。",
+      "bodyEn": "Between the rainy days, we picked hydrangeas and pressed them into fresh washi, sheet by sheet.\nNo two sheets are alike — paper that exists only in this season.\nThe Toga River in front of the studio is running a little high with rain today.",
+      "image": ""
+    },
+    {
+      "id": "diary-demo-3",
+      "date": "2026-06-10",
+      "authorJa": "森（鉄心工房）",
+      "authorEn": "Mori (Tesshin Cutlery Studio)",
+      "titleJa": "アメリカのシェフから手紙が届きました",
+      "titleEn": "A letter from a chef in the U.S.",
+      "bodyJa": "昨年ニューヨークのポップアップで牛刀を買ってくださったシェフから、手紙が届きました。\n「毎日この包丁で仕込みをしています」とのこと。\n海の向こうで自分の刃物が働いていると思うと、鍛冶場の火にも一段と力が入ります。",
+      "bodyEn": "A chef who bought a gyuto at our New York pop-up last year sent us a letter.\n\"I prep with this knife every single day,\" he wrote.\nKnowing my blade is at work across the ocean puts extra fire into the forge.",
+      "image": ""
+    },
+    {
+      "id": "diary-demo-2",
+      "date": "2026-05-28",
+      "authorJa": "中村（飛騨こうじ工房）",
+      "authorEn": "Nakamura (Hida Koji Studio)",
+      "titleJa": "麹の花が咲きました",
+      "titleEn": "The koji is blooming",
+      "bodyJa": "今朝、麹蓋を開けたら真っ白な「麹の花」がきれいに咲いていました。\n温度と湿度に気を配った三日間の成果です。\nこの麹で仕込む塩麹は、ひと月後が食べごろになります。",
+      "bodyEn": "This morning I opened the koji trays to find them covered in a beautiful white bloom.\nThree days of careful tending to temperature and humidity paid off.\nThe shio-koji made from this batch will be ready to enjoy in about a month.",
+      "image": ""
+    },
+    {
+      "id": "diary-demo-1",
+      "date": "2026-05-15",
+      "authorJa": "川上（匠木工房）",
+      "authorEn": "Kawakami (Shoki Lacquer Studio)",
+      "titleJa": "新緑の飛騨古川より",
+      "titleEn": "Fresh green season in Hida-Furukawa",
+      "bodyJa": "工房の窓から見える山々が、一気に新緑に染まりました。\n春慶塗は乾燥の速さが季節で変わるので、この時期は漆の様子と毎日にらめっこです。\n連休には海外からのお客様も工房に立ち寄ってくださいました。",
+      "bodyEn": "The mountains outside the studio window have turned brilliant green almost overnight.\nShunkei lacquer dries differently with each season, so these days I keep a close eye on the urushi.\nDuring the holidays we even welcomed visitors from overseas to the studio.",
+      "image": ""
+    }
   ]
 };

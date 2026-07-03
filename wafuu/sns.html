@@ -9,11 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* SNS grid — masonry-style columns */
-    .sns-grid { column-count: 2; column-gap: 24px; }
-    @media (max-width: 900px) { .sns-grid { column-count: 1; } }
-    .sns-item { break-inside: avoid; margin-bottom: 24px; }
-    .sns-item blockquote { margin: 0 auto !important; }
+    /* SNS grid — 横2列を起点に縦へ積み上げる */
+    .sns-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; align-items: start; }
+    .sns-col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+    @media (max-width: 900px) { .sns-grid { grid-template-columns: 1fr; gap: 24px; } }
+    .sns-item blockquote { margin: 0 auto !important; max-width: 100%; }
+    .sns-item iframe { max-width: 100% !important; }
     .sns-card {
       background: #fff; border: 1px solid rgba(0,0,0,.08);
       border-radius: 8px; overflow: hidden;

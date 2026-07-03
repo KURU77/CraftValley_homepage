@@ -147,8 +147,16 @@
       return;
     }
 
+    // 横2列を起点に、投稿を交互に振り分けて縦に積み上げる
+    var colL = document.createElement("div");
+    var colR = document.createElement("div");
+    colL.className = "sns-col";
+    colR.className = "sns-col";
+    grid.appendChild(colL);
+    grid.appendChild(colR);
+
     var needTwitter = false, needInsta = false;
-    posts.forEach(function (p) {
+    posts.forEach(function (p, idx) {
       var url = (p.url || "").trim();
       var comment = lang === "ja" ? (p.commentJa || "") : (p.commentEn || p.commentJa || "");
       var item = document.createElement("div");
@@ -193,7 +201,7 @@
             escHtml(snsT("viewPost")) + " →</a>" : "") +
           "</div></div>";
       }
-      grid.appendChild(item);
+      (idx % 2 === 0 ? colL : colR).appendChild(item);
       // 画像プレースホルダーを実画像へ昇格
       var ph = item.querySelector(".image-placeholder");
       if (ph) upgradePlaceholder(ph);
