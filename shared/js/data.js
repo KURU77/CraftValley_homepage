@@ -479,5 +479,31 @@ const CV_DATA = {
       "summaryJa": "米国向けオンラインショップが開設しました。全注文は富山の発送センターからDHLエクスプレスで3〜5営業日でお届け。150ドル以上送料無料。",
       "image": "PLACEHOLDER — Products arranged on white background for e-commerce; clean, minimalist packaging visible"
     }
+  ],
+  "sns": [
+    {
+      "id": "sns-toyama-navi",
+      "date": "2026-07-03",
+      "url": "https://twitter.com/panokitotoyama",
+      "commentJa": "とやま観光ナビ（公式）の最新投稿",
+      "commentEn": "Latest posts from Toyama Tourism Navi (official)",
+      "tags": ["富山"]
+    },
+    {
+      "id": "sns-nanto-kanko",
+      "date": "2026-07-02",
+      "url": "https://twitter.com/7104kankokyokai",
+      "commentJa": "南砺市観光協会（公式）の最新投稿",
+      "commentEn": "Latest posts from Nanto City Tourism (official)",
+      "tags": ["南砺"]
+    },
+    {
+      "id": "sns-toyama-post",
+      "date": "2026-07-01",
+      "url": "https://twitter.com/panokitotoyama/status/1876806433594843143",
+      "commentJa": "",
+      "commentEn": "",
+      "tags": ["富山"]
+    }
   ]
 };

@@ -153,11 +153,23 @@
       var comment = lang === "ja" ? (p.commentJa || "") : (p.commentEn || p.commentJa || "");
       var item = document.createElement("div");
       item.className = "sns-item";
+      // 埋め込みの上に出す小さな見出し（コメント欄を利用・任意）
+      var cap = comment
+        ? '<p style="font-size:12px;opacity:.72;margin:0 0 6px;font-family:sans-serif;letter-spacing:.04em">' +
+          escHtml(comment) + "</p>"
+        : "";
 
-      if (/^https?:\/\/(www\.)?(twitter\.com|x\.com)\//i.test(url)) {
-        // X (Twitter) 公式埋め込み — widgets.js は twitter.com 形式のURLを要求
+      if (/^https?:\/\/(www\.)?(twitter\.com|x\.com)\/[A-Za-z0-9_]+\/?$/i.test(url)) {
+        // X (Twitter) アカウントURL → タイムライン埋め込み（実際の最新投稿が流れる）
+        var tlUrl = url.replace(/^https?:\/\/(www\.)?x\.com\//i, "https://twitter.com/").replace(/\/$/, "");
+        item.innerHTML = cap +
+          '<a class="twitter-timeline" data-height="480" data-dnt="true" href="' +
+          escHtml(tlUrl) + '"></a>';
+        needTwitter = true;
+      } else if (/^https?:\/\/(www\.)?(twitter\.com|x\.com)\//i.test(url)) {
+        // X (Twitter) 個別投稿の公式埋め込み — widgets.js は twitter.com 形式のURLを要求
         var twUrl = url.replace(/^https?:\/\/(www\.)?x\.com\//i, "https://twitter.com/");
-        item.innerHTML = '<blockquote class="twitter-tweet" data-dnt="true"><a href="' +
+        item.innerHTML = cap + '<blockquote class="twitter-tweet" data-dnt="true"><a href="' +
           escHtml(twUrl) + '"></a></blockquote>';
         needTwitter = true;
       } else if (/^https?:\/\/(www\.)?instagram\.com\//i.test(url)) {
