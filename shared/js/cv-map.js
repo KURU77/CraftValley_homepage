@@ -117,7 +117,16 @@
       /* 縮尺・帰属表示を小さく */
       ".cv-map .leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.85)}",
       ".cv-map .leaflet-control-attribution a{color:#3a6ea5}",
-      "@media(max-width:600px){.cv-map-legend{font-size:10px;padding:7px 9px}}"
+      /* スマートフォン向け — 指で押しやすい大きさにする */
+      "@media(max-width:768px){",
+      "  .cv-map-legend{font-size:10px;padding:7px 9px;max-width:47vw}",
+      "  .cv-map-legend .lg-hint{display:none}",
+      "  .cv-map-reset{padding:11px 14px;font-size:12px;min-height:44px}",
+      "  .cv-map.leaflet-touch .leaflet-bar a,.cv-map .leaflet-bar a{width:40px !important;height:40px !important;line-height:40px !important;font-size:20px}",
+      "  .cv-map .leaflet-control-attribution{font-size:9px}",
+      "  .cv-city-label{font-size:11px}",
+      "  .cv-pop .cv-pop-name{font-size:16px}",
+      "}"
     ].join("");
     var s = document.createElement("style");
     s.id = "cv-map-style";
@@ -336,7 +345,11 @@
       b.type = "button";
       b.textContent = tx("reset");
       L.DomEvent.disableClickPropagation(b);
-      L.DomEvent.on(b, "click", fit);
+      L.DomEvent.on(b, "click", function () {
+        if (box._cvResetUserMove) box._cvResetUserMove();
+        map.invalidateSize();
+        fit();
+      });
       return b;
     };
     reset.addTo(map);
@@ -363,9 +376,40 @@
     }
     document.addEventListener("cv-lang-change", relabel);
 
-    // レイアウト確定後に再計算（フェードイン等でサイズが変わるため）
-    setTimeout(function () { map.invalidateSize(); fit(); }, 260);
-    window.addEventListener("resize", function () { map.invalidateSize(); });
+    // ── レイアウト確定後の再計算 ────────────────────────────────
+    // オープニング演出やフェードインの最中は、地図の領域サイズが
+    // まだ確定していない。サイズが変わるたびに測り直して表示範囲を
+    // 合わせ直す（利用者が自分で動かした後は、その表示を尊重する）。
+    var userMoved = false;
+    ["pointerdown", "wheel", "touchstart"].forEach(function (ev) {
+      box.addEventListener(ev, function () { userMoved = true; }, { passive: true });
+    });
+
+    var refitTimer;
+    function refresh() {
+      clearTimeout(refitTimer);
+      refitTimer = setTimeout(function () {
+        map.invalidateSize();
+        if (!userMoved) fit();
+      }, 120);
+    }
+
+    // 領域サイズの変化を監視
+    if (window.ResizeObserver) {
+      new ResizeObserver(refresh).observe(box);
+    }
+    // 画面内に入ったとき（表示されるまでサイズが0のことがある）
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) refresh(); });
+      }, { threshold: 0.05 }).observe(box);
+    }
+    // 保険として時間差でも数回試す
+    [260, 900, 2000].forEach(function (ms) { setTimeout(refresh, ms); });
+    window.addEventListener("resize", refresh);
+
+    // 「全体を表示」を押したら、追従を再開する
+    box._cvResetUserMove = function () { userMoved = false; };
 
     box._cvMap = map;
   }

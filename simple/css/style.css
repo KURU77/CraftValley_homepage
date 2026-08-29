@@ -376,3 +376,80 @@ h3{font-size:clamp(18px,2.5vw,26px)}
 .product-price span{font-size:12px}
 /* 在庫・カテゴリの視認性 */
 .product-category{color:var(--red)}
+
+/* ================================================================
+   スマートフォン向けの調整
+   ・指で押しやすい大きさ（最低44px）を確保する
+   ・小さすぎる文字を読める大きさまで底上げする
+   ・入力欄は16px以上にして、iOSでの自動ズームを防ぐ
+================================================================ */
+@media(max-width:768px){
+
+  /* ── 押しやすさ ── */
+  .nav-hamburger{width:48px;height:48px;padding:0;box-sizing:border-box}
+  .mobile-menu a{min-height:50px;display:flex;align-items:center;padding:12px 20px;font-size:15px}
+  .mobile-lang,.nav-lang{min-height:44px;padding:0 16px;font-size:13px}
+
+  .btn-primary,.btn-outline,.btn-red{
+    min-height:48px;display:inline-flex;align-items:center;justify-content:center;
+  }
+  .hero-ctas{gap:12px}
+  .hero-ctas .btn-primary,.hero-ctas .btn-outline,.hero-ctas .btn-red{width:100%}
+
+  .footer-col ul a{display:inline-block;padding:9px 0;font-size:14px}
+  .footer-legal{gap:6px}
+  .footer-legal a{display:inline-block;padding:8px 0;font-size:12px}
+  .footer-newsletter-form input,
+  .footer-newsletter-form button{min-height:46px}
+
+  .event-tab{min-height:46px;padding:0 18px}
+  .subnav a{min-height:46px;display:flex;align-items:center}
+
+  /* ── 読みやすさ ── */
+  .section-label{font-size:11px;letter-spacing:.16em}
+  .section-sub{font-size:14px}
+  .hero-eyebrow{font-size:11px;letter-spacing:.16em}
+  .hero-caption{font-size:12px}
+  .concept-intro{font-size:15px;line-height:1.9}
+  .pillar-desc{font-size:13px;line-height:1.8}
+  .legend-item span{font-size:12px}
+
+  /* ── 地図 ── */
+  .map-svg-wrap{padding:8px}
+  .cv-map{height:clamp(320px,58vh,430px)}
+}
+
+@media(max-width:480px){
+  .container{padding:0 16px}
+  .hero-title{font-size:clamp(28px,8.5vw,38px);line-height:1.2}
+
+  /* iOS で入力時に画面が拡大されないようにする */
+  input,textarea,select{font-size:16px}
+
+  .footer-legal{flex-direction:column;align-items:flex-start}
+}
+
+/* スマホ: 残りの押しづらい箇所 / 小さすぎる文字の調整 */
+@media(max-width:768px){
+  .footer-social a{
+    display:inline-flex;align-items:center;
+    min-height:44px;padding:0 2px;font-size:13px !important;
+  }
+  .footer-legal a{padding:12px 0;font-size:12.5px}
+  .producer-craft,.product-producer,.news-category,.event-type{font-size:11.5px}
+  .image-placeholder-note{font-size:11px;line-height:1.6}
+  .cv-map .leaflet-bar a{width:40px;height:40px;line-height:40px;font-size:20px}
+}
+
+/* スマホ: 種別ラベル等の極小文字を読める大きさに */
+@media(max-width:768px){
+  .product-category,.news-cat{font-size:11px;letter-spacing:.1em}
+  .event-month,.event-year{font-size:11.5px}
+  .sidebar-logo-text{font-size:12px}
+  .sidebar-lang-label{font-size:10px}
+}
+
+/* スマホ: ヘッダーのロゴも押しやすい高さを確保 */
+@media(max-width:768px){
+  .nav-logo{display:inline-flex;flex-direction:column;justify-content:center;min-height:44px}
+}

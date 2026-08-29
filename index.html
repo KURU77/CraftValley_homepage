@@ -201,6 +201,27 @@
       .choices{grid-template-columns:1fr 1fr;gap:10px}
       .choice-card{height:210px}
     }
+
+    /* ── スマートフォン向けの調整 ──────────────────────
+       ・画面が縦に短い端末でも、アンケートが収まるようにする
+       ・ボタンを指で押しやすい大きさにする              */
+    @media(max-width:768px){
+      .survey-overlay{padding:16px 14px;align-items:flex-start}
+      .survey-box{
+        max-height:calc(100dvh - 32px);
+        overflow-y:auto;-webkit-overflow-scrolling:touch;
+        padding:22px 18px 26px;margin-top:8px;
+      }
+      .survey-option{min-height:52px;font-size:14px;padding:12px 14px}
+      .survey-q-text{font-size:18px;line-height:1.5}
+      .survey-q-sub{font-size:13px}
+      .survey-btn-row{margin-top:22px;gap:12px}
+      .survey-btn-next{padding:15px 26px;font-size:12px;min-height:48px;flex:1}
+      .survey-btn-skip{min-height:48px;padding:0 8px;font-size:12px}
+      .survey-lang-btn{min-height:40px;padding:0 14px}
+      /* iOS で入力時に画面が拡大されないようにする */
+      .survey-textarea{font-size:16px}
+    }
   </style>
 </head>
 <body>
