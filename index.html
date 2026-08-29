@@ -388,6 +388,80 @@
 
   // ── 状態変数 ──────────────────────────────────────────────────
   var lang="en", currentQ=1, answers={};
+  var surveySent = false;   // 二重送信の防止
+
+  // ================================================================
+  //  アンケート回答の保存先（Googleフォーム）
+  //
+  //  ▼ 設定のしかた（詳しくは docs/アンケート設定手順.md を参照）
+  //   1. Googleフォームを作り、下の7項目を「記述式」で用意します
+  //        Q1 / Q2 / Q3 / Q4 / Q5 / STATUS / LANG
+  //   2. 右上の ⋮ から「事前入力したURLを取得」を開きます
+  //   3. 各欄に、項目名とまったく同じ文字を入力します
+  //        Q1の欄には Q1、Q2の欄には Q2 … STATUSの欄には STATUS
+  //   4. 「リンクを取得」→「リンクをコピー」で出たURLを、
+  //      下の prefilledUrl の "" の中に貼り付けます
+  //
+  //  空のままなら何も送信されません（サイトは通常どおり動きます）
+  // ================================================================
+  var SURVEY_FORM = {
+    prefilledUrl: ""
+  };
+
+  /** 貼り付けたURLから、送信先と各項目のIDを読み取る */
+  function buildFormConfig() {
+    var raw = (SURVEY_FORM.prefilledUrl || "").trim();
+    if (!raw) return null;
+    try {
+      var u = new URL(raw);
+      var action = u.origin + u.pathname.replace(/\/viewform.*$/, "/formResponse");
+      var map = {}, n = 0;
+      u.searchParams.forEach(function (val, key) {
+        if (key.indexOf("entry.") !== 0) return;
+        var tag = String(val).trim().toUpperCase();
+        if (/^(Q[1-5]|STATUS|LANG)$/.test(tag)) { map[tag.toLowerCase()] = key; n++; }
+      });
+      return n ? { action: action, map: map } : null;
+    } catch (e) { return null; }
+  }
+
+  /**
+   * 回答をGoogleフォームへ送信する
+   * status: "完了" / "スキップ" / "離脱"
+   * 送信は一度だけ。未設定・失敗してもサイトの動作には影響しません。
+   */
+  function sendSurvey(status, useBeacon) {
+    if (surveySent) return;
+    var cfg = buildFormConfig();
+    if (!cfg) return;
+    surveySent = true;
+
+    var vals = {
+      q1: answers[1] || "", q2: answers[2] || "", q3: answers[3] || "",
+      q4: answers[4] || "", q5: answers[5] || "",
+      status: status, lang: lang
+    };
+    var body = new URLSearchParams();
+    Object.keys(vals).forEach(function (k) {
+      if (cfg.map[k]) body.append(cfg.map[k], vals[k]);
+    });
+
+    try {
+      if (useBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon(cfg.action, body);
+      } else {
+        fetch(cfg.action, { method: "POST", mode: "no-cors", body: body });
+      }
+    } catch (e) { /* 送信できなくても表示には影響させない */ }
+  }
+
+  // 回答途中でページを閉じた場合も、入力済みの分だけ記録する
+  window.addEventListener("pagehide", function () {
+    if (surveySent) return;
+    var any = [1, 2, 3, 4, 5].some(function (i) { return answers[i]; });
+    if (any) sendSurvey("離脱", true);
+  });
+
   var btnNext      = document.getElementById("survey-btn-next");
   var btnSkip      = document.getElementById("survey-btn-skip");
   var btnRow       = document.getElementById("survey-btn-row");
@@ -528,6 +602,7 @@
   function showResult() {
     hideTimer(); // タイマー停止＆非表示
     setCookie(COOKIE_NAME, "1", COOKIE_DAYS); // 訪問記録（クッキー）
+    sendSurvey("完了");                        // 回答をGoogleフォームへ
     document.querySelectorAll(".survey-q").forEach(function (q) { q.classList.remove("active"); });
     btnRow.style.display = "none";
     var t = TEXT[lang], key = answers[4] || "default", res = t.results[key] || t.results["default"];
@@ -536,7 +611,7 @@
     document.getElementById("result-sub").textContent = t.resultSub;
     document.getElementById("result-recommendation").innerHTML = res.rec;
     document.getElementById("result-enter-btn").textContent = t.enterSite;
-    document.getElementById("result-enter-btn").href = "stylish/index.html";
+    document.getElementById("result-enter-btn").href = "wafuu/index.html";
     document.getElementById("result-choose-note").textContent = t.chooseNote;
     document.getElementById("survey-result").classList.add("active");
     updateProgress();
@@ -546,6 +621,7 @@
   function dismiss() {
     hideTimer(); // タイマー停止
     setCookie(COOKIE_NAME, "1", COOKIE_DAYS); // 訪問記録（クッキー）
+    sendSurvey("スキップ");   // 途中までの回答も記録（完了済みなら何もしない）
     overlay.classList.add("hiding");
     setTimeout(function () {
       overlay.style.display = "none";
