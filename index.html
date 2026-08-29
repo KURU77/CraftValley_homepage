@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Craftvalley — Choose Your Experience</title>
+  <!-- ファビコン（ブラウザのタブに出るアイコン） -->
+  <link rel="icon" href="shared/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="shared/img/favicon-32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="shared/img/favicon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="shared/img/apple-touch-icon.png">
+  <!-- SNSで共有したときに出る情報 -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Craftvalley — Choose Your Experience">
+  <meta property="og:description" content="Craftvalley — 富山・飛騨・小松をつなぐ工芸の物語">
+  <meta property="og:image" content="https://kuru77.github.io/CraftValley_homepage/shared/img/ogp.jpg">
+  <meta property="og:site_name" content="Craftvalley">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cormorant+Garamond:wght@300;400;600&family=M+PLUS+Rounded+1c:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -222,6 +234,23 @@
       /* iOS で入力時に画面が拡大されないようにする */
       .survey-textarea{font-size:16px}
     }
+
+    /* ── ロゴ ─────────────────────────────────────── */
+    .cv-hero-mark{
+      width:clamp(76px,11vw,104px);height:auto;display:block;
+      margin:0 auto 14px;
+      /* 暗い背景でもロゴ本来の見た目を保つため、淡色の丸い台に載せる */
+      background:#faf9f6;border-radius:50%;padding:9px;
+      box-shadow:0 6px 22px rgba(0,0,0,.35);
+    }
+    .survey-brand-wrap{display:inline-flex;align-items:center;gap:9px}
+    .cv-survey-mark{
+      width:26px;height:26px;
+      background:#faf9f6;border-radius:50%;padding:3px;
+    }
+    @media(max-width:768px){
+      .cv-hero-mark{width:72px;padding:7px;margin-bottom:10px}
+    }
   </style>
 </head>
 <body>
@@ -230,7 +259,7 @@
 <div class="survey-overlay" id="survey-overlay">
   <div class="survey-box">
     <div class="survey-lang-row">
-      <span class="survey-brand" id="s-brand">Craftvalley</span>
+      <span class="survey-brand-wrap"><img src="shared/img/logo-mark.png" alt="" class="cv-survey-mark"><span class="survey-brand" id="s-brand">Craftvalley</span></span>
       <!-- Countdown timer -->
       <div class="survey-timer" id="survey-timer" title="Time remaining for this question">
         <svg class="timer-svg" viewBox="0 0 44 44" aria-hidden="true">
@@ -313,6 +342,7 @@
 
 <!-- ===== VERSION SELECTOR (2 versions) ===== -->
 <div class="version-page" id="version-page">
+  <img src="shared/img/logo-mark.png" alt="Craftvalley" class="cv-hero-mark">
   <p class="logo-mark">Craftvalley — クラフトバレー</p>
   <h1>Choose Your<br><span>Design Style</span></h1>
   <p class="tagline">Two visions of Japan's mountain craft heritage</p>

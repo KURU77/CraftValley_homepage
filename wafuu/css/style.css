@@ -954,3 +954,30 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
   .sidebar-logo-text{font-size:12px}
   .sidebar-lang-label{font-size:10px}
 }
+
+/* ================================================================
+   ロゴ
+   ・ロゴは背景が明るい前提で作られているため、暗い面に置くときは
+     淡色の丸い台に載せて、本来の見た目を保つ
+================================================================ */
+.sidebar-kamon{
+  background:#faf9f6;
+  border-color:rgba(196,162,64,.7);
+  overflow:hidden;
+  padding:3px;
+}
+.sidebar-kamon .cv-mark{
+  width:100%;height:100%;object-fit:contain;display:block;
+}
+/* 既存の家紋の飾りはロゴと重なるため隠す */
+.sidebar-kamon::before,.sidebar-kamon::after{display:none !important}
+
+.cv-footer-mark{
+  width:54px;height:54px;display:block;margin-bottom:12px;
+  background:#faf9f6;border-radius:50%;padding:5px;
+  box-shadow:0 3px 12px rgba(0,0,0,.3);
+}
+
+@media(max-width:900px){
+  .cv-footer-mark{width:48px;height:48px}
+}

@@ -453,3 +453,24 @@ h3{font-size:clamp(18px,2.5vw,26px)}
 @media(max-width:768px){
   .nav-logo{display:inline-flex;flex-direction:column;justify-content:center;min-height:44px}
 }
+
+/* ================================================================
+   ロゴ
+   ・ヘッダーは白背景なのでそのまま置ける
+   ・フッターは黒背景のため、淡色の丸い台に載せる
+================================================================ */
+.nav-logo{flex-direction:row;align-items:center;gap:10px}
+.cv-nav-mark{
+  width:34px;height:34px;object-fit:contain;display:block;flex-shrink:0;
+}
+.nav-logo .nav-logo-en,.nav-logo .nav-logo-ja{display:block}
+
+.cv-footer-mark{
+  width:54px;height:54px;display:block;margin-bottom:12px;
+  background:#faf9f6;border-radius:50%;padding:5px;
+}
+
+@media(max-width:768px){
+  .cv-nav-mark{width:30px;height:30px}
+  .cv-footer-mark{width:48px;height:48px}
+}

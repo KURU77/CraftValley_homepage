@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simple | Artisan Profile — Craftvalley</title>
+  <!-- ファビコン（ブラウザのタブに出るアイコン） -->
+  <link rel="icon" href="../shared/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="../shared/img/favicon-32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="../shared/img/favicon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="../shared/img/apple-touch-icon.png">
+  <!-- SNSで共有したときに出る情報 -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Simple | Artisan Profile — Craftvalley">
+  <meta property="og:description" content="Craftvalley — 富山・飛騨・小松をつなぐ工芸の物語">
+  <meta property="og:image" content="https://kuru77.github.io/CraftValley_homepage/shared/img/ogp.jpg">
+  <meta property="og:site_name" content="Craftvalley">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
@@ -11,7 +23,8 @@
 <body>
 <nav class="nav" id="main-nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo"><span class="nav-logo-en">Craft<span>valley</span></span><span class="nav-logo-ja">クラフトバレー</span></a>
+    <a href="index.html" class="nav-logo">
+      <img src="../shared/img/logo-mark.png" alt="" class="cv-nav-mark"><span class="nav-logo-en">Craft<span>valley</span></span><span class="nav-logo-ja">クラフトバレー</span></a>
     <ul class="nav-links">
       <li><a href="index.html" data-i18n="nav.home">Home</a></li>
       <li><a href="about.html" data-i18n="nav.about">About Craftvalley</a></li>
@@ -76,7 +89,8 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div><p class="footer-logo-en">Craft<span>valley</span></p><p class="footer-logo-ja">クラフトバレー</p><p class="footer-tagline" data-i18n="footer.tagline">Crafted in Japan's Mountain Heartland</p></div>
+      <div><img src="../shared/img/logo-mark.png" alt="" class="cv-footer-mark">
+            <p class="footer-logo-en">Craft<span>valley</span></p><p class="footer-logo-ja">クラフトバレー</p><p class="footer-tagline" data-i18n="footer.tagline">Crafted in Japan's Mountain Heartland</p></div>
       <div class="footer-col"><h4 data-i18n="footer.links">Quick Links</h4><ul><li><a href="about.html" data-i18n="nav.about">About</a></li><li><a href="producers.html" data-i18n="nav.producers">Artisans</a></li><li><a href="products.html" data-i18n="nav.products">Shop</a></li><li><a href="contact.html" data-i18n="nav.contact">Contact</a></li></ul></div>
       <div class="footer-col"><h4>Events</h4><ul><li><a href="events-upcoming.html" data-i18n="nav.eventsUpcoming">Upcoming</a></li><li><a href="events-past.html" data-i18n="nav.eventsPast">Past Events</a></li><li><a href="calendar.html" data-i18n="nav.calendar">Calendar</a></li></ul></div>
       <div class="footer-col"><h4 data-i18n="footer.newsletter">Newsletter</h4><form class="footer-newsletter-form" onsubmit="return false"><input type="email" placeholder="Your email address"><button type="submit" data-i18n="footer.newsletterBtn">Subscribe</button></form></div>
