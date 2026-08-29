@@ -52,10 +52,10 @@ const T = {
     map: {
       heading: "The Craftvalley Region",
       desc: "The Craftvalley zone spans three prefectures along Japan's central mountain ranges — a ribbon of cultural heritage that few visitors have discovered.",
-      toyama: "Toyama Pref. (Western Zone)",
-      gifu: "Gifu Pref. (Hida City)",
-      ishikawa: "Ishikawa Pref. (Komatsu City)",
-      legend: "Craftvalley Zone",
+      toyama: "Toyama — Takaoka, Himi & Nanto",
+      gifu: "Gifu — Hida City",
+      ishikawa: "Ishikawa — Komatsu City",
+      legend: "Craftvalley Area (5 municipalities)",
     },
     producers: {
       heading: "Meet the Artisans",
@@ -249,10 +249,10 @@ const T = {
     map: {
       heading: "クラフトバレー域図",
       desc: "クラフトバレーは、日本中央山岳地帯の3県にまたがる文化遺産の回廊です。",
-      toyama: "富山県（呉西地域）",
-      gifu: "岐阜県（飛騨市）",
-      ishikawa: "石川県（小松市）",
-      legend: "クラフトバレー域",
+      toyama: "富山県 — 高岡市・氷見市・南砺市",
+      gifu: "岐阜県 — 飛騨市",
+      ishikawa: "石川県 — 小松市",
+      legend: "クラフトバレー対象地域（5市）",
     },
     producers: {
       heading: "職人・生産者紹介",
@@ -406,3 +406,14 @@ function t(key, lang) {
   }
   return val != null ? val : key;
 }
+
+// 文言編集画面のプレビュー用（URLに ?cvpreview=1 が付いているときだけ下書きを反映）
+try {
+  if (location.search.indexOf("cvpreview=1") >= 0) {
+    var _cvd = localStorage.getItem("cv_text_draft");
+    if (_cvd) {
+      var _cvp = JSON.parse(_cvd);
+      if (_cvp && _cvp.en && _cvp.ja) { T.en = _cvp.en; T.ja = _cvp.ja; }
+    }
+  }
+} catch (e) {}
