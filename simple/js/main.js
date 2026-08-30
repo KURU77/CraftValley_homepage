@@ -417,7 +417,7 @@
     var lang = window.CV_LANG;
 
     // Update page title
-    document.title = (lang === "ja" ? producer.nameJa : producer.nameEn) + " — Craftvalley";
+    document.title = (lang === "ja" ? producer.nameJa : producer.nameEn) + " — Craft Valley";
 
     // Related products
     var relatedProducts = CV_DATA.products.filter(function (p) { return producer.products.indexOf(p.id) > -1; });
@@ -475,7 +475,7 @@
     var lang = window.CV_LANG;
     var producer = CV_DATA.producers.find(function (p) { return p.id === product.producerId; });
 
-    document.title = (lang === "ja" ? product.nameJa : product.nameEn) + " — Craftvalley";
+    document.title = (lang === "ja" ? product.nameJa : product.nameEn) + " — Craft Valley";
 
     wrap.innerHTML =
       '<div class="product-detail-grid">' +

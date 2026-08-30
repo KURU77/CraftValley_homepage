@@ -371,7 +371,7 @@
     var producer = CV_DATA.producers.find(function (p) { return p.id === id; });
     if (!producer) { wrap.innerHTML = "<p>Producer not found.</p>"; return; }
     var lang = window.CV_LANG;
-    document.title = (lang === "ja" ? producer.nameJa : producer.nameEn) + " — Craftvalley";
+    document.title = (lang === "ja" ? producer.nameJa : producer.nameEn) + " — Craft Valley";
     var relatedProducts = CV_DATA.products.filter(function (p) { return producer.products.indexOf(p.id) > -1; });
     wrap.innerHTML =
       '<div class="producer-detail-grid">' +
@@ -412,7 +412,7 @@
     if (!product) { wrap.innerHTML = "<p>Product not found.</p>"; return; }
     var lang = window.CV_LANG;
     var producer = CV_DATA.producers.find(function (p) { return p.id === product.producerId; });
-    document.title = (lang === "ja" ? product.nameJa : product.nameEn) + " — Craftvalley";
+    document.title = (lang === "ja" ? product.nameJa : product.nameEn) + " — Craft Valley";
     wrap.innerHTML =
       '<div class="product-detail-grid">' +
         '<div class="product-detail-img"><div class="image-placeholder" style="aspect-ratio:1;min-height:400px"><span class="image-placeholder-label">🎁</span><div class="image-placeholder-note">' + product.image + '</div></div></div>' +

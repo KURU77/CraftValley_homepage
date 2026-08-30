@@ -1,4 +1,4 @@
-// Craftvalley — Bilingual Translation Data (English primary, Japanese secondary)
+// Craft Valley — Bilingual Translation Data (English primary, Japanese secondary)
 // このファイルは 文言編集画面（admin-text.html）から書き出されています。
 // shared/js/ フォルダの translations.js にこのファイルを上書きすると公開されます。
 // （手動でも編集できますが、形式を崩さないようご注意ください）
@@ -9,7 +9,7 @@ const T = {
     "langToggle": "日本語",
     "nav": {
       "home": "Home",
-      "about": "About Craftvalley",
+      "about": "About Craft Valley",
       "producers": "Artisans",
       "products": "Shop",
       "events": "Events",
@@ -23,31 +23,31 @@ const T = {
       "menuOpen": "Menu"
     },
     "sns": {
-      "heading": "Craftvalley on Social Media",
+      "heading": "Craft Valley on Social Media",
       "subheading": "Posts from visitors and fans around the world.",
       "viewPost": "View post",
       "empty": "No posts yet — check back soon!"
     },
     "diary": {
       "heading": "Notes from the Valley",
-      "subheading": "Occasional journal entries from the people behind Craftvalley.",
+      "subheading": "Occasional journal entries from the people behind Craft Valley.",
       "by": "by",
       "empty": "No entries yet — check back soon!"
     },
     "hero": {
       "tagline": "Hokuriku Craft, Beyond Borders",
       "subtitle": "A new vision for Japan's hidden treasure belt — Toyama, Hida & Komatsu",
-      "cta": "Discover Craftvalley",
+      "cta": "Discover Craft Valley",
       "ctaShop": "Browse the Shop",
       "taglineLine1": "Hokuriku Craft,",
       "taglineLine2": "Beyond Borders",
       "epoch": "Reiwa Craft — Japan's Living Craft",
-      "kicker": "Craftvalley — Toyama · Hida · Komatsu"
+      "kicker": "Craft Valley — Hinouetsu, Japan"
     },
     "concept": {
-      "label": "About Craftvalley",
-      "heading": "What is Craftvalley?",
-      "body": "Craftvalley is a regional initiative uniting master artisans across the mountainous corridor stretching from western Toyama Prefecture through Hida City in Gifu to Komatsu City in Ishikawa. This highland valley has quietly nurtured extraordinary craftsmanship for centuries — copper casting, washi papermaking, lacquerware, cutlery, fermented foods, and beyond. We are now bringing these treasures to the world.",
+      "label": "About Craft Valley",
+      "heading": "What is Craft Valley?",
+      "body": "Craft Valley is a regional initiative uniting master artisans across the mountainous corridor stretching from western Toyama Prefecture through Hida City in Gifu to Komatsu City in Ishikawa. This highland valley has quietly nurtured extraordinary craftsmanship for centuries — copper casting, washi papermaking, lacquerware, cutlery, fermented foods, and beyond. We are now bringing these treasures to the world.",
       "place": "Place",
       "people": "People",
       "craft": "Craft",
@@ -70,12 +70,12 @@ const T = {
       ]
     },
     "map": {
-      "heading": "The Craftvalley Region",
-      "desc": "The Craftvalley zone spans three prefectures along Japan's central mountain ranges — a ribbon of cultural heritage that few visitors have discovered.",
-      "toyama": "Toyama — Takaoka, Himi & Nanto",
+      "heading": "The Craft Valley Region",
+      "desc": "Craft Valley — known in Japanese as Hinouetsu — spans three prefectures along Japan's central mountain ranges. The shape on the map shows the approximate area, not administrative boundaries.",
+      "toyama": "Toyama — Takaoka, Himi, Nanto & Imizu",
       "gifu": "Gifu — Hida City",
       "ishikawa": "Ishikawa — Komatsu City",
-      "legend": "Craftvalley Area (5 municipalities)"
+      "legend": "Craft Valley Area (6 cities)"
     },
     "producers": {
       "heading": "Meet the Artisans",
@@ -139,7 +139,7 @@ const T = {
     },
     "contact": {
       "heading": "Get in Touch",
-      "subheading": "Questions about Craftvalley, wholesale inquiries, press, or partnership? We'd love to hear from you.",
+      "subheading": "Questions about Craft Valley, wholesale inquiries, press, or partnership? We'd love to hear from you.",
       "name": "Your Name",
       "email": "Email Address",
       "subject": "Subject",
@@ -158,18 +158,18 @@ const T = {
       ]
     },
     "about": {
-      "heading": "About Craftvalley",
+      "heading": "About Craft Valley",
       "visionHeading": "Our Vision",
-      "vision": "We believe that exceptional craft deserves a global audience. Craftvalley is building bridges between Japan's most dedicated artisans and people around the world who value authenticity, beauty and the stories behind objects.",
+      "vision": "We believe that exceptional craft deserves a global audience. Craft Valley is building bridges between Japan's most dedicated artisans and people around the world who value authenticity, beauty and the stories behind objects.",
       "missionHeading": "Our Mission",
       "mission": "To sustain traditional crafts by connecting their makers directly with international markets — starting with the United States — while preserving the landscapes, communities and knowledge that make this region unique.",
       "regionHeading": "The Region",
-      "region": "The Craftvalley corridor runs along the ancient Kaetsu-Getto trade route. Western Toyama (呉西地域) includes craft cities like Takaoka, famous for 400 years of copper casting. South through the mountains lies Hida City, home of the spring-lacquer (春慶塗) and koji fermentation traditions. To the west, Komatsu in Ishikawa carries on the Kaga cutlery lineage. Together, they form one of Japan's densest concentrations of living traditional crafts.",
-      "timelineHeading": "Craftvalley Timeline",
+      "region": "The Craft Valley area is known in Japanese as Hinouetsu — a name formed from Hida, Noto and Etchu, the historical provinces that meet here. It covers six cities: Takaoka, Himi, Nanto and Imizu in Toyama, Komatsu in Ishikawa, and Hida in Gifu. Copper casting, lacquerware, woodcarving, handmade paper, cutlery, ceramics and fermented foods have all been handed down in this corridor.",
+      "timelineHeading": "Craft Valley Timeline",
       "timeline": [
         {
           "year": "2023",
-          "event": "Craftvalley concept launched by regional artisan coalition"
+          "event": "Craft Valley concept launched by regional artisan coalition"
         },
         {
           "year": "2024 Spring",
@@ -177,7 +177,7 @@ const T = {
         },
         {
           "year": "2024 Autumn",
-          "event": "Craftvalley Launch Exhibition, Takaoka"
+          "event": "Craft Valley Launch Exhibition, Takaoka"
         },
         {
           "year": "2024 Winter",
@@ -199,7 +199,7 @@ const T = {
       "wholesaleTitle": "Wholesale & B2B Inquiries",
       "wholesaleDesc": "Retailers, restaurants and interior designers — we offer wholesale pricing and custom procurement. All products are export-certified.",
       "wholesaleCta": "Contact for Wholesale",
-      "joinTitle": "Are you an artisan in the Craftvalley region?",
+      "joinTitle": "Are you an artisan in the Craft Valley region?",
       "joinDesc": "We're always looking for new partners. Get in touch and tell us about your craft.",
       "joinCta": "Contact Us",
       "faqHeading": "Frequently Asked Questions",
@@ -211,7 +211,7 @@ const T = {
       "faq3a": "Yes — each artisan's profile page lists directions from Toyama Station and visit policies.",
       "newsletterTitle": "Get news delivered monthly",
       "newsletterDesc": "New artisans, product launches and event announcements — once a month.",
-      "featuredTitle": "Craftvalley US Online Shop Now Open",
+      "featuredTitle": "Craft Valley US Online Shop Now Open",
       "featuredDesc": "All six founding artisan collections ship to all 50 US states. Free shipping on orders over $150 via DHL Express.",
       "shopNow": "Shop Now",
       "backToShop": "Back to Shop",
@@ -220,7 +220,7 @@ const T = {
       "seeNext": "See What's Next",
       "openCalendar": "Open Calendar",
       "calendarHint": "Click on a highlighted date to see event details.",
-      "meetArtisansTitle": "Meet the Artisans Behind Craftvalley"
+      "meetArtisansTitle": "Meet the Artisans Behind Craft Valley"
     },
     "footer": {
       "tagline": "Crafted in Japan's Mountain Heartland",
@@ -229,7 +229,7 @@ const T = {
       "newsletter": "Newsletter",
       "newsletterPlaceholder": "Your email address",
       "newsletterBtn": "Subscribe",
-      "copyright": "© 2026 Craftvalley Initiative. All rights reserved.",
+      "copyright": "© 2026 Craft Valley Initiative. All rights reserved.",
       "privacy": "Privacy Policy",
       "terms": "Terms of Use"
     }
@@ -272,7 +272,7 @@ const T = {
       "taglineLine1": "北陸の工芸を",
       "taglineLine2": "世界へ",
       "epoch": "令和の工芸 — Japan's Living Craft",
-      "kicker": "クラフトバレー — 富山・飛騨・小松"
+      "kicker": "Craft Valley — 飛能越"
     },
     "concept": {
       "label": "クラフトバレーについて",
@@ -300,12 +300,12 @@ const T = {
       ]
     },
     "map": {
-      "heading": "クラフトバレー域図",
-      "desc": "クラフトバレーは、日本中央山岳地帯の3県にまたがる文化遺産の回廊です。",
-      "toyama": "富山県 — 高岡市・氷見市・南砺市",
+      "heading": "飛能越 — Craft Valley の地域",
+      "desc": "飛能越（ひのうえつ）は、富山・石川・岐阜の3県にまたがる山あいの地域です。地図の図形は、行政界ではなくおよその範囲を示しています。",
+      "toyama": "富山県 — 高岡市・氷見市・南砺市・射水市",
       "gifu": "岐阜県 — 飛騨市",
       "ishikawa": "石川県 — 小松市",
-      "legend": "クラフトバレー対象地域（5市）"
+      "legend": "飛能越（対象6市のおよその範囲）"
     },
     "producers": {
       "heading": "職人・生産者紹介",
@@ -394,7 +394,7 @@ const T = {
       "missionHeading": "ミッション",
       "mission": "伝統工芸の継承者が国際市場（まずは米国市場）と直接つながれる仕組みを構築し、この地域の自然・地域社会・知識を守りながら工芸を持続させること。",
       "regionHeading": "この地域について",
-      "region": "クラフトバレー回廊は、古来の越後・飛騨交易路に沿って連なっています。呉西地域（高岡市など）は400年の銅器鋳造の歴史を持ち、南の飛騨市は春慶塗と麹発酵の伝統を守り、石川県小松市は加賀刃物の系譜を継いでいます。日本有数の密度で生きた伝統工芸が息づく地帯です。",
+      "region": "Craft Valley の対象地域は、日本語で「飛能越（ひのうえつ）」と呼びます。飛騨・能登（石川）・越中（富山）の頭文字をとった呼び名です。富山県の高岡市・氷見市・南砺市・射水市、石川県小松市、岐阜県飛騨市の6市からなり、銅器・漆器・木彫・和紙・刃物・陶磁・発酵食品など、多様な手仕事が受け継がれてきた地帯です。",
       "timelineHeading": "クラフトバレー年表",
       "timeline": [
         {

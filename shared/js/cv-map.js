@@ -1,8 +1,9 @@
 // ================================================================
-// Craftvalley — 地理院地図ベースの地域マップ (cv-map.js)
+// Craft Valley（飛能越）— 地理院地図ベースの地域マップ (cv-map.js)
 //
-//   対象5自治体（高岡市・氷見市・南砺市・小松市・飛騨市）の
-//   行政区域を、国土地理院の地図の上に網掛けで表示します。
+//   対象6市（高岡・氷見・南砺・射水・小松・飛騨）を、
+//   国土地理院の地図の上に「ひとつの図形でまとめて囲んで」表示します。
+//   行政界をなぞる方式ではなく、およその範囲を示す描き方です。
 //
 //   使い方（HTML側）:
 //     <div class="cv-map" id="cv-map"
@@ -41,26 +42,26 @@
   // ── 多言語ラベル ────────────────────────────────────────────────
   var TXT = {
     ja: {
-      areaLabel: "クラフトバレー対象地域",
-      cities: "5市",
+      areaLabel: "飛能越 — Craft Valley 対象地域",
+      cities: "6市のおよその範囲",
       reset: "全体を表示",
       loading: "地図を読み込んでいます…",
       failTitle: "地図を表示できませんでした",
       failBody: "インターネット接続をご確認のうえ、ページを再読み込みしてください。",
       craftLabel: "主な工芸",
       prefLabel: "所在",
-      hint: "市名をクリックすると詳細が表示されます"
+      hint: "市名をクリックすると詳細が出ます（境界は目安です）"
     },
     en: {
-      areaLabel: "Craftvalley Area",
-      cities: "5 municipalities",
+      areaLabel: "Craft Valley Area",
+      cities: "Approximate area · 6 cities",
       reset: "Reset view",
       loading: "Loading map…",
       failTitle: "The map could not be loaded",
       failBody: "Please check your internet connection and reload the page.",
       craftLabel: "Craft",
       prefLabel: "Location",
-      hint: "Click a municipality for details"
+      hint: "Click a city for details (boundary is approximate)"
     }
   };
 
@@ -79,20 +80,26 @@
       ".cv-area-shape{transition:fill-opacity .2s ease,stroke-width .2s ease}",
       ".cv-area-shape:hover{fill-opacity:.55}",
 
-      /* 市名ラベル */
-      ".cv-city-label{background:transparent;border:none;box-shadow:none;padding:0;",
-      "  font-weight:700;font-size:12px;white-space:nowrap;pointer-events:none}",
-      ".cv-city-label .cv-city-inner{display:inline-block;padding:2px 7px;border-radius:3px;",
-      "  background:rgba(255,255,255,.86);color:#1a1a1a;",
-      "  box-shadow:0 1px 3px rgba(0,0,0,.18)}",
-      ".cv-city-label::before{display:none}",
+      /* 対象地域の図形 */
+      ".cv-zone-shape{transition:fill-opacity .25s ease}",
+
+      /* 市の位置を示すピン */
+      ".cv-city-pin{background:transparent;border:none;box-shadow:none;padding:0;",
+      "  white-space:nowrap;display:flex;align-items:center;gap:5px;",
+      "  transform:translate(-7px,-7px);cursor:pointer}",
+      ".cv-city-pin::before{display:none}",
+      ".cv-pin-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;",
+      "  background:currentColor;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}",
+      ".cv-pin-name{display:inline-block;padding:2px 8px;border-radius:3px;",
+      "  font-weight:700;font-size:12px;color:#1a1a1a;",
+      "  background:rgba(255,255,255,.9);box-shadow:0 1px 3px rgba(0,0,0,.2)}",
 
       /* 凡例 */
       ".cv-map-legend{background:rgba(255,255,255,.93);padding:9px 12px;border-radius:4px;",
       "  box-shadow:0 1px 6px rgba(0,0,0,.16);font-size:11px;line-height:1.7;color:#222}",
       ".cv-map-legend .lg-title{font-weight:700;font-size:11px;margin-bottom:5px;letter-spacing:.04em}",
       ".cv-map-legend .lg-row{display:flex;align-items:center;gap:7px;white-space:nowrap}",
-      ".cv-map-legend .lg-swatch{width:16px;height:11px;flex-shrink:0;border:1px solid rgba(0,0,0,.35)}",
+      ".cv-map-legend .lg-swatch{width:20px;height:12px;flex-shrink:0}",
       ".cv-map-legend .lg-hint{margin-top:6px;font-size:10px;color:#777}",
 
       /* リセットボタン */
@@ -239,8 +246,8 @@
   function buildMap(box) {
     var L = window.L;
     var area = window.CV_AREA;
-    if (!area || !area.features || !area.features.length) {
-      showState(box, "err", tx("failTitle"), "境界データ (cv-area.js) が読み込まれていません。");
+    if (!area || !area.zone || !area.cities || !area.cities.length) {
+      showState(box, "err", tx("failTitle"), "対象地域データ (cv-area.js) が読み込まれていません。");
       return;
     }
 
@@ -252,6 +259,8 @@
 
     ensureHatchPattern(patId, accent);
     clearState(box);
+
+    box.style.color = accent;   // ピンの丸の色に使う
 
     var map = L.map(box, {
       zoomControl: true,
@@ -270,61 +279,53 @@
     map.on("click", function () { map.scrollWheelZoom.enable(); });
     map.on("mouseout", function () { map.scrollWheelZoom.disable(); });
 
-    // ── 網掛けレイヤー ──
-    var layer = L.geoJSON(area, {
-      style: function () {
-        return {
-          className: "cv-area-shape",
-          color: accent,
-          weight: 1.8,
-          opacity: 0.9,
-          fillColor: accent,
-          fillOpacity: 1,
-          fill: true
-        };
-      },
-      onEachFeature: function (feature, lyr) {
-        // 網掛けパターンを適用
-        lyr.on("add", function () {
-          if (lyr._path) lyr._path.setAttribute("fill", "url(#" + patId + ")");
-        });
-
-        var p = feature.properties;
-        lyr.bindPopup(buildPopup(p), { className: "cv-pop-wrap", maxWidth: 240 });
-
-        lyr.on("mouseover", function () {
-          lyr.setStyle({ weight: 3 });
-          if (lyr._path) lyr._path.setAttribute("fill-opacity", "0.75");
-        });
-        lyr.on("mouseout", function () {
-          lyr.setStyle({ weight: 1.8 });
-          if (lyr._path) lyr._path.setAttribute("fill-opacity", "1");
-        });
+    // ── 対象地域を包む図形 ──
+    // 行政界をなぞるのではなく、6市をまとめて囲む「およその範囲」を示す。
+    // 内側をやわらかい網掛けで塗り、輪郭は破線にして
+    // 「厳密な境界ではない」ことが伝わるようにしている。
+    var zoneLayer = L.geoJSON(
+      { type: "Feature", properties: {}, geometry: area.zone },
+      {
+        style: function () {
+          return {
+            className: "cv-zone-shape",
+            color: accent, weight: 2.4, opacity: 0.85,
+            dashArray: "10 7", lineJoin: "round",
+            fillColor: accent, fillOpacity: 1, fill: true
+          };
+        }
       }
-    }).addTo(map);
+    ).addTo(map);
 
-    // ── 市名ラベル ──
-    var labelLayer = L.layerGroup();
+    zoneLayer.eachLayer(function (l) {
+      if (l._path) l._path.setAttribute("fill", "url(#" + patId + ")");
+      l.on("add", function () {
+        if (l._path) l._path.setAttribute("fill", "url(#" + patId + ")");
+      });
+    });
+
+    // ── 各市の位置を示すマーカー ──
+    var cityLayer = L.layerGroup();
     if (showLbl) {
-      area.features.forEach(function (f) {
-        var c = polyCenter(f.geometry.coordinates);
-        if (!c) return;
-        L.marker(c, {
-          interactive: false,
-          keyboard: false,
+      area.cities.forEach(function (c) {
+        var mk = L.marker([c.lat, c.lng], {
           icon: L.divIcon({
-            className: "cv-city-label",
-            html: '<span class="cv-city-inner" data-cv-city="' + f.properties.code + '">' +
-                  cityName(f.properties) + "</span>",
+            className: "cv-city-pin",
+            // ピンの丸はアクセント色（currentColor 経由で指定）
+            html: '<span class="cv-pin-dot"></span>' +
+                  '<span class="cv-pin-name" data-cv-city="' + c.code + '">' +
+                  esc(cityName(c)) + "</span>",
             iconSize: [0, 0]
           })
-        }).addTo(labelLayer);
+        });
+        mk.bindPopup(buildPopup(c), { className: "cv-pop-wrap", maxWidth: 240 });
+        mk.addTo(cityLayer);
       });
-      labelLayer.addTo(map);
+      cityLayer.addTo(map);
     }
 
     // ── 表示範囲 ──
-    var bounds = layer.getBounds();
+    var bounds = zoneLayer.getBounds();
     function fit() { map.fitBounds(bounds, { padding: [26, 26] }); }
     fit();
 
@@ -359,10 +360,10 @@
 
     // ── 言語切替に追従 ──
     function relabel() {
-      // ラベル
-      area.features.forEach(function (f) {
-        var el = box.querySelector('[data-cv-city="' + f.properties.code + '"]');
-        if (el) el.textContent = cityName(f.properties);
+      // 市名
+      area.cities.forEach(function (c) {
+        var el = box.querySelector('[data-cv-city="' + c.code + '"]');
+        if (el) el.textContent = cityName(c);
       });
       // 凡例・ボタン
       var lg = box.querySelector(".cv-map-legend");
@@ -370,8 +371,10 @@
       var rb = box.querySelector(".cv-map-reset");
       if (rb) rb.textContent = tx("reset");
       // ポップアップ
-      layer.eachLayer(function (l) {
-        if (l.feature) l.setPopupContent(buildPopup(l.feature.properties));
+      var i = 0;
+      cityLayer.eachLayer(function (l) {
+        if (area.cities[i]) l.setPopupContent(buildPopup(area.cities[i]));
+        i++;
       });
     }
     document.addEventListener("cv-lang-change", relabel);
@@ -440,9 +443,10 @@
   function legendHtml(accent, patId) {
     return '<div class="lg-title">' + tx("areaLabel") + "</div>" +
            '<div class="lg-row">' +
-             '<svg class="lg-swatch" viewBox="0 0 16 11" aria-hidden="true">' +
-               '<rect width="16" height="11" fill="url(#' + patId + ')"/>' +
-               '<rect width="16" height="11" fill="none" stroke="' + accent + '" stroke-width="1.4"/>' +
+             '<svg class="lg-swatch" viewBox="0 0 20 12" aria-hidden="true">' +
+               '<rect x="1" y="1" width="18" height="10" rx="3" fill="url(#' + patId + ')"/>' +
+               '<rect x="1" y="1" width="18" height="10" rx="3" fill="none" ' +
+                 'stroke="' + accent + '" stroke-width="1.5" stroke-dasharray="4 3"/>' +
              "</svg>" +
              "<span>" + tx("cities") + "</span>" +
            "</div>" +
