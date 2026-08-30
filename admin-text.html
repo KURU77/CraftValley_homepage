@@ -120,6 +120,23 @@ main{max-width:1180px;margin:0 auto;padding:20px}
 
 .nores{background:#fff;border:1px dashed var(--line);border-radius:var(--radius);
   padding:40px;text-align:center;color:var(--sub)}
+
+/* ── 編集画面の切り替えタブ ── */
+.admin-switch{display:flex;gap:6px;margin-right:14px}
+.admin-switch a{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:7px;font-size:13px;text-decoration:none;
+  border:1px solid var(--line);background:#fff;color:var(--ink);transition:.15s;
+  white-space:nowrap;
+}
+.admin-switch a:hover{background:#f0ede6}
+.admin-switch a.current{
+  background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700;
+}
+@media(max-width:760px){
+  .admin-switch{margin-right:0;width:100%;order:-1}
+  .admin-switch a{flex:1;justify-content:center;min-height:44px;font-size:12px}
+}
 </style>
   <!-- ファビコン（ブラウザのタブに出るアイコン） -->
   <link rel="icon" href="shared/img/favicon.ico" sizes="any">
@@ -139,6 +156,10 @@ main{max-width:1180px;margin:0 auto;padding:20px}
 <header>
   <div class="head-row">
     <div class="brand">Craftvalley 文言編集 <small>ページ内の見出し・説明文・ボタン名</small></div>
+    <nav class="admin-switch">
+      <a href="admin.html" >📦 商品・職人・お知らせ</a>
+      <a href="admin-text.html" class="current">✏️ ページの文言</a>
+    </nav>
     <div class="head-actions">
       <span class="save-state" id="save-state"></span>
       <select id="preview-theme" class="btn-sm" style="padding:8px 10px;border-radius:7px;border:1px solid var(--line)">
@@ -163,6 +184,7 @@ main{max-width:1180px;margin:0 auto;padding:20px}
       <code>shared/js/</code> フォルダの同名ファイルに上書きすると、サイトに公開されます。</li>
   </ol>
   ※ 英語欄が空だと海外の閲覧者に日本語がそのまま表示されます。海外向けサイトのため英語の入力を推奨します。
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px"><b>編集画面は2つあります。</b>上のタブで切り替えられます。<br>📦 <b>商品・職人・お知らせ</b>… 商品や職人など「一覧に並ぶもの」を追加・編集します（書き出し: data.js）<br>✏️ <b>ページの文言</b>… 見出し・説明文・ボタンの文字など「ページに固定で出る文章」を直します（書き出し: translations.js）</div>
 </div>
 
 <div class="toolbar">
