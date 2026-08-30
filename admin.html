@@ -598,18 +598,31 @@ main{max-width:1180px;margin:0 auto;padding:20px}
   function deepCopy(o){return JSON.parse(JSON.stringify(o));}
 
   function loadData(){
+    var pub = deepCopy(typeof CV_DATA!=="undefined"?CV_DATA:{});
     try{
       var raw=localStorage.getItem(STORAGE_KEY);
-      if(raw){ var d=JSON.parse(raw); markDraft(true); return normalize(d); }
+      if(raw){ var d=JSON.parse(raw); markDraft(true); return normalize(d, pub); }
     }catch(e){}
     markDraft(false);
-    return normalize(deepCopy(typeof CV_DATA!=="undefined"?CV_DATA:{producers:[],products:[],events:{upcoming:[],past:[]},news:[]}));
+    return normalize(pub, pub);
   }
-  function normalize(d){
-    d.producers=d.producers||[]; d.products=d.products||[];
-    d.news=d.news||[]; d.events=d.events||{upcoming:[],past:[]};
+  // 下書きに無い項目は、公開中のデータで補う。
+  // （古い下書きを読み込んだときに、あとから追加した種類…SNS投稿や日記…が
+  //   空になったまま書き出され、公開データを消してしまうのを防ぐため）
+  function normalize(d, pub){
+    pub = pub || {};
+    function keep(key){
+      if(Array.isArray(d[key]) && d[key].length) return d[key];
+      if(Array.isArray(d[key]) && Array.isArray(pub[key]) && pub[key].length) return deepCopy(pub[key]);
+      return d[key] || deepCopy(pub[key]) || [];
+    }
+    d.producers=keep("producers"); d.products=keep("products");
+    d.news=keep("news"); d.sns=keep("sns"); d.diary=keep("diary");
+    d.events=d.events||deepCopy(pub.events)||{upcoming:[],past:[]};
+    var pe=pub.events||{};
+    if(!(d.events.upcoming||[]).length && (pe.upcoming||[]).length) d.events.upcoming=deepCopy(pe.upcoming);
+    if(!(d.events.past||[]).length     && (pe.past||[]).length)     d.events.past=deepCopy(pe.past);
     d.events.upcoming=d.events.upcoming||[]; d.events.past=d.events.past||[];
-    d.sns=d.sns||[]; d.diary=d.diary||[];
     return d;
   }
 
