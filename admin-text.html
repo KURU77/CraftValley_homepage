@@ -202,7 +202,11 @@ var SCHEMA = [
   where:"サイトを開いて最初に見える部分",
   desc:"訪問者が最初に目にする、いちばん大切な文言です。短く印象的な言葉が効果的です。",
   fields:[
-    {key:"hero.tagline", label:"キャッチコピー", hint:"最も大きく表示される見出し", type:"text"},
+    {key:"hero.taglineLine1", label:"キャッチコピー（1行目）", hint:"見出しの前半。和風は日本語、simpleは英語が表示されます", type:"text"},
+    {key:"hero.taglineLine2", label:"キャッチコピー（2行目・強調色）", hint:"見出しの後半。色が付いて目立つ部分です", type:"text"},
+    {key:"hero.tagline",      label:"キャッチコピー（1行版）", hint:"和風の見出しの下に小さく出る英文", type:"text"},
+    {key:"hero.epoch",        label:"見出しの上の小さな文字（和風）", type:"text"},
+    {key:"hero.kicker",       label:"見出しの上の小さな文字（simple）", type:"text"},
     {key:"hero.subtitle", label:"サブコピー", hint:"キャッチコピーの下の説明文", type:"area"},
     {key:"hero.cta",     label:"ボタン①（左）", hint:"「詳しく知る」系のボタン", type:"text"},
     {key:"hero.ctaShop", label:"ボタン②（右）", hint:"「ショップを見る」系のボタン", type:"text"},

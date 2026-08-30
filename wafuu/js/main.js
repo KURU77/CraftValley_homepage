@@ -19,7 +19,7 @@
   function applyTranslations() {
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
       var key = el.getAttribute("data-i18n");
-      var val = getT(key);
+      var val = getT(key, el.getAttribute("data-i18n-lang"));
       if (val !== undefined && val !== key) {
         if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") el.placeholder = val;
         else el.textContent = val;
@@ -27,14 +27,16 @@
     });
     document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
       var key = el.getAttribute("data-i18n-html");
-      var val = getT(key);
+      var val = getT(key, el.getAttribute("data-i18n-lang"));
       if (val !== undefined && val !== key) el.innerHTML = val;
     });
   }
 
-  function getT(key) {
+  // forceLang を渡すと、表示中の言語に関わらずその言語の文言を返す
+  // （和風の見出しは日本語、その下の一文は英語、のように固定したい箇所で使う）
+  function getT(key, forceLang) {
     if (typeof T === "undefined") return key;
-    var lang = window.CV_LANG;
+    var lang = forceLang || window.CV_LANG;
     var parts = key.split(".");
     var val = T[lang];
     for (var i = 0; i < parts.length; i++) {
