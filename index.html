@@ -17,7 +17,7 @@
   <meta property="og:site_name" content="Craft Valley">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cormorant+Garamond:wght@300;400;600&family=M+PLUS+Rounded+1c:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cormorant+Garamond:wght@300;400;600&family=M+PLUS+Rounded+1c:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=DotGothic16&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
@@ -132,107 +132,207 @@
     }
     .footnote{margin-top:32px;font-size:11px;letter-spacing:.2em;color:#3a3030;text-align:center}
 
-    /* ── Timer ── */
-    .survey-timer{position:relative;width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-    .timer-svg{position:absolute;inset:0;transform:rotate(-90deg);overflow:visible}
-    .timer-track{fill:none;stroke:rgba(201,168,76,.12);stroke-width:3}
-    .timer-fill{fill:none;stroke:#c9a84c;stroke-width:3;stroke-linecap:round;stroke-dasharray:107;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .4s ease}
-    .timer-fill.urgent{stroke:#e05555}
-    .timer-num{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:#c9a84c;position:relative;z-index:1;line-height:1;transition:color .4s ease}
-    .timer-num.urgent{color:#e05555}
-    .timer-expired-label{font-size:9px;letter-spacing:.15em;color:#4a4540;text-align:center;margin-top:4px;animation:fadeInUp .3s ease}
 
-    /* ── SURVEY (identical to before) ── */
-    .survey-overlay{
-      position:fixed;inset:0;z-index:9000;
-      background:rgba(4,9,16,.97);
-      display:flex;align-items:center;justify-content:center;padding:16px;
-      backdrop-filter:blur(6px);transition:opacity .5s ease;
+    /* ================================================================
+       RPG風アンケート — 4人のキャラが順番に問いかける
+    ================================================================ */
+    .rpg{
+      position:fixed;inset:0;z-index:1000;
+      display:flex;flex-direction:column;
+      background:
+        radial-gradient(ellipse at 50% 120%, rgba(201,168,76,.10), transparent 60%),
+        linear-gradient(180deg,#0a1420 0%,#0d1b2a 55%,#132436 100%);
+      font-family:'DotGothic16','Noto Sans JP',sans-serif;
+      color:#f5f0e8;transition:opacity .5s ease;
+      overflow:hidden;
     }
-    .survey-overlay.hiding{opacity:0;pointer-events:none}
-    .survey-box{
-      width:100%;max-width:580px;background:#111c2a;
-      border:1px solid rgba(201,168,76,.25);border-radius:6px;
-      padding:clamp(24px,5vw,48px);position:relative;
-      animation:surveyIn .5s cubic-bezier(.16,1,.3,1) forwards;
+    .rpg.hiding{opacity:0;pointer-events:none}
+    /* 遠景の山なみ（ピクセル調） */
+    .rpg::before{
+      content:"";position:absolute;left:0;right:0;bottom:0;height:46%;
+      background:
+        linear-gradient(180deg,transparent 0,rgba(201,168,76,.05) 100%),
+        repeating-linear-gradient(90deg,transparent 0 22px,rgba(255,255,255,.012) 22px 23px);
+      pointer-events:none;
     }
-    @keyframes surveyIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-    .survey-lang-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-    .survey-brand{font-family:'Noto Serif JP',serif;font-size:12px;letter-spacing:.35em;color:#c9a84c;text-transform:uppercase}
-    .survey-lang-btn{font-size:11px;letter-spacing:.2em;border:1px solid rgba(201,168,76,.4);color:#c9a84c;padding:4px 12px;border-radius:2px;cursor:pointer;background:transparent;transition:background .25s;font-family:'Noto Serif JP',serif}
-    .survey-lang-btn:hover{background:rgba(201,168,76,.12)}
-    .survey-progress-bar{height:2px;background:rgba(255,255,255,.08);border-radius:1px;margin-bottom:28px;overflow:hidden}
-    .survey-progress-fill{height:100%;background:#c9a84c;border-radius:1px;transition:width .4s cubic-bezier(.4,0,.2,1)}
-    .survey-progress-text{text-align:right;font-size:11px;color:#6e6258;letter-spacing:.15em;margin-bottom:5px}
-    .survey-q{display:none}
-    .survey-q.active{display:block;animation:qIn .35s ease forwards}
-    @keyframes qIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
-    .survey-q-num{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#c9a84c;margin-bottom:10px;display:block}
-    .survey-q-text{font-size:clamp(16px,2.5vw,21px);font-weight:400;line-height:1.45;color:#f5f0e8;margin-bottom:7px}
-    .survey-q-sub{font-size:13px;color:#7a7060;margin-bottom:24px;line-height:1.6;font-style:italic}
-    .survey-options{display:flex;flex-direction:column;gap:9px}
-    .survey-option{
-      display:flex;align-items:center;gap:13px;padding:13px 16px;
-      border:1px solid rgba(255,255,255,.08);border-radius:4px;cursor:pointer;
-      transition:border-color .25s,background .25s;font-size:clamp(13px,1.8vw,15px);color:#c8bfb0;user-select:none;
+    .rpg-mountains{
+      position:absolute;left:0;right:0;bottom:22%;height:26vh;min-height:120px;
+      background:
+        linear-gradient(135deg,transparent 49%,#0b1826 50%) 0 0/160px 100% no-repeat,
+        linear-gradient(225deg,transparent 49%,#0b1826 50%) 160px 0/160px 100% no-repeat;
+      opacity:.0;pointer-events:none;
     }
-    .survey-option:hover{border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.04);color:#f5f0e8}
-    .survey-option.selected{border-color:#c9a84c;background:rgba(201,168,76,.1);color:#f5f0e8}
-    .survey-option-icon{font-size:19px;flex-shrink:0;width:26px;text-align:center}
-    .survey-option-check{margin-left:auto;width:17px;height:17px;border:1px solid rgba(201,168,76,.3);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
-    .survey-option.selected .survey-option-check{background:#c9a84c;border-color:#c9a84c}
-    .survey-option.selected .survey-option-check::after{content:'✓';font-size:10px;color:#0d1b2a;font-weight:700}
-    .survey-textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#f5f0e8;padding:13px 15px;font-size:15px;border-radius:4px;font-family:'Cormorant Garamond','Noto Serif JP',serif;resize:none;min-height:95px;transition:border-color .25s}
-    .survey-textarea:focus{outline:none;border-color:rgba(201,168,76,.5)}
-    .survey-textarea::placeholder{color:#4a4540}
-    .survey-btn-row{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
-    .survey-btn-next{padding:11px 30px;background:#c9a84c;color:#0d1b2a;font-size:11px;letter-spacing:.25em;text-transform:uppercase;font-family:'Cormorant Garamond',serif;border:none;border-radius:2px;cursor:pointer;transition:background .25s,transform .2s;opacity:.4;pointer-events:none}
-    .survey-btn-next.ready{opacity:1;pointer-events:auto}
-    .survey-btn-next.ready:hover{background:#e8c96a;transform:translateY(-1px)}
-    .survey-btn-skip{font-size:11px;letter-spacing:.15em;color:#4a4540;cursor:pointer;background:none;border:none;transition:color .25s}
-    .survey-btn-skip:hover{color:#8a8070}
-    .survey-result{display:none;text-align:center;animation:qIn .4s ease forwards}
-    .survey-result.active{display:block}
-    .result-emoji{font-size:52px;margin-bottom:18px;display:block}
-    .result-heading{font-size:clamp(20px,3vw,28px);font-weight:300;margin-bottom:10px;color:#f5f0e8;line-height:1.3}
-    .result-heading .gold{color:#c9a84c}
-    .result-sub{font-size:14px;color:#8a8070;line-height:1.7;margin-bottom:24px;font-style:italic}
-    .result-recommendation{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:16px 20px;font-size:13px;color:#c8bfb0;line-height:1.7;margin-bottom:28px;text-align:left}
-    .result-recommendation strong{color:#c9a84c}
-    .btn-enter-site{display:inline-block;padding:13px 36px;background:#c9a84c;color:#0d1b2a;font-size:11px;letter-spacing:.3em;text-transform:uppercase;font-family:'Cormorant Garamond',serif;border:none;border-radius:2px;cursor:pointer;transition:background .25s,transform .2s;text-decoration:none}
-    .btn-enter-site:hover{background:#e8c96a;transform:translateY(-2px)}
-    .result-choose-note{margin-top:14px;font-size:11px;color:#4a4540;letter-spacing:.1em;cursor:pointer}
-    .result-choose-note:hover{color:#8a8070;text-decoration:underline}
-
-    @media(max-width:720px){
-      .choices{grid-template-columns:repeat(2,160px);gap:14px}
-      .choice-card{height:240px}
-      .card-title{font-size:18px}
-    }
-    @media(max-width:440px){
-      .choices{grid-template-columns:1fr 1fr;gap:10px}
-      .choice-card{height:210px}
+    .rpg-ground{
+      position:absolute;left:0;right:0;bottom:0;height:22%;
+      background:linear-gradient(180deg,#14283a 0,#0e1e2d 100%);
+      border-top:3px solid #1f3a52;
+      pointer-events:none;
     }
 
-    /* ── スマートフォン向けの調整 ──────────────────────
-       ・画面が縦に短い端末でも、アンケートが収まるようにする
-       ・ボタンを指で押しやすい大きさにする              */
+    /* ── 上部バー ── */
+    .rpg-top{
+      position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;
+      padding:16px 22px;gap:12px;
+    }
+    .rpg-brand{display:inline-flex;align-items:center;gap:9px;font-size:13px;letter-spacing:.25em;color:#c9a84c;text-transform:uppercase}
+    .rpg-brand img{width:26px;height:26px;background:#faf9f6;border-radius:50%;padding:3px}
+    .rpg-top-btns{display:flex;gap:8px}
+    .rpg-btn-ghost{
+      font-family:inherit;font-size:13px;letter-spacing:.12em;
+      background:transparent;color:#c9a84c;
+      border:2px solid rgba(201,168,76,.45);padding:9px 14px;min-height:44px;
+      cursor:pointer;transition:background .2s;
+    }
+    .rpg-btn-ghost:hover{background:rgba(201,168,76,.12)}
+
+    /* ── 舞台（キャラが立つ場所） ── */
+    .rpg{--rpg-box-h:190px}
+    .rpg-stage{
+      position:relative;z-index:2;flex:1;
+      display:flex;align-items:flex-end;justify-content:center;gap:clamp(10px,3vw,40px);
+      /* 会話窓の高さ＋余白ぶんだけ下を空ける（JSが --rpg-box-h を更新） */
+      padding:0 16px calc(var(--rpg-box-h) + 52px);
+      min-height:0;
+    }
+    .rpg-char{
+      position:relative;width:clamp(64px,11vw,132px);flex-shrink:0;
+      transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .4s ease,filter .4s ease;
+      opacity:0;transform:translateY(24px);
+      filter:brightness(.55) saturate(.6);
+      image-rendering:pixelated;
+    }
+    .rpg-char img{width:100%;height:auto;display:block;image-rendering:pixelated}
+    .rpg-char.in{opacity:1;transform:translateY(0)}
+    .rpg-char.speaking{filter:none;transform:translateY(-6px) scale(1.06);z-index:2}
+    .rpg-char.speaking img{animation:rpgBob 1.1s ease-in-out infinite}
+    .rpg-char.react img{animation:rpgHop .5s ease}
+    @keyframes rpgBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+    @keyframes rpgHop{0%{transform:translateY(0)}35%{transform:translateY(-16px)}70%{transform:translateY(0)}85%{transform:translateY(-5px)}100%{transform:translateY(0)}}
+    /* 名前の札（頭上） */
+    .rpg-char .tag{
+      position:absolute;left:50%;top:-24px;transform:translateX(-50%);
+      font-size:11px;letter-spacing:.15em;color:#c9a84c;white-space:nowrap;
+      opacity:0;transition:opacity .3s;
+    }
+    .rpg-char.speaking .tag{opacity:1}
+
+    /* ── 会話ウィンドウ ── */
+    .rpg-box{
+      position:absolute;left:50%;bottom:max(18px,env(safe-area-inset-bottom));
+      transform:translateX(-50%);z-index:5;
+      width:min(760px,calc(100% - 28px));
+      background:#0f1a27;
+      border:3px solid #c9a84c;box-shadow:0 0 0 3px #0f1a27,0 0 0 5px rgba(201,168,76,.35),0 18px 50px rgba(0,0,0,.55);
+      padding:18px 22px 16px;
+      min-height:168px;
+    }
+    .rpg-name{
+      position:absolute;top:-16px;left:18px;
+      background:#c9a84c;color:#0d1b2a;
+      font-size:13px;letter-spacing:.2em;padding:4px 12px;
+      box-shadow:0 0 0 3px #0f1a27;
+    }
+    .rpg-timer{
+      position:absolute;top:-16px;right:18px;
+      display:inline-flex;align-items:center;gap:5px;
+      background:#0f1a27;border:2px solid rgba(201,168,76,.5);color:#c9a84c;
+      font-size:12px;padding:3px 9px;letter-spacing:.1em;
+      transition:opacity .3s;
+    }
+    .rpg-timer.urgent{color:#ff8a6e;border-color:#ff8a6e}
+    .rpg-timer.off{opacity:0}
+    .rpg-text{
+      font-size:clamp(15px,2.2vw,18px);line-height:1.85;min-height:3.7em;
+      color:#f5f0e8;white-space:pre-wrap;word-break:break-word;
+      margin-top:6px;
+    }
+    .rpg-text em{color:#c9a84c;font-style:normal}
+    .rpg-cursor{
+      position:absolute;right:20px;bottom:12px;
+      color:#c9a84c;font-size:14px;animation:rpgBlink 1s steps(2) infinite;
+      opacity:0;transition:opacity .2s;
+    }
+    .rpg-cursor.show{opacity:1}
+    @keyframes rpgBlink{50%{opacity:.15}}
+
+    /* ── 選択肢（RPGのコマンド風） ── */
+    .rpg-choices{list-style:none;margin:10px 0 0;padding:0;display:none}
+    .rpg-choices.show{display:block}
+    .rpg-choice{
+      display:flex;align-items:center;gap:10px;
+      padding:9px 12px 9px 30px;position:relative;min-height:44px;
+      font-size:clamp(14px,2vw,16px);cursor:pointer;color:#d9d2c4;
+      border:2px solid transparent;
+      opacity:0;transform:translateX(-8px);
+      animation:rpgChoiceIn .28s ease forwards;
+    }
+    .rpg-choice:nth-child(2){animation-delay:.07s}
+    .rpg-choice:nth-child(3){animation-delay:.14s}
+    .rpg-choice:nth-child(4){animation-delay:.21s}
+    .rpg-choice:nth-child(5){animation-delay:.28s}
+    @keyframes rpgChoiceIn{to{opacity:1;transform:translateX(0)}}
+    .rpg-choice::before{
+      content:"▶";position:absolute;left:8px;color:#c9a84c;
+      opacity:0;transition:opacity .12s;
+    }
+    .rpg-choice:hover,.rpg-choice.cur{color:#fff;background:rgba(201,168,76,.10);border-color:rgba(201,168,76,.35)}
+    .rpg-choice:hover::before,.rpg-choice.cur::before{opacity:1}
+    .rpg-choice .ic{width:22px;text-align:center;flex-shrink:0}
+
+    /* ── 自由記述 ── */
+    .rpg-free{display:none;margin-top:10px}
+    .rpg-free.show{display:block}
+    .rpg-free textarea{
+      width:100%;min-height:76px;resize:none;
+      background:#0a1420;color:#f5f0e8;
+      border:2px solid rgba(201,168,76,.4);padding:10px 12px;
+      font-family:'Noto Sans JP',sans-serif;font-size:16px;line-height:1.7;
+    }
+    .rpg-free textarea:focus{outline:none;border-color:#c9a84c}
+    .rpg-free-btns{display:flex;gap:10px;margin-top:10px;justify-content:flex-end}
+    .rpg-btn{
+      font-family:inherit;font-size:14px;letter-spacing:.15em;
+      background:#c9a84c;color:#0d1b2a;border:none;
+      padding:12px 22px;min-height:46px;cursor:pointer;
+      box-shadow:3px 3px 0 #7a6428;transition:transform .1s,box-shadow .1s;
+    }
+    .rpg-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #7a6428}
+    .rpg-btn.sub{background:transparent;color:#c9a84c;border:2px solid rgba(201,168,76,.5);box-shadow:none}
+
+    /* ── 進行度 ── */
+    .rpg-progress{
+      position:absolute;left:50%;transform:translateX(-50%);
+      bottom:max(4px,env(safe-area-inset-bottom));z-index:4;
+      display:flex;gap:7px;
+    }
+    .rpg-progress i{width:9px;height:9px;background:rgba(201,168,76,.22);display:block}
+    .rpg-progress i.done{background:#c9a84c}
+    .rpg-progress i.now{background:#fff;box-shadow:0 0 6px #c9a84c}
+
+    /* ── 最後の「扉」 ── */
+    .rpg-enter{
+      display:none;margin-top:12px;text-align:center;
+    }
+    .rpg-enter.show{display:block}
+    .rpg-enter .rpg-btn{font-size:16px;padding:14px 32px}
+
+    /* ── スマホ ── */
     @media(max-width:768px){
-      .survey-overlay{padding:16px 14px;align-items:flex-start}
-      .survey-box{
-        max-height:calc(100dvh - 32px);
-        overflow-y:auto;-webkit-overflow-scrolling:touch;
-        padding:22px 18px 26px;margin-top:8px;
-      }
-      .survey-option{min-height:52px;font-size:14px;padding:12px 14px}
-      .survey-q-text{font-size:18px;line-height:1.5}
-      .survey-q-sub{font-size:13px}
-      .survey-btn-row{margin-top:22px;gap:12px}
-      .survey-btn-next{padding:15px 26px;font-size:12px;min-height:48px;flex:1}
-      .survey-btn-skip{min-height:48px;padding:0 8px;font-size:12px}
-      .survey-lang-btn{min-height:40px;padding:0 14px}
-      /* iOS で入力時に画面が拡大されないようにする */
-      .survey-textarea{font-size:16px}
+      .rpg-top{padding:12px 14px}
+      .rpg-brand span{display:none}
+      .rpg-stage{gap:6px}
+      .rpg-char{width:clamp(56px,17vw,80px)}
+      .rpg-box{padding:16px 14px 14px;min-height:150px;width:calc(100% - 16px)}
+      .rpg-text{font-size:15px;min-height:3.4em}
+      .rpg-choice{padding:8px 10px 8px 26px;font-size:14px}
+      .rpg-name{font-size:12px}
+      .rpg-progress{display:none}
+    }
+    @media(max-height:640px){
+      .rpg-char{width:clamp(48px,12vw,72px)}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .rpg-char,.rpg-char img,.rpg-choice,.rpg-cursor{animation:none!important;transition:none!important}
     }
 
     /* ── ロゴ ─────────────────────────────────────── */
@@ -243,11 +343,6 @@
       background:#faf9f6;border-radius:50%;padding:9px;
       box-shadow:0 6px 22px rgba(0,0,0,.35);
     }
-    .survey-brand-wrap{display:inline-flex;align-items:center;gap:9px}
-    .cv-survey-mark{
-      width:26px;height:26px;
-      background:#faf9f6;border-radius:50%;padding:3px;
-    }
     @media(max-width:768px){
       .cv-hero-mark{width:72px;padding:7px;margin-bottom:10px}
     }
@@ -256,87 +351,44 @@
 <body>
 
 <!-- ===== SURVEY (same as before) ===== -->
-<div class="survey-overlay" id="survey-overlay">
-  <div class="survey-box">
-    <div class="survey-lang-row">
-      <span class="survey-brand-wrap"><img src="shared/img/logo-mark.png" alt="" class="cv-survey-mark"><span class="survey-brand" id="s-brand">Craft Valley</span></span>
-      <!-- Countdown timer -->
-      <div class="survey-timer" id="survey-timer" title="Time remaining for this question">
-        <svg class="timer-svg" viewBox="0 0 44 44" aria-hidden="true">
-          <circle class="timer-track" cx="22" cy="22" r="17"/>
-          <circle class="timer-fill"  cx="22" cy="22" r="17" id="timer-fill"/>
-        </svg>
-        <span class="timer-num" id="timer-num">10</span>
-      </div>
-      <button class="survey-lang-btn" id="survey-lang-btn">日本語</button>
-    </div>
-    <p class="survey-progress-text" id="s-progress-text">Question 1 of 5</p>
-    <div class="survey-progress-bar"><div class="survey-progress-fill" id="s-progress-fill" style="width:20%"></div></div>
+<div class="rpg" id="survey-overlay" role="dialog" aria-label="Welcome survey">
+  <div class="rpg-ground" aria-hidden="true"></div>
 
-    <div class="survey-q active" data-q="1">
-      <span class="survey-q-num" id="s-q1-num">Question 1</span>
-      <p class="survey-q-text" id="s-q1-text">Have you heard of <em style="color:#c9a84c">Craft Valley</em> before?</p>
-      <p class="survey-q-sub" id="s-q1-sub">We're curious how far our story has traveled.</p>
-      <div class="survey-options">
-        <div class="survey-option" data-value="know-well"><span class="survey-option-icon">🌟</span><span id="s-q1-a1">Yes — I know it well</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="heard-of"><span class="survey-option-icon">👂</span><span id="s-q1-a2">I've heard the name before</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="first-time"><span class="survey-option-icon">🆕</span><span id="s-q1-a3">First time hearing about it</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="not-sure"><span class="survey-option-icon">🤔</span><span id="s-q1-a4">Not sure</span><div class="survey-option-check"></div></div>
+  <div class="rpg-top">
+    <div class="rpg-brand"><img src="shared/img/logo-mark.png" alt=""><span id="s-brand">Craft Valley</span></div>
+    <div class="rpg-top-btns">
+      <button class="rpg-btn-ghost" id="survey-lang-btn" type="button">日本語</button>
+      <button class="rpg-btn-ghost" id="survey-btn-skip" type="button">Skip →</button>
+    </div>
+  </div>
+
+  <div class="rpg-stage" id="rpg-stage" aria-hidden="true">
+    <div class="rpg-char" data-who="haru"><span class="tag"></span><img src="shared/img/dot-character.png" alt=""></div>
+    <div class="rpg-char" data-who="mio"><span class="tag"></span><img src="shared/img/dot-friend1.png" alt=""></div>
+    <div class="rpg-char" data-who="ken"><span class="tag"></span><img src="shared/img/dot-friend2.png" alt=""></div>
+    <div class="rpg-char" data-who="tabi"><span class="tag"></span><img src="shared/img/dot-friend3.png" alt=""></div>
+  </div>
+
+  <div class="rpg-box" id="rpg-box">
+    <span class="rpg-name" id="rpg-name"></span>
+    <span class="rpg-timer off" id="rpg-timer">⌛ <b id="timer-num">10</b></span>
+    <div class="rpg-text" id="rpg-text" aria-live="polite"></div>
+    <ul class="rpg-choices" id="rpg-choices"></ul>
+    <div class="rpg-free" id="rpg-free">
+      <textarea id="s-q5-input" rows="3"></textarea>
+      <div class="rpg-free-btns">
+        <button class="rpg-btn sub" id="rpg-free-skip" type="button"></button>
+        <button class="rpg-btn" id="rpg-free-send" type="button"></button>
       </div>
     </div>
-    <div class="survey-q" data-q="2">
-      <span class="survey-q-num" id="s-q2-num">Question 2</span>
-      <p class="survey-q-text" id="s-q2-text">When you hear <em style="color:#c9a84c">"Craft Valley"</em>, what image comes to mind?</p>
-      <p class="survey-q-sub" id="s-q2-sub">Go with your first instinct — there's no wrong answer.</p>
-      <div class="survey-options">
-        <div class="survey-option" data-value="traditional-craft"><span class="survey-option-icon">🏺</span><span id="s-q2-a1">Japanese traditional crafts &amp; artisans</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="mountains"><span class="survey-option-icon">🏔️</span><span id="s-q2-a2">Mountain landscapes &amp; nature</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="food-drink"><span class="survey-option-icon">🍶</span><span id="s-q2-a3">Food, fermentation &amp; Japanese flavors</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="modern-brand"><span class="survey-option-icon">✨</span><span id="s-q2-a4">A new &amp; exciting Japanese brand</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="no-image"><span class="survey-option-icon">❓</span><span id="s-q2-a5">No specific image yet</span><div class="survey-option-check"></div></div>
-      </div>
+    <div class="rpg-enter" id="rpg-enter">
+      <button class="rpg-btn" id="result-enter-btn" type="button"></button>
     </div>
-    <div class="survey-q" data-q="3">
-      <span class="survey-q-num" id="s-q3-num">Question 3</span>
-      <p class="survey-q-text" id="s-q3-text">Have you ever owned or gifted a <em style="color:#c9a84c">traditional Japanese craft</em> object?</p>
-      <p class="survey-q-sub" id="s-q3-sub">Lacquerware, handmade paper, knives, copper ware…</p>
-      <div class="survey-options">
-        <div class="survey-option" data-value="yes-several"><span class="survey-option-icon">💝</span><span id="s-q3-a1">Yes — I collect them</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="yes-once"><span class="survey-option-icon">🎁</span><span id="s-q3-a2">Once or twice</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="want-to"><span class="survey-option-icon">🌱</span><span id="s-q3-a3">Not yet — but I'd love to</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="not-yet"><span class="survey-option-icon">👀</span><span id="s-q3-a4">Not really — just browsing</span><div class="survey-option-check"></div></div>
-      </div>
-    </div>
-    <div class="survey-q" data-q="4">
-      <span class="survey-q-num" id="s-q4-num">Question 4</span>
-      <p class="survey-q-text" id="s-q4-text">What would make you most <em style="color:#c9a84c">excited</em> to explore?</p>
-      <p class="survey-q-sub" id="s-q4-sub">Help us show you what matters most.</p>
-      <div class="survey-options">
-        <div class="survey-option" data-value="artisans"><span class="survey-option-icon">🤲</span><span id="s-q4-a1">Meeting the artisans behind each craft</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="buy"><span class="survey-option-icon">🛍️</span><span id="s-q4-a2">Buying authentic Japanese craft objects</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="story"><span class="survey-option-icon">📖</span><span id="s-q4-a3">Learning the history &amp; stories</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="food"><span class="survey-option-icon">🍱</span><span id="s-q4-a4">Discovering fermented foods &amp; drinks</span><div class="survey-option-check"></div></div>
-        <div class="survey-option" data-value="visit"><span class="survey-option-icon">✈️</span><span id="s-q4-a5">Planning a trip to visit workshops</span><div class="survey-option-check"></div></div>
-      </div>
-    </div>
-    <div class="survey-q" data-q="5">
-      <span class="survey-q-num" id="s-q5-num">Question 5</span>
-      <p class="survey-q-text" id="s-q5-text">Anything you've always wanted to <em style="color:#c9a84c">know about Japan's craft culture</em>?</p>
-      <p class="survey-q-sub" id="s-q5-sub">Optional — your thoughts help shape Craft Valley's story.</p>
-      <textarea class="survey-textarea" id="s-q5-input" placeholder="e.g. How are crafts passed down? What makes Japanese tools special?…" rows="4"></textarea>
-    </div>
-    <div class="survey-result" id="survey-result">
-      <span class="result-emoji" id="result-emoji">🎉</span>
-      <h2 class="result-heading" id="result-heading">Welcome to <span class="gold">Craft Valley</span></h2>
-      <p class="result-sub" id="result-sub">Thank you! Here's where we suggest starting:</p>
-      <div class="result-recommendation" id="result-recommendation">Based on your answers, we recommend exploring the Artisan Profiles.</div>
-      <a href="#" class="btn-enter-site" id="result-enter-btn">Enter Craft Valley →</a>
-      <p class="result-choose-note" id="result-choose-note">Choose your design style below ↓</p>
-    </div>
-    <div class="survey-btn-row" id="survey-btn-row">
-      <button class="survey-btn-skip" id="survey-btn-skip">Skip survey →</button>
-      <button class="survey-btn-next" id="survey-btn-next">Continue</button>
-    </div>
+    <span class="rpg-cursor" id="rpg-cursor">▼</span>
+  </div>
+
+  <div class="rpg-progress" id="rpg-progress" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i>
   </div>
 </div>
 
@@ -428,12 +480,135 @@
     return; // 以降のサーベイ初期化をすべてスキップ
   }
 
-  // ── テキストデータ ────────────────────────────────────────────
-  var TEXT={en:{brand:"Craft Valley",langBtn:"日本語",progress:["Question {n} of 5","Complete!"],skip:"Skip survey →",next:"Continue",finish:"See My Results",qs:[{num:"Question 1",text:'Have you heard of <em style="color:#c9a84c">Craft Valley</em> before?',sub:"We're curious how far our story has traveled.",options:[{icon:"🌟",label:"Yes — I know it well",val:"know-well"},{icon:"👂",label:"I've heard the name before",val:"heard-of"},{icon:"🆕",label:"First time hearing about it",val:"first-time"},{icon:"🤔",label:"Not sure",val:"not-sure"}]},{num:"Question 2",text:'When you hear <em style="color:#c9a84c">"Craft Valley"</em>, what image comes to mind?',sub:"Go with your first instinct.",options:[{icon:"🏺",label:"Japanese traditional crafts & artisans",val:"traditional-craft"},{icon:"🏔️",label:"Mountain landscapes & nature",val:"mountains"},{icon:"🍶",label:"Food, fermentation & Japanese flavors",val:"food-drink"},{icon:"✨",label:"A new & exciting Japanese brand",val:"modern-brand"},{icon:"❓",label:"No specific image yet",val:"no-image"}]},{num:"Question 3",text:'Have you ever owned or gifted a <em style="color:#c9a84c">traditional Japanese craft</em> object?',sub:"Lacquerware, handmade paper, knives, copper ware…",options:[{icon:"💝",label:"Yes — I collect them",val:"yes-several"},{icon:"🎁",label:"Once or twice",val:"yes-once"},{icon:"🌱",label:"Not yet — but I'd love to",val:"want-to"},{icon:"👀",label:"Not really — just browsing",val:"not-yet"}]},{num:"Question 4",text:'What would make you most <em style="color:#c9a84c">excited</em> to explore?',sub:"Help us show you what matters most.",options:[{icon:"🤲",label:"Meeting the artisans behind each craft",val:"artisans"},{icon:"🛍️",label:"Buying authentic Japanese craft objects",val:"buy"},{icon:"📖",label:"Learning the history & stories",val:"story"},{icon:"🍱",label:"Discovering fermented foods & drinks",val:"food"},{icon:"✈️",label:"Planning a trip to visit workshops",val:"visit"}]},{num:"Question 5",text:'Anything you\'ve always wanted to <em style="color:#c9a84c">know about Japan\'s craft culture</em>?',sub:"Optional — your thoughts help shape Craft Valley's story.",freeText:true,placeholder:"e.g. How are crafts passed down? What makes Japanese tools special?…"}],results:{"artisans":{emoji:"🤲",heading:"Meet the Makers",rec:'Start with the <strong>Artisan Profiles</strong> — six studios, six remarkable stories.'},"buy":{emoji:"🛍️",heading:"The Collection Awaits",rec:'Head to the <strong>Shop</strong> — eight carefully curated items, each with an artisan story.'},"story":{emoji:"📖",heading:"Dive Into the Story",rec:'Start with <strong>About Craft Valley</strong> — the mountain corridor, the heritage, the vision.'},"food":{emoji:"🍶",heading:"A World of Flavor",rec:'Explore <strong>Ecchu Craft Brewery</strong> and <strong>Hida Koji Studio</strong> artisan profiles.'},"visit":{emoji:"✈️",heading:"Plan Your Journey",rec:'Check <strong>Events</strong> for Artisan Experience Tours and workshop directions.'},"default":{emoji:"🎉",heading:"Welcome to Craft Valley",rec:'Explore at your own pace — artisans, collection, or the story of the region.'}},resultSub:"Thank you for sharing. Here's where we think you'll want to start:",enterSite:"Enter Craft Valley →",chooseNote:"Choose your design style below ↓"},ja:{brand:"クラフトバレー",langBtn:"English",progress:["質問 {n} / 5","完了！"],skip:"スキップ →",next:"次へ",finish:"結果を見る",qs:[{num:"質問 1",text:'<em style="color:#c9a84c">クラフトバレー</em>をご存知でしたか？',sub:"私たちの物語がどこまで届いているか、知りたいのです。",options:[{icon:"🌟",label:"はい、よく知っています",val:"know-well"},{icon:"👂",label:"名前は聞いたことがあります",val:"heard-of"},{icon:"🆕",label:"今日初めて知りました",val:"first-time"},{icon:"🤔",label:"よくわかりません",val:"not-sure"}]},{num:"質問 2",text:'<em style="color:#c9a84c">「クラフトバレー」</em>と聞いて、どんなイメージが浮かびますか？',sub:"直感でお選びください。",options:[{icon:"🏺",label:"日本の伝統工芸・職人の技",val:"traditional-craft"},{icon:"🏔️",label:"山岳の風景・大自然",val:"mountains"},{icon:"🍶",label:"発酵食品・日本の味わい",val:"food-drink"},{icon:"✨",label:"新しいおしゃれな日本ブランド",val:"modern-brand"},{icon:"❓",label:"まだ特にイメージがない",val:"no-image"}]},{num:"質問 3",text:'日本の<em style="color:#c9a84c">伝統工芸品</em>を購入・贈り物にしたことはありますか？',sub:"漆器・和紙・包丁・銅器など",options:[{icon:"💝",label:"はい、よく購入します",val:"yes-several"},{icon:"🎁",label:"1〜2回あります",val:"yes-once"},{icon:"🌱",label:"まだありませんが、ぜひ欲しい",val:"want-to"},{icon:"👀",label:"まだ特に考えていません",val:"not-yet"}]},{num:"質問 4",text:'このサイトで最も<em style="color:#c9a84c">楽しみにしていること</em>は？',sub:"あなたが気になることを教えてください。",options:[{icon:"🤲",label:"職人・生産者たちに出会うこと",val:"artisans"},{icon:"🛍️",label:"本物の工芸品を購入すること",val:"buy"},{icon:"📖",label:"地域の歴史・ストーリーを知ること",val:"story"},{icon:"🍱",label:"発酵食品・クラフトビールの発見",val:"food"},{icon:"✈️",label:"いつか工房を訪問したい",val:"visit"}]},{num:"質問 5",text:'日本の<em style="color:#c9a84c">工芸文化</em>について気になっていることは？',sub:"任意回答です。あなたの声がクラフトバレーを形作ります。",freeText:true,placeholder:"例：伝統工芸はどうやって受け継がれるの？…"}],results:{"artisans":{emoji:"🤲",heading:"職人に会いに行こう",rec:'まずは<strong>職人プロフィール</strong>をどうぞ — 6つの工房、6つの物語。'},"buy":{emoji:"🛍️",heading:"コレクションを見てみよう",rec:'<strong>ショップ</strong>へ — 8つの厳選商品。それぞれに職人の物語が宿っています。'},"story":{emoji:"📖",heading:"物語に飛び込もう",rec:'<strong>クラフトバレーについて</strong>から — 山岳回廊と工芸の系譜を知ることができます。'},"food":{emoji:"🍶",heading:"発酵の世界へ",rec:'<strong>越中麦酒醸造所</strong>と<strong>飛騨こうじ工房</strong>のプロフィールをぜひ。'},"visit":{emoji:"✈️",heading:"旅の計画をはじめよう",rec:'<strong>イベント</strong>で職人体験ツアーをチェック。工房へのアクセスも掲載。'},"default":{emoji:"🎉",heading:"クラフトバレーへようこそ",rec:'ゆっくり探索してください。'}},resultSub:"ご回答ありがとうございます。おすすめの出発点をご提案します。",enterSite:"クラフトバレーへ →",chooseNote:"デザインスタイルを選んでください ↓"}};
+  // ================================================================
+  //  会話の台本
+  //   4人のキャラが順番に話しかけ、答えると物語が進みます。
+  //   セリフは自由に書き換えられます（意味を変えなければ動作に影響しません）。
+  //   回答の記号（val）は集計に使うので変えないでください。
+  // ================================================================
+  var SCRIPT = {
+    ja: {
+      langBtn: "English", skip: "とばす →", send: "伝える", later: "またこんど",
+      enter: "谷へ入る ▶", timeout: "……おっと、時間切れ。つぎ行こう！",
+      chars: { haru: "ハル", mio: "ミオ", ken: "ケン", tabi: "タビ", all: "みんな" },
+      scenes: [
+        { who: "haru", q: 1,
+          intro: ["やあ！　ようこそ、<em>飛能越</em>の谷へ。", "ぼくはハル。この谷の案内人さ。", "ひとつ聞いてもいいかな？"],
+          ask: "<em>Craft Valley</em>って、聞いたことある？",
+          options: [
+            { ic: "🌟", label: "うん、よく知ってる", val: "know-well",  react: "おお、知ってるんだ！　うれしいなあ。" },
+            { ic: "👂", label: "名前だけなら",       val: "heard-of",   react: "名前だけでも届いてたんだね。" },
+            { ic: "🆕", label: "今日はじめて知った", val: "first-time", react: "はじめまして！　じゃあ、ゆっくり案内するね。" },
+            { ic: "🤔", label: "よくわからない",     val: "not-sure",   react: "だいじょうぶ。今日ではっきりするよ。" }
+          ] },
+        { who: "mio", q: 2,
+          intro: ["ハル、その人だれ？", "……あ、お客さん！　わたしはミオ。", "ねえねえ、教えてほしいことがあるの。"],
+          ask: "<em>「Craft Valley」</em>って聞いて、どんな景色が浮かぶ？",
+          options: [
+            { ic: "🏺", label: "職人と伝統工芸",       val: "traditional-craft", react: "そう、それ！　この谷は職人の谷なの。" },
+            { ic: "🏔️", label: "山と自然",             val: "mountains",         react: "山、いいよね。谷の名前のとおり。" },
+            { ic: "🍶", label: "発酵と日本の味",       val: "food-drink",        react: "食いしん坊さんだ！　わたしも。" },
+            { ic: "✨", label: "新しい日本のブランド", val: "modern-brand",      react: "新しいって思ってもらえるの、うれしい。" },
+            { ic: "❓", label: "まだイメージがない",   val: "no-image",          react: "それなら、これから一緒に見つけよう。" }
+          ] },
+        { who: "ken", q: 3,
+          intro: ["よう。おれはケン。", "工芸品、好きなんだ。"],
+          ask: "日本の<em>伝統工芸品</em>、持ってたり贈ったりしたことある？",
+          options: [
+            { ic: "💝", label: "うん、集めてる",       val: "yes-several", react: "おっ、同志だな。話が合いそうだ。" },
+            { ic: "🎁", label: "1〜2回くらい",         val: "yes-once",    react: "いいね。その一つ、大事にしてくれてる？" },
+            { ic: "🌱", label: "まだ。でも欲しい",     val: "want-to",     react: "その気持ちがあれば十分さ。" },
+            { ic: "👀", label: "とくに考えてない",     val: "not-yet",     react: "見てるだけでも楽しいから、気楽にな。" }
+          ] },
+        { who: "tabi", q: 4,
+          intro: ["旅の途中で寄ったんだ。タビっていう。", "この谷、いいところだよ。"],
+          ask: "きみは、この谷で<em>なにを探しに</em>来た？",
+          options: [
+            { ic: "🤲", label: "職人に会いたい",       val: "artisans", react: "会えるよ。ひとりひとり、物語がある。" },
+            { ic: "🛍️", label: "本物の工芸品が欲しい", val: "buy",      react: "目利きだね。いいものが揃ってる。" },
+            { ic: "📖", label: "歴史や物語を知りたい", val: "story",    react: "この谷には400年分の話があるんだ。" },
+            { ic: "🍱", label: "発酵食品を味わいたい", val: "food",     react: "麹とビール、どっちも試してほしい。" },
+            { ic: "✈️", label: "いつか工房を訪ねたい", val: "visit",    react: "来なよ。駅からの道も案内してある。" }
+          ] },
+        { who: "all", q: 5, free: true,
+          intro: ["みんな：最後にひとつだけ。"],
+          ask: "日本の<em>工芸文化</em>について、気になってることはある？\n（なければ「またこんど」でOK）",
+          react: "ありがとう。ちゃんと届いたよ。" }
+      ],
+      endings: {
+        artisans: "じゃあ、まずは<em>職人たち</em>に会いに行こう。",
+        buy:      "じゃあ、まずは<em>工芸品の棚</em>を見に行こう。",
+        story:    "じゃあ、まずは<em>谷の物語</em>から読もう。",
+        food:     "じゃあ、まずは<em>麹と麦酒</em>のところへ行こう。",
+        visit:    "じゃあ、まずは<em>催事と道案内</em>を見よう。",
+        "default": "じゃあ、いっしょに谷を歩こう。"
+      },
+      door: "扉が開いた。さあ、行こう！"
+    },
+    en: {
+      langBtn: "日本語", skip: "Skip →", send: "Tell them", later: "Maybe later",
+      enter: "Enter the valley ▶", timeout: "…Oops, time's up. Let's move on!",
+      chars: { haru: "Haru", mio: "Mio", ken: "Ken", tabi: "Tabi", all: "Everyone" },
+      scenes: [
+        { who: "haru", q: 1,
+          intro: ["Hey! Welcome to the valley of <em>Hinouetsu</em>.", "I'm Haru, your guide around here.", "Mind if I ask you something?"],
+          ask: "Have you heard of <em>Craft Valley</em> before?",
+          options: [
+            { ic: "🌟", label: "Yes, I know it well",       val: "know-well",  react: "Oh, you know us! That makes me happy." },
+            { ic: "👂", label: "Just the name",             val: "heard-of",   react: "So the name has travelled. Nice." },
+            { ic: "🆕", label: "First time hearing of it",  val: "first-time", react: "Nice to meet you! I'll show you around." },
+            { ic: "🤔", label: "Not sure",                  val: "not-sure",   react: "No worries. It'll all make sense today." }
+          ] },
+        { who: "mio", q: 2,
+          intro: ["Haru, who's that?", "…Oh, a visitor! I'm Mio.", "Can I ask you something?"],
+          ask: "When you hear <em>\"Craft Valley\"</em>, what do you picture?",
+          options: [
+            { ic: "🏺", label: "Artisans & traditional craft", val: "traditional-craft", react: "Yes, exactly! This is a valley of makers." },
+            { ic: "🏔️", label: "Mountains & nature",            val: "mountains",         react: "The mountains are lovely — true to the name." },
+            { ic: "🍶", label: "Fermentation & Japanese food", val: "food-drink",        react: "A food lover! Me too." },
+            { ic: "✨", label: "A fresh Japanese brand",        val: "modern-brand",      react: "I'm glad it feels new to you." },
+            { ic: "❓", label: "No image yet",                  val: "no-image",          react: "Then let's find one together." }
+          ] },
+        { who: "ken", q: 3,
+          intro: ["Hey. I'm Ken.", "I'm into crafts myself."],
+          ask: "Have you ever owned or gifted a piece of <em>traditional Japanese craft</em>?",
+          options: [
+            { ic: "💝", label: "Yes, I collect them",   val: "yes-several", react: "A fellow collector! We'll get along." },
+            { ic: "🎁", label: "Once or twice",         val: "yes-once",    react: "Nice. Still taking good care of it?" },
+            { ic: "🌱", label: "Not yet, but I'd like to", val: "want-to",  react: "That feeling is all you need." },
+            { ic: "👀", label: "Not really",            val: "not-yet",     react: "Just looking is fun too. Take it easy." }
+          ] },
+        { who: "tabi", q: 4,
+          intro: ["I stopped by on my travels. Call me Tabi.", "This valley's a good place."],
+          ask: "What did you come to this valley <em>looking for</em>?",
+          options: [
+            { ic: "🤲", label: "To meet the artisans",     val: "artisans", react: "You will. Each one has a story." },
+            { ic: "🛍️", label: "Authentic craft objects",  val: "buy",      react: "Good eye. There's fine work here." },
+            { ic: "📖", label: "History and stories",      val: "story",    react: "This valley holds 400 years of them." },
+            { ic: "🍱", label: "Fermented food & drink",   val: "food",     react: "Try both the koji and the beer." },
+            { ic: "✈️", label: "To visit a workshop someday", val: "visit", react: "Come. Directions from the station are ready." }
+          ] },
+        { who: "all", q: 5, free: true,
+          intro: ["Everyone: One last thing."],
+          ask: "Anything you've wondered about <em>Japan's craft culture</em>?\n(If not, just say \"Maybe later\".)",
+          react: "Thank you. We heard you." }
+      ],
+      endings: {
+        artisans: "Then let's go meet the <em>artisans</em> first.",
+        buy:      "Then let's look at the <em>collection</em> first.",
+        story:    "Then let's start with the <em>valley's story</em>.",
+        food:     "Then let's head to the <em>koji and beer</em>.",
+        visit:    "Then let's check the <em>events and directions</em>.",
+        "default": "Then let's walk the valley together."
+      },
+      door: "The door is open. Let's go!"
+    }
+  };
 
-  // ── 状態変数 ──────────────────────────────────────────────────
-  var lang="en", currentQ=1, answers={};
+  // ── 状態 ──────────────────────────────────────────────────────
+  var lang = "en", currentQ = 1, answers = {};
   var surveySent = false;   // 二重送信の防止
+  var sceneIdx = 0, choiceIdx = 0, typing = null, waitingClick = null;
 
   // ================================================================
   //  アンケート回答の保存先（Googleフォーム）
@@ -507,186 +682,279 @@
     if (any) sendSurvey("離脱", true);
   });
 
-  var btnNext      = document.getElementById("survey-btn-next");
-  var btnSkip      = document.getElementById("survey-btn-skip");
-  var btnRow       = document.getElementById("survey-btn-row");
-  var progressFill = document.getElementById("s-progress-fill");
-  var progressText = document.getElementById("s-progress-text");
+
+  // ── 要素 ──────────────────────────────────────────────────────
+  var $ = function (id) { return document.getElementById(id); };
+  var elText = $("rpg-text"), elName = $("rpg-name"), elChoices = $("rpg-choices"),
+      elFree = $("rpg-free"), elEnter = $("rpg-enter"), elCursor = $("rpg-cursor"),
+      elTimer = $("rpg-timer"), timerNumEl = $("timer-num"), elBox = $("rpg-box"),
+      btnSkip = $("survey-btn-skip"), btnLang = $("survey-lang-btn"),
+      ta = $("s-q5-input");
+  var chars = {};
+  document.querySelectorAll(".rpg-char").forEach(function (c) { chars[c.getAttribute("data-who")] = c; });
+  var reduced = false;
+  try { reduced = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+
+  function T() { return SCRIPT[lang]; }
+
+  // 会話窓の高さに合わせて、キャラの立ち位置を上げ下げする
+  function syncBoxHeight() {
+    overlay.style.setProperty("--rpg-box-h", elBox.offsetHeight + "px");
+  }
+  // 表示が変わった直後に同期（すぐ＋レイアウト確定後の2回。
+  // requestAnimationFrame はタブが非表示だと止まるため setTimeout を使う）
+  function syncSoon() { syncBoxHeight(); setTimeout(syncBoxHeight, 40); setTimeout(syncBoxHeight, 320); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
   // ── タイマー ──────────────────────────────────────────────────
   var TIMER_DURATION = 10;  // 1問あたりの秒数
-  var timerInterval  = null;
-  var timerCount     = TIMER_DURATION;
-  var timerFillEl    = document.getElementById("timer-fill");
-  var timerNumEl     = document.getElementById("timer-num");
-  // SVG円の周長 (2 * π * r=17 ≈ 106.8)
-  var CIRC = 2 * Math.PI * 17;
-
+  var timerInterval = null, timerCount = TIMER_DURATION;
   function updateTimerUI() {
-    if (!timerNumEl || !timerFillEl) return;
     timerNumEl.textContent = timerCount;
-    // stroke-dashoffset で残り時間を表現 (0=満タン, CIRC=空)
-    var offset = CIRC * (1 - timerCount / TIMER_DURATION);
-    timerFillEl.style.strokeDashoffset = offset;
-    timerFillEl.style.strokeDasharray  = CIRC;
-    var urgent = timerCount <= 3;
-    timerNumEl.classList.toggle("urgent", urgent);
-    timerFillEl.classList.toggle("urgent", urgent);
+    elTimer.classList.toggle("urgent", timerCount <= 3);
   }
-
-  function clearTimer() {
-    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-  }
-
-  function startTimer() {
+  function clearTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } elTimer.classList.add("off"); }
+  function startTimer(onTimeout) {
     clearTimer();
-    timerCount = TIMER_DURATION;
-    updateTimerUI();
-    // タイマーを表示
-    var timerEl = document.getElementById("survey-timer");
-    if (timerEl) timerEl.style.display = "flex";
-
+    timerCount = TIMER_DURATION; updateTimerUI(); elTimer.classList.remove("off");
     timerInterval = setInterval(function () {
-      timerCount--;
-      updateTimerUI();
-      if (timerCount <= 0) {
-        clearTimer();
-        // 時間切れ → 強制で次の質問へ
-        advanceQuestion(true);
-      }
+      timerCount--; updateTimerUI();
+      if (timerCount <= 0) { clearTimer(); onTimeout(); }
     }, 1000);
   }
 
-  // タイマーを隠す（結果画面・スキップ後）
-  function hideTimer() {
-    clearTimer();
-    var timerEl = document.getElementById("survey-timer");
-    if (timerEl) timerEl.style.display = "none";
-  }
-
-  // ── 共通の「次の質問へ進む」ロジック ─────────────────────────
-  // forced=true のときは選択なしでも進む（タイマー切れ時）
-  function advanceQuestion(forced) {
-    if (!forced && !btnNext.classList.contains("ready")) return;
-    if (currentQ < 5) {
-      document.querySelector('.survey-q[data-q="'+currentQ+'"]').classList.remove("active");
-      currentQ++;
-      document.querySelector('.survey-q[data-q="'+currentQ+'"]').classList.add("active");
-      updateProgress();
-      updateNextBtn();
-      startTimer(); // 次の質問のタイマーを開始
-    } else {
-      showResult();
+  // ── タイプライター ───────────────────────────────────────────
+  function typeText(html, done) {
+    if (typing) { clearTimeout(typing); typing = null; }
+    elCursor.classList.remove("show");
+    // タグを崩さず1文字ずつ出すため、いったん全文を入れて文字数で切る
+    var tmp = document.createElement("div"); tmp.innerHTML = html;
+    var plain = tmp.textContent;
+    var total = plain.length, i = 0;
+    var speed = reduced ? 0 : 26;
+    function frame() {
+      i++;
+      elText.innerHTML = sliceHtml(html, i);
+      if (i < total && speed) { typing = setTimeout(frame, speed); }
+      else { typing = null; elText.innerHTML = html; syncSoon(); done && done(); }
     }
+    if (!speed) { elText.innerHTML = html; done && done(); return; }
+    elText.innerHTML = ""; frame();
+  }
+  // HTMLの先頭 n 文字（表示文字ベース）だけを残す
+  function sliceHtml(html, n) {
+    var out = "", count = 0, inTag = false;
+    for (var k = 0; k < html.length; k++) {
+      var ch = html[k];
+      if (ch === "<") inTag = true;
+      if (inTag) { out += ch; if (ch === ">") inTag = false; continue; }
+      if (ch === "&") { var m = html.slice(k).match(/^&[a-z#0-9]+;/i); if (m) { out += m[0]; k += m[0].length - 1; count++; if (count >= n) break; continue; } }
+      out += ch; count++;
+      if (count >= n) break;
+    }
+    // 閉じタグを補う
+    var open = (out.match(/<em[^>]*>/g) || []).length - (out.match(/<\/em>/g) || []).length;
+    while (open-- > 0) out += "</em>";
+    return out;
+  }
+  // 表示中の文をクリックで一気に出す／▼が出ていれば次へ
+  function boxClick() {
+    if (typing) { clearTimeout(typing); typing = null; elText.innerHTML = elText.getAttribute("data-full") || elText.innerHTML; if (afterType) { var f = afterType; afterType = null; f(); } return; }
+    if (waitingClick) { var g = waitingClick; waitingClick = null; g(); }
+  }
+  var afterType = null;
+  function say(html, done) {
+    elText.setAttribute("data-full", html);
+    afterType = done;
+    typeText(html, function () { afterType = null; done && done(); });
+  }
+  function sayThenWait(html, done) {
+    say(html, function () { elCursor.classList.add("show"); waitingClick = function () { elCursor.classList.remove("show"); done(); }; });
   }
 
-  // ── レンダリング ──────────────────────────────────────────────
-  function render() {
-    var t = TEXT[lang];
-    document.getElementById("s-brand").textContent = t.brand;
-    document.getElementById("survey-lang-btn").textContent = t.langBtn;
-    btnSkip.textContent = t.skip;
-    t.qs.forEach(function (q, i) {
-      var qn = i + 1, el = document.querySelector('.survey-q[data-q="'+qn+'"]');
-      if (!el) return;
-      el.querySelector(".survey-q-num").textContent = q.num;
-      el.querySelector(".survey-q-text").innerHTML  = q.text;
-      el.querySelector(".survey-q-sub").textContent  = q.sub;
-      if (q.freeText) {
-        var ta = el.querySelector(".survey-textarea");
-        if (ta) ta.placeholder = q.placeholder;
-      } else {
-        var opts = el.querySelectorAll(".survey-option");
-        q.options.forEach(function (opt, j) {
-          if (opts[j]) {
-            opts[j].querySelectorAll("span")[1].textContent = opt.label;
-            opts[j].setAttribute("data-value", opt.val);
-          }
-        });
-      }
+  // ── キャラ演出 ───────────────────────────────────────────────
+  function showChars(list) {
+    Object.keys(chars).forEach(function (k) {
+      chars[k].classList.toggle("in", list.indexOf(k) >= 0);
     });
-    updateProgress();
-    updateNextBtn();
-    // ※ 言語切替時はタイマーをリセットしない（現在の残り秒数を維持）
+  }
+  function speaker(who) {
+    Object.keys(chars).forEach(function (k) {
+      chars[k].classList.toggle("speaking", who === "all" ? true : k === who);
+      chars[k].querySelector(".tag").textContent = T().chars[k];
+    });
+    elName.textContent = T().chars[who] || "";
+  }
+  function react(who) {
+    var list = who === "all" ? Object.keys(chars) : [who];
+    list.forEach(function (k) {
+      var c = chars[k]; c.classList.remove("react"); void c.offsetWidth; c.classList.add("react");
+    });
+  }
+  function setProgress(q) {
+    var dots = document.querySelectorAll("#rpg-progress i");
+    dots.forEach(function (d, i) {
+      d.classList.toggle("done", i < q - 1); d.classList.toggle("now", i === q - 1);
+    });
   }
 
-  function updateProgress() {
-    var t = TEXT[lang], isR = document.getElementById("survey-result").classList.contains("active");
-    progressText.textContent = isR ? t.progress[1] : t.progress[0].replace("{n}", currentQ);
-    progressFill.style.width = (isR ? 100 : currentQ / 5 * 100) + "%";
+  // ── 場面の進行 ───────────────────────────────────────────────
+  function runScene(idx) {
+    var sc = T().scenes[idx];
+    if (!sc) { return ending(); }
+    sceneIdx = idx; currentQ = sc.q;
+    setProgress(sc.q);
+    elChoices.classList.remove("show"); elChoices.innerHTML = "";
+    elFree.classList.remove("show"); elEnter.classList.remove("show");
+    syncSoon();
+    clearTimer();
+
+    // 登場（これまで出た人は残す）
+    var seen = T().scenes.slice(0, idx + 1).map(function (x) { return x.who; });
+    if (sc.who === "all") seen = Object.keys(chars);
+    showChars(seen.filter(function (w) { return w !== "all"; }));
+    speaker(sc.who);
+
+    var lines = sc.intro.slice();
+    (function next() {
+      if (lines.length) { sayThenWait(lines.shift(), next); return; }
+      askQuestion(sc);
+    })();
   }
 
-  function updateNextBtn() {
-    var t = TEXT[lang], isLast = currentQ === 5;
-    btnNext.textContent = isLast ? t.finish : t.next;
-    var qEl = document.querySelector('.survey-q[data-q="'+currentQ+'"]');
-    var sel = qEl && qEl.querySelector(".survey-option.selected");
-    var isFT = qEl && !!qEl.querySelector(".survey-textarea");
-    (sel || isFT) ? btnNext.classList.add("ready") : btnNext.classList.remove("ready");
-  }
-
-  // ── 選択肢クリック ────────────────────────────────────────────
-  document.querySelectorAll(".survey-q").forEach(function (qEl) {
-    qEl.querySelectorAll(".survey-option").forEach(function (opt) {
-      opt.addEventListener("click", function () {
-        qEl.querySelectorAll(".survey-option").forEach(function (o) { o.classList.remove("selected"); });
-        opt.classList.add("selected");
-        answers[currentQ] = opt.getAttribute("data-value");
-        btnNext.classList.add("ready");
+  function askQuestion(sc) {
+    say(sc.ask, function () {
+      if (sc.free) {
+        elFree.classList.add("show");
+        syncSoon();
+        ta.placeholder = ""; ta.value = answers[5] || ""; ta.focus();
+        $("rpg-free-send").textContent = T().send;
+        $("rpg-free-skip").textContent = T().later;
+        return;   // 自由記述はタイマーなし
+      }
+      choiceIdx = 0;
+      sc.options.forEach(function (o, i) {
+        var li = document.createElement("li");
+        li.className = "rpg-choice" + (i === 0 ? " cur" : "");
+        li.setAttribute("data-value", o.val);
+        li.innerHTML = '<span class="ic">' + o.ic + "</span><span>" + esc(o.label) + "</span>";
+        li.addEventListener("click", function (e) { e.stopPropagation(); choose(sc, i); });
+        li.addEventListener("mouseenter", function () { setCur(i); });
+        elChoices.appendChild(li);
+      });
+      elChoices.classList.add("show");
+      syncSoon();
+      startTimer(function () {
+        // 時間切れ: 未回答のまま次へ
+        elChoices.classList.remove("show");
+        sayThenWait(T().timeout, function () { runScene(sceneIdx + 1); });
       });
     });
+  }
+
+  function setCur(i) {
+    choiceIdx = i;
+    elChoices.querySelectorAll(".rpg-choice").forEach(function (li, k) { li.classList.toggle("cur", k === i); });
+  }
+
+  function choose(sc, i) {
+    clearTimer();
+    var o = sc.options[i];
+    answers[sc.q] = o.val;
+    elChoices.classList.remove("show");
+    react(sc.who);
+    sayThenWait(o.react, function () { runScene(sceneIdx + 1); });
+  }
+
+  // 自由記述
+  $("rpg-free-send").addEventListener("click", function () {
+    answers[5] = ta.value.trim();
+    elFree.classList.remove("show");
+    react("all");
+    var sc = T().scenes[sceneIdx];
+    sayThenWait(sc.react, function () { runScene(sceneIdx + 1); });
   });
-  var ta = document.getElementById("s-q5-input");
-  if (ta) ta.addEventListener("input", function () { answers[5] = ta.value; });
+  $("rpg-free-skip").addEventListener("click", function () {
+    answers[5] = ta.value.trim();
+    elFree.classList.remove("show");
+    runScene(sceneIdx + 1);
+  });
+  ta.addEventListener("input", function () { answers[5] = ta.value; });
 
-  // ── ボタン ────────────────────────────────────────────────────
-  btnNext.addEventListener("click", function () { advanceQuestion(false); });
-  btnSkip.addEventListener("click", dismiss);
-
-  // ── 結果表示 ──────────────────────────────────────────────────
-  function showResult() {
-    hideTimer(); // タイマー停止＆非表示
+  // ── 結び ────────────────────────────────────────────────────
+  function ending() {
+    clearTimer();
+    setProgress(6);
+    showChars(Object.keys(chars));
+    speaker("tabi");
+    var e = T().endings, key = answers[4] || "default";
     setCookie(COOKIE_NAME, "1", COOKIE_DAYS); // 訪問記録（クッキー）
     sendSurvey("完了");                        // 回答をGoogleフォームへ
-    document.querySelectorAll(".survey-q").forEach(function (q) { q.classList.remove("active"); });
-    btnRow.style.display = "none";
-    var t = TEXT[lang], key = answers[4] || "default", res = t.results[key] || t.results["default"];
-    document.getElementById("result-emoji").textContent = res.emoji;
-    document.getElementById("result-heading").innerHTML = res.heading + ' — <span class="gold">Craft Valley</span>';
-    document.getElementById("result-sub").textContent = t.resultSub;
-    document.getElementById("result-recommendation").innerHTML = res.rec;
-    document.getElementById("result-enter-btn").textContent = t.enterSite;
-    document.getElementById("result-enter-btn").href = (SINGLE_STYLE || "wafuu") + "/index.html";
-    document.getElementById("result-choose-note").textContent = t.chooseNote;
-    document.getElementById("survey-result").classList.add("active");
-    updateProgress();
+    sayThenWait(e[key] || e["default"], function () {
+      speaker("all");
+      say(T().door, function () {
+        $("result-enter-btn").textContent = T().enter;
+        elEnter.classList.add("show");
+        syncSoon();
+      });
+    });
+  }
+  $("result-enter-btn").addEventListener("click", function () { leave(); });
+
+  function leave() {
+    clearTimer();
+    overlay.classList.add("hiding");
+    setTimeout(function () { overlay.style.display = "none"; goSite(); }, 500);
   }
 
-  // ── 閉じる ────────────────────────────────────────────────────
+  // ── とばす ───────────────────────────────────────────────────
   function dismiss() {
-    hideTimer(); // タイマー停止
+    clearTimer();
     setCookie(COOKIE_NAME, "1", COOKIE_DAYS); // 訪問記録（クッキー）
     sendSurvey("スキップ");   // 途中までの回答も記録（完了済みなら何もしない）
-    overlay.classList.add("hiding");
-    setTimeout(function () {
-      overlay.style.display = "none";
-      goSite();
-    }, 500);
+    leave();
+  }
+  btnSkip.addEventListener("click", dismiss);
+
+  // ── 言語切替（今の場面を同じ位置からやり直す）───────────────
+  btnLang.addEventListener("click", function () {
+    lang = lang === "en" ? "ja" : "en";
+    applyChrome();
+    runScene(sceneIdx);
+  });
+  function applyChrome() {
+    btnLang.textContent = T().langBtn;
+    btnSkip.textContent = T().skip;
+    $("s-brand").textContent = "Craft Valley";
   }
 
-  document.getElementById("result-choose-note").addEventListener("click", dismiss);
-  document.getElementById("survey-lang-btn").addEventListener("click", function () {
-    lang = lang === "en" ? "ja" : "en";
-    render();
+  // ── 操作 ────────────────────────────────────────────────────
+  elBox.addEventListener("click", function (e) {
+    if (e.target.closest(".rpg-choice, .rpg-free, .rpg-enter, textarea, button")) return;
+    boxClick();
   });
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && btnNext.classList.contains("ready")) advanceQuestion(false);
+    if (overlay.style.display === "none") return;
+    if (e.target === ta) return;
+    if (elChoices.classList.contains("show")) {
+      var n = elChoices.children.length;
+      if (e.key === "ArrowDown") { setCur((choiceIdx + 1) % n); e.preventDefault(); }
+      else if (e.key === "ArrowUp") { setCur((choiceIdx - 1 + n) % n); e.preventDefault(); }
+      else if (e.key === "Enter" || e.key === " ") { choose(T().scenes[sceneIdx], choiceIdx); e.preventDefault(); }
+      return;
+    }
+    if (e.key === "Enter" || e.key === " ") { boxClick(); e.preventDefault(); }
   });
 
-  // ── 初期化 ────────────────────────────────────────────────────
-  render();
-  startTimer(); // 最初の質問のタイマーを開始
+  if (window.ResizeObserver) new ResizeObserver(syncSoon).observe(elBox);
+  window.addEventListener("resize", syncSoon);
+  syncBoxHeight();
 
+  // ── 開始 ────────────────────────────────────────────────────
+  // ブラウザの言語が日本語なら日本語で始める
+  try { if (/^ja/i.test(navigator.language || "")) lang = "ja"; } catch (e) {}
+  applyChrome();
+  setTimeout(function () { runScene(0); }, reduced ? 0 : 350);
 })();
 </script>
 </body>
