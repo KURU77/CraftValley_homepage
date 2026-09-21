@@ -303,7 +303,8 @@ main{max-width:1180px;margin:0 auto;padding:20px}
       <span class="save-state" id="save-state"></span>
       <select id="preview-theme" class="btn-ghost" title="プレビューに使うデザイン案" style="padding:9px 12px;">
         <option value="wafuu">プレビュー: 和風</option>
-        <option value="simple">プレビュー: simple</option>
+        <!-- シンプル版は現在非公開のため選択肢から外しています（再公開時は hidden を削除）-->
+        <option value="simple" hidden>プレビュー: simple</option>
       </select>
       <button class="btn-ghost" id="btn-preview">👁 プレビュー</button>
       <button class="btn-ghost btn-sm" id="btn-reload" title="保存していない下書きを破棄して、公開中のデータに戻します">公開データに戻す</button>
@@ -313,7 +314,8 @@ main{max-width:1180px;margin:0 auto;padding:20px}
       <span class="save-state" id="t-save-state"></span>
       <select id="t-preview-theme" class="btn-sm" style="padding:8px 10px;border-radius:7px;border:1px solid var(--line)">
         <option value="wafuu">プレビュー: 和風</option>
-        <option value="simple">プレビュー: simple</option>
+        <!-- シンプル版は現在非公開のため選択肢から外しています（再公開時は hidden を削除）-->
+        <option value="simple" hidden>プレビュー: simple</option>
       </select>
       <button class="btn-sm" id="t-btn-preview">👁 プレビュー</button>
       <button class="btn-sm" id="t-btn-reset" title="下書きを破棄して公開中の文言に戻します">公開データに戻す</button>

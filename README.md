@@ -1,7 +1,16 @@
 # Craft Valley 海外消費者向けホームページ
 
 日本の工芸品・食品を海外のお客様に紹介する、多言語（英語/日本語）の静的サイトです。
-2つのデザイン案（和風 / Simple）を比較でき、**商品・職人・お知らせ・イベントは管理画面から非エンジニアでも更新**できます。
+デザインは **和風** に一本化しています。**商品・職人・お知らせ・イベント・ページの文言は管理画面から非エンジニアでも更新**できます。
+
+> **⚠️ 非公開にしている機能があります**（削除はしていません）
+>
+> | 機能 | 場所 | 状態 | 戻し方 |
+> |---|---|---|---|
+> | **シンプル版デザイン** | `simple/` | 導線を外し、検索エンジンにも載せていません | 下記「シンプル版を再公開する」 |
+> | **SNS投稿ページ** | `wafuu/sns.html` `simple/sns.html` | メニューから外し、noindex | `shared/js/cv-restore-sns.md` |
+>
+> ファイルはすべて残っているので、URLを直接入力すれば表示できます。
 
 ---
 
@@ -9,20 +18,28 @@
 
 ```
 .
-├── index.html            … デザイン案を選ぶトップ（和風 / Simple の入口）
-├── admin.html            … ★編集画面（管理用・日本語UI）
+├── index.html            … トップ（初回はアンケート → 和風サイトへ）
+├── admin.html            … ★編集画面（管理用・日本語UI）コンテンツと文言を切り替えて編集
+├── admin-text.html       … 旧・文言編集画面（admin.html に統合済み。案内ページとして残置）
 ├── 編集の手引き.md        … 非エンジニア向けの操作マニュアル
+├── アンケート設定手順.md  … アンケート回答をGoogleフォームに貯める設定
 │
 ├── shared/js/
-│   ├── data.js           … ★全コンテンツのデータ（編集画面が書き出す唯一のファイル）
+│   ├── data.js           … ★コンテンツのデータ（編集画面「コンテンツ」が書き出す）
+│   ├── translations.js   … ★ページの文言（編集画面「ページの文言」が書き出す）
 │   ├── cv-runtime.js     … 画像表示・プレビューの共通プログラム（さわらない）
-│   └── translations.js   … UIの多言語テキスト
+│   ├── cv-map.js         … 地域マップ（国土地理院の地図に対象地域を表示）
+│   ├── cv-intro.js       … オープニング演出・キャラクター
+│   └── cv-restore-sns.md … SNSページを再公開する手順
+├── shared/data/
+│   └── cv-area.js        … 対象地域（飛能越 6市）の図形データ
+├── shared/img/           … ロゴ・ファビコン・キャラ画像
 │
-├── wafuu/  simple/
-│       … 2つのデザイン案（各 css/style.css, js/main.js を持つ）
+├── wafuu/                … ★公開中のデザイン（和風）
+└── simple/               … 非公開のデザイン（シンプル）。ファイルは残しています
 ```
 
-**両案とも共通の `shared/js/data.js` を読み込みます。** データを1か所更新すれば両方に反映されます。
+`wafuu/` も `simple/` も同じ `shared/js/data.js` と `translations.js` を読み込みます。
 
 ---
 
@@ -86,3 +103,21 @@ git push -u origin main
 - `各テーマ/js/main.js` … 各デザインの表示プログラム
 
 更新するのは **`shared/js/data.js` だけ**（編集画面が自動生成します）。
+
+---
+
+## シンプル版を再公開する
+
+シンプル版（`simple/`）は 2026年9月に非公開にしましたが、ファイルはそのまま残しています。
+元に戻す場合は、次の3か所を変更してください。
+
+1. **`index.html`** … `var SINGLE_STYLE = "wafuu";` を `var SINGLE_STYLE = "";` にする
+   （アンケートのあとに和風／シンプルの選択画面が出るようになります）
+2. **`index.html`** … `simple/index.html` へのリンク（`choice-card card-f`）から `style="display:none"` を削除
+3. **`admin.html`** … `<option value="simple" hidden>` の `hidden` を削除（2か所）
+
+さらに検索エンジンにも載せるなら、`simple/*.html` の
+`<meta name="robots" content="noindex,nofollow">` の行を削除してください。
+
+各ページのフッターにある「← Version Select」リンクも `style="display:none"` を外すと復活します。
+

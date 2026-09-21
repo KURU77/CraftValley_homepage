@@ -362,7 +362,8 @@
     </a>
 
     <!-- Simple -->
-    <a href="simple/index.html" class="choice-card card-f">
+    <!-- シンプル版は現在非公開です（ファイルは simple/ に残しています）。再公開するときは下の style を外し、上の SINGLE_STYLE を "" にしてください -->
+    <a href="simple/index.html" class="choice-card card-f" style="display:none">
       <span class="ja-badge" style="color:#111">素</span>
       <div class="card-inner">
         <span class="card-icon" style="font-size:34px">◻</span>
@@ -406,10 +407,24 @@
   var overlay     = document.getElementById("survey-overlay");
   var versionPage = document.getElementById("version-page");
 
-  if (getCookie(COOKIE_NAME)) {
-    // 2回目以降: オーバーレイを非表示にして版選択画面を直接表示
-    overlay.style.display = "none";
+  // ================================================================
+  //  公開するデザイン
+  //    "wafuu" … 和風だけを公開する（現在の設定）。
+  //              アンケートのあと、デザイン選択画面を出さずに和風へ進みます。
+  //    ""      … 和風とシンプルの選択画面を出す（以前の動き）
+  //  ※ シンプル版のファイルは simple/ に残してあります。README を参照。
+  // ================================================================
+  var SINGLE_STYLE = "wafuu";
+
+  function goSite() {
+    if (SINGLE_STYLE) { location.replace(SINGLE_STYLE + "/index.html"); return; }
     versionPage.classList.add("visible");
+  }
+
+  if (getCookie(COOKIE_NAME)) {
+    // 2回目以降: アンケートを出さずにサイトへ
+    overlay.style.display = "none";
+    goSite();
     return; // 以降のサーベイ初期化をすべてスキップ
   }
 
@@ -641,7 +656,7 @@
     document.getElementById("result-sub").textContent = t.resultSub;
     document.getElementById("result-recommendation").innerHTML = res.rec;
     document.getElementById("result-enter-btn").textContent = t.enterSite;
-    document.getElementById("result-enter-btn").href = "wafuu/index.html";
+    document.getElementById("result-enter-btn").href = (SINGLE_STYLE || "wafuu") + "/index.html";
     document.getElementById("result-choose-note").textContent = t.chooseNote;
     document.getElementById("survey-result").classList.add("active");
     updateProgress();
@@ -655,7 +670,7 @@
     overlay.classList.add("hiding");
     setTimeout(function () {
       overlay.style.display = "none";
-      versionPage.classList.add("visible");
+      goSite();
     }, 500);
   }
 
