@@ -296,6 +296,7 @@ main{max-width:1180px;margin:0 auto;padding:20px}
     <nav class="mode-switch" id="mode-switch">
       <button type="button" data-mode="data" class="on">📦 コンテンツ</button>
       <button type="button" data-mode="text">✏️ ページの文言</button>
+      <button type="button" data-mode="survey">🎭 アンケート</button>
     </nav>
 
     <div class="head-actions">
@@ -321,6 +322,12 @@ main{max-width:1180px;margin:0 auto;padding:20px}
       <button class="btn-sm" id="t-btn-reset" title="下書きを破棄して公開中の文言に戻します">公開データに戻す</button>
       <button class="btn-primary" id="t-btn-export">💾 translations.js を書き出す</button>
     </div>
+      <div class="actions-pane"    id="actions-survey">
+      <span class="save-state" id="sv-save-state"></span>
+      <button class="btn-sm" id="sv-btn-preview" title="クッキーに関係なくアンケートを表示して、下書きの会話を確認します">👁 プレビュー</button>
+      <button class="btn-sm" id="sv-btn-reset" title="下書きを破棄して公開中の台本に戻します">公開データに戻す</button>
+      <button class="btn-primary" id="sv-btn-export">💾 survey.js を書き出す</button>
+    </div>
     </div>
   </div>
 </header>
@@ -338,7 +345,7 @@ main{max-width:1180px;margin:0 auto;padding:20px}
         <code>shared/js/</code> フォルダの中の同名ファイルに上書きすると、サイトに公開されます。</li>
     </ol>
     ※ 英語欄を空にすると、英語サイトには日本語がそのまま表示されます（海外向けのため英語入力を推奨）。
-    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px"><b>上のボタンで2つのモードを切り替えられます。</b><br>📦 <b>コンテンツ</b>… 商品・職人・お知らせなど「一覧に並ぶもの」を追加・編集します（書き出し: data.js）<br>✏️ <b>ページの文言</b>… 見出し・説明文・ボタンの文字など「ページに固定で出る文章」を直します（書き出し: translations.js）</div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px"><b>上のボタンで3つのモードを切り替えられます。</b><br>📦 <b>コンテンツ</b>… 商品・職人・お知らせなど「一覧に並ぶもの」を追加・編集します（書き出し: data.js）<br>✏️ <b>ページの文言</b>… 見出し・説明文・ボタンの文字など「ページに固定で出る文章」を直します（書き出し: translations.js）<br>🎭 <b>アンケート</b>… 初回訪問時にキャラが話しかける会話の、名前・セリフ・質問・選択肢を直します（書き出し: survey.js）</div>
   </div>
 
   <div class="tabs" id="tabs">
@@ -362,6 +369,32 @@ main{max-width:1180px;margin:0 auto;padding:20px}
   </div>
 
   <!-- ========== 文言編集 ========== -->
+
+  <!-- ========== アンケート（会話台本）編集 ========== -->
+  <div class="mode-pane" id="pane-survey">
+
+<div class="intro">
+  <b>使い方</b>：初回訪問時に4人のキャラが話しかけるアンケートの、名前・セリフ・質問・選択肢・結びを直します。入力すると自動で下書き保存されます。
+  <ol>
+    <li><b>自動下書き保存</b>＝この端末のブラウザに一時保存されます（まだサイトには反映されません）。</li>
+    <li><b>👁 プレビュー</b>＝下書きの会話を実際の画面で確認できます（回答は送信されず、クッキーも残りません）。</li>
+    <li><b>💾 survey.js を書き出す</b>＝完成したら押して、ダウンロードされた <code>survey.js</code> を
+      <code>shared/js/</code> フォルダの中の同名ファイルに上書きすると、サイトに公開されます。</li>
+  </ol>
+  ※ 各選択肢の「記号」は回答の集計に使うため変更できません。それ以外の文字は自由に直せます。<br>
+  ※ 「登場のセリフ」は1行が1回の表示です。改行で区切ってください。
+</div>
+
+<div class="toolbar">
+  <button class="filter-chip" id="sv-f-changed">変更した項目のみ</button>
+  <button class="filter-chip" id="sv-f-emptyen">英語が未入力のみ</button>
+</div>
+
+<div class="t-tabs" id="sv-tabs"></div>
+<div id="sv-area"></div>
+
+  </div>
+
   <div class="mode-pane" id="pane-text">
 
 
@@ -420,7 +453,8 @@ main{max-width:1180px;margin:0 auto;padding:20px}
   "use strict";
   var DESC = {
     data: "商品・職人・お知らせ・イベント",
-    text: "見出し・説明文・ボタンの文字"
+    text: "見出し・説明文・ボタンの文字",
+    survey: "初回アンケートのキャラ・セリフ・質問"
   };
   function setMode(m) {
     document.querySelectorAll(".mode-switch button").forEach(function (b) {
@@ -428,8 +462,10 @@ main{max-width:1180px;margin:0 auto;padding:20px}
     });
     document.getElementById("pane-data").classList.toggle("on", m === "data");
     document.getElementById("pane-text").classList.toggle("on", m === "text");
+    document.getElementById("pane-survey").classList.toggle("on", m === "survey");
     document.getElementById("actions-data").classList.toggle("on", m === "data");
     document.getElementById("actions-text").classList.toggle("on", m === "text");
+    document.getElementById("actions-survey").classList.toggle("on", m === "survey");
     // 文言編集は画面下に固定バーがあるので、そのときだけ出す
     var fb = document.querySelector(".footbar");
     if (fb) fb.style.display = (m === "text") ? "flex" : "none";
@@ -444,8 +480,9 @@ main{max-width:1180px;margin:0 auto;padding:20px}
   // 前回開いていたモード、またはURLの #text を復元
   var start = "data";
   if (location.hash === "#text") start = "text";
+  else if (location.hash === "#survey") start = "survey";
   else {
-    try { if (localStorage.getItem("cv_admin_mode") === "text") start = "text"; } catch (e) {}
+    try { var _m = localStorage.getItem("cv_admin_mode"); if (_m === "text" || _m === "survey") start = _m; } catch (e) {}
   }
   setMode(start);
 })();
@@ -1579,6 +1616,242 @@ markDraft(localStorage.getItem(STORAGE_KEY) ? true : false);
 
 })();
 
+</script>
+
+<script src="shared/js/survey.js"></script>
+<script>
+(function () {
+"use strict";
+
+var STORAGE_KEY = "cv_survey_draft";
+var ORIGINAL = deepCopy(window.CV_SURVEY || null);
+if (!ORIGINAL) {
+  document.getElementById("sv-area").innerHTML =
+    '<div class="nores">台本ファイル shared/js/survey.js が読み込めませんでした。</div>';
+  return;
+}
+var data = deepCopy(ORIGINAL);
+var activeTab = "chars", filterChanged = false, filterEmptyEn = false;
+
+try {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) { var p = JSON.parse(saved); if (p && p.ja && p.en) { data = p; markDraft(true); } }
+} catch (e) {}
+
+function deepCopy(o) { return JSON.parse(JSON.stringify(o)); }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function markDraft(on) {
+  var el = document.getElementById("sv-save-state");
+  if (el) el.innerHTML = on ? "<b>● 下書きあり</b>（未公開）" : "公開中の内容と同じ";
+}
+function persist() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); markDraft(true); }
+  catch (e) { toast("保存できませんでした", "err"); }
+}
+var toastTimer;
+function toast(msg, kind) {
+  var el = document.getElementById("t-toast") || document.getElementById("toast");
+  el.textContent = msg; el.className = "toast show" + (kind ? " " + kind : "");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { el.className = "toast" + (kind ? " " + kind : ""); }, 2800);
+}
+
+// ── パス操作（"scenes[2].options[1].react" のような指定） ──
+function get(lang, path) {
+  var v = data[lang];
+  path.replace(/\[(\d+)\]/g, ".$1").split(".").forEach(function (k) { v = v == null ? undefined : v[k]; });
+  return v;
+}
+function getOrig(lang, path) {
+  var v = ORIGINAL[lang];
+  path.replace(/\[(\d+)\]/g, ".$1").split(".").forEach(function (k) { v = v == null ? undefined : v[k]; });
+  return v;
+}
+function set(lang, path, val) {
+  var ks = path.replace(/\[(\d+)\]/g, ".$1").split("."), o = data[lang];
+  for (var i = 0; i < ks.length - 1; i++) { if (o[ks[i]] == null) o[ks[i]] = {}; o = o[ks[i]]; }
+  o[ks[ks.length - 1]] = val;
+}
+function changed(path) {
+  return JSON.stringify(get("ja", path)) !== JSON.stringify(getOrig("ja", path)) ||
+         JSON.stringify(get("en", path)) !== JSON.stringify(getOrig("en", path));
+}
+
+// ── 画面に出す項目の定義 ──
+var CHAR_LABEL = { haru: "1人目（案内人・dot-character.png）", mio: "2人目（dot-friend1.png）",
+                   ken: "3人目（dot-friend2.png）", tabi: "4人目（dot-friend3.png）", all: "4人そろったとき" };
+var Q_LABEL = ["Q1 知っていたか", "Q2 浮かぶイメージ", "Q3 工芸品の経験", "Q4 探しているもの", "Q5 自由記述"];
+
+function buildSections() {
+  var secs = [];
+  secs.push({ id: "chars", icon: "🧑‍🤝‍🧑", title: "キャラクターの名前", desc: "会話の名前札に出ます。",
+    fields: Object.keys(CHAR_LABEL).map(function (k) { return { path: "chars." + k, label: CHAR_LABEL[k], type: "text" }; }) });
+
+  secs.push({ id: "ui", icon: "🔘", title: "ボタン・共通の文言", desc: "画面のボタンや、決まった場面で出る短い文です。",
+    fields: [
+      { path: "skip",    label: "「とばす」ボタン", type: "text" },
+      { path: "send",    label: "自由記述の「送る」ボタン", type: "text" },
+      { path: "later",   label: "自由記述の「あとで」ボタン", type: "text" },
+      { path: "enter",   label: "最後の「サイトへ入る」ボタン", type: "text" },
+      { path: "timeout", label: "時間切れのときのセリフ", type: "text" },
+      { path: "door",    label: "扉が開いたときのセリフ", type: "text" }
+    ] });
+
+  data.ja.scenes.forEach(function (sc, i) {
+    var f = [
+      { path: "scenes[" + i + "].intro", label: "登場のセリフ（1行＝1回の表示）", type: "lines" },
+      { path: "scenes[" + i + "].ask",   label: "質問文", type: "area", hint: "<em>…</em> で囲むと金色で強調されます" }
+    ];
+    if (sc.options) {
+      sc.options.forEach(function (o, k) {
+        f.push({ path: "scenes[" + i + "].options[" + k + "]", label: "選択肢 " + (k + 1), type: "option" });
+      });
+    } else {
+      f.push({ path: "scenes[" + i + "].react", label: "答えてくれたときの返事", type: "text" });
+    }
+    secs.push({ id: "scene" + i, icon: ["🏔", "✨", "🤲", "✈️", "💬"][i] || "💬",
+      title: "場面 " + (i + 1) + "　" + Q_LABEL[i],
+      desc: "話すキャラ: " + (CHAR_LABEL[sc.who] || sc.who), fields: f });
+  });
+
+  secs.push({ id: "endings", icon: "🚪", title: "結びのひとこと", desc: "Q4の答えに応じて、最後に4人目が言う言葉です。",
+    fields: Object.keys(data.ja.endings).map(function (k) {
+      var lbl = { artisans: "職人に会いたい", buy: "工芸品が欲しい", story: "歴史を知りたい",
+                  food: "発酵食品", visit: "工房を訪ねたい", "default": "上記以外・未回答" }[k] || k;
+      return { path: "endings." + k, label: lbl, type: "area" };
+    }) });
+  return secs;
+}
+
+function matches(f) {
+  if (filterChanged && !changed(f.path)) return false;
+  if (filterEmptyEn) {
+    var en = get("en", f.path);
+    if (f.type === "option") { if ((en.label || "").trim() && (en.react || "").trim()) return false; }
+    else if (f.type === "lines") { if ((en || []).join("").trim()) return false; }
+    else if (String(en == null ? "" : en).trim()) return false;
+  }
+  return true;
+}
+
+// ── 描画 ──
+function renderTabs() {
+  var secs = buildSections();
+  document.getElementById("sv-tabs").innerHTML = secs.map(function (s) {
+    var n = s.fields.filter(function (f) { return changed(f.path); }).length;
+    return '<button class="t-tab' + (s.id === activeTab ? " on" : "") + '" data-tab="' + s.id + '">' +
+      s.icon + " " + esc(s.title) + (n ? '<span class="n">(' + n + ")</span>" : "") + "</button>";
+  }).join("");
+  Array.prototype.forEach.call(document.querySelectorAll("#sv-tabs .t-tab"), function (b) {
+    b.onclick = function () { activeTab = b.getAttribute("data-tab"); render(); window.scrollTo(0, 0); };
+  });
+}
+
+function renderArea() {
+  var secs = buildSections().filter(function (s) { return (filterChanged || filterEmptyEn) ? true : s.id === activeTab; });
+  var out = "";
+  secs.forEach(function (s) {
+    var flds = s.fields.filter(matches);
+    if (!flds.length) return;
+    out += '<div class="sec"><div class="sec-head"><span class="ico">' + s.icon + "</span><h2>" + esc(s.title) + "</h2></div>" +
+           '<div class="sec-desc">' + esc(s.desc) + '</div><div class="sec-body">';
+    flds.forEach(function (f) { out += renderField(f); });
+    out += "</div></div>";
+  });
+  document.getElementById("sv-area").innerHTML = out || '<div class="nores">該当する項目がありません。</div>';
+  bind();
+}
+
+function col(lang, path, type, val, extra) {
+  var lbl = lang === "ja" ? "日本語" : "English";
+  var emptyCls = (lang === "en" && !String(val == null ? "" : val).trim()) ? " empty-en" : "";
+  var el = type === "text"
+    ? '<input type="text" class="sv-i' + emptyCls + '" data-path="' + esc(path) + '" data-lang="' + lang + '" value="' + esc(val) + '">'
+    : '<textarea class="sv-i' + emptyCls + '" data-path="' + esc(path) + '" data-lang="' + lang + '" data-kind="' + type + '">' + esc(val) + "</textarea>";
+  return '<div class="lang-col ' + lang + '"><label>' + lbl + (extra ? " — " + esc(extra) : "") + "</label>" + el + "</div>";
+}
+
+function renderField(f) {
+  var ch = changed(f.path);
+  var head = '<div class="fld-head"><span class="fld-label">' + esc(f.label) + "</span>" +
+    (f.hint ? '<span class="fld-hint">' + esc(f.hint) + "</span>" : "") +
+    (ch ? '<span class="badge-edited">変更済</span>' : "") +
+    '<span class="fld-key">' + esc(f.path) + "</span></div>";
+  var body = "";
+  if (f.type === "option") {
+    var oj = get("ja", f.path), oe = get("en", f.path);
+    body += '<div class="pair" style="grid-template-columns:70px 1fr;margin-bottom:8px">' +
+      '<div class="lang-col ja"><label>絵文字</label><input type="text" class="sv-i" data-path="' + esc(f.path + ".ic") + '" data-lang="both" value="' + esc(oj.ic) + '"></div>' +
+      '<div class="lang-col ja"><label>記号（集計用・変更不可）</label><input type="text" value="' + esc(oj.val) + '" readonly style="background:#f0ede6;color:#7d766a"></div></div>';
+    body += '<div class="pair">' + col("ja", f.path + ".label", "text", oj.label, "選択肢の文字") + col("en", f.path + ".label", "text", oe.label, "選択肢の文字") + "</div>";
+    body += '<div class="pair" style="margin-top:8px">' + col("ja", f.path + ".react", "text", oj.react, "選んだときの返事") + col("en", f.path + ".react", "text", oe.react, "選んだときの返事") + "</div>";
+  } else if (f.type === "lines") {
+    body = '<div class="pair">' + col("ja", f.path, "lines", (get("ja", f.path) || []).join("\n")) + col("en", f.path, "lines", (get("en", f.path) || []).join("\n")) + "</div>";
+  } else {
+    body = '<div class="pair">' + col("ja", f.path, f.type, get("ja", f.path)) + col("en", f.path, f.type, get("en", f.path)) + "</div>";
+  }
+  return '<div class="fld' + (ch ? " changed" : "") + '" data-key="' + esc(f.path) + '">' + head + body + "</div>";
+}
+
+function bind() {
+  Array.prototype.forEach.call(document.querySelectorAll(".sv-i"), function (el) {
+    el.addEventListener("input", function () {
+      var path = el.getAttribute("data-path"), lang = el.getAttribute("data-lang"), kind = el.getAttribute("data-kind");
+      var v = el.value;
+      if (kind === "lines") v = v.split("\n").map(function (x) { return x.trim(); }).filter(Boolean);
+      if (lang === "both") { set("ja", path, v); set("en", path, v); } else set(lang, path, v);
+      if (lang === "en") el.classList.toggle("empty-en", !String(el.value).trim());
+      var box = el.closest(".fld");
+      if (box) {
+        var k = box.getAttribute("data-key"), ch = changed(k);
+        box.classList.toggle("changed", ch);
+        var badge = box.querySelector(".badge-edited");
+        if (ch && !badge) { var b = document.createElement("span"); b.className = "badge-edited"; b.textContent = "変更済"; box.querySelector(".fld-key").before(b); }
+        else if (!ch && badge) badge.remove();
+      }
+      persist();
+    });
+  });
+}
+function render() { renderTabs(); renderArea(); }
+
+// ── 書き出し ──
+function exportFile() {
+  var header =
+"// ================================================================\n" +
+"// Craft Valley — 初回アンケートの台本 (survey.js)\n" +
+"//   サイトを初めて開いたときに、4人のドットキャラが話しかける会話の内容です。\n" +
+"//   このファイルは編集画面 admin.html（🎭 アンケート）から書き出されています。\n" +
+"//   shared/js/ フォルダの survey.js にこのファイルを上書きすると公開されます。\n" +
+"//\n" +
+"//   ※ 各選択肢の val は回答の集計に使う記号です。変えないでください。\n" +
+"//   ※ 手動でも編集できますが、形式を崩さないようご注意ください。\n" +
+"// ================================================================\n\n";
+  var content = header + "window.CV_SURVEY = " + JSON.stringify(data, null, 2) + ";\n";
+  var blob = new Blob([content], { type: "text/javascript;charset=utf-8" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "survey.js";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  toast("survey.js を書き出しました。shared/js/ に上書きしてください", "ok");
+}
+document.getElementById("sv-btn-export").onclick = exportFile;
+document.getElementById("sv-btn-preview").onclick = function () {
+  persist();
+  window.open("index.html?cvpreview=1", "_blank");
+};
+document.getElementById("sv-btn-reset").onclick = function () {
+  if (!confirm("下書きを破棄して、公開中の台本に戻します。よろしいですか？")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  data = deepCopy(ORIGINAL); markDraft(false); render();
+  toast("公開データに戻しました", "ok");
+};
+document.getElementById("sv-f-changed").onclick = function () { filterChanged = !filterChanged; this.classList.toggle("on", filterChanged); renderArea(); };
+document.getElementById("sv-f-emptyen").onclick = function () { filterEmptyEn = !filterEmptyEn; this.classList.toggle("on", filterEmptyEn); renderArea(); };
+
+render();
+markDraft(!!localStorage.getItem(STORAGE_KEY));
+})();
 </script>
 </body>
 </html>
