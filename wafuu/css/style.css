@@ -27,7 +27,7 @@
   --ff-en: 'Cormorant Garamond',Georgia,serif;
 
   /* Layout: left sidebar nav + main content */
-  --sidebar-w: 200px;
+  --sidebar-w: 215px;
   --nav-h: 0px; /* sidebar nav, no top bar */
   --sp: clamp(56px,7vw,100px);
   --w: 1200px;
@@ -89,6 +89,15 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
   width:100%;text-align:center;
   position:relative;z-index:1;
 }
+/* ロゴ全体がトップページへのリンク */
+a.sidebar-logo{
+  text-decoration:none;cursor:pointer;
+  padding-top:4px;padding-bottom:18px;
+  transition:opacity .25s;
+}
+a.sidebar-logo:hover{opacity:.82}
+a.sidebar-logo:hover .sidebar-kamon{border-color:var(--kin2)}
+a.sidebar-logo:focus-visible{outline:2px solid var(--kin2);outline-offset:3px}
 .sidebar-kamon{
   width:46px;height:46px;
   border:1.5px solid rgba(196,162,64,.5);
@@ -108,38 +117,44 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 
 /* Vertical navigation links */
 .sidebar-nav{
-  display:flex;flex-direction:column;align-items:center;
+  display:flex;flex-direction:column;align-items:stretch;
   gap:0;list-style:none;
   flex:1;justify-content:center;
   position:relative;z-index:1;
   width:100%;
 }
-.sidebar-nav li{width:100%;text-align:center}
+.sidebar-nav li{width:100%}
+/* 日本語・英語とも横書き。左端を揃えるので、画面幅が変わっても
+   文字の始まる位置がぶれない */
 .sidebar-nav a{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:11px 12px;
+  display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  padding:11px 18px;
   font-family:var(--ff-ja);
   color:rgba(244,237,216,.5);
   transition:all .3s;
   position:relative;
-  font-size:12px;
-  letter-spacing:.2em;
+  letter-spacing:.08em;
+  text-align:left;
 }
 .sidebar-nav a:hover,
-.sidebar-nav a.active{color:var(--kin2);}
+.sidebar-nav a.active{color:var(--kin2);background:rgba(196,162,64,.06);}
 .sidebar-nav a.active::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--aka);
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--aka);
 }
-/* Japanese label above each link */
+/* 日本語ラベル（横書き） */
 .nav-ja{
-  font-family:var(--ff-ja);font-size:10px;
-  writing-mode:vertical-rl;
-  letter-spacing:.3em;
-  height:40px;
-  display:flex;align-items:center;
-  opacity:.8;
+  font-family:var(--ff-ja);
+  font-size:14px;
+  letter-spacing:.12em;
+  line-height:1.4;
+  white-space:nowrap;
+  opacity:.9;
 }
-.nav-en{font-size:9px;letter-spacing:.3em;text-transform:uppercase;opacity:.5}
+/* 英語ラベル（日本語の下に小さく） */
+.nav-en{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  opacity:.45;line-height:1.3;white-space:nowrap;
+}
 .sidebar-nav a:hover .nav-ja,
 .sidebar-nav a.active .nav-ja{opacity:1}
 
@@ -734,8 +749,8 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 
 /* ── Responsive ── */
 @media(max-width:1100px){
-  :root{--sidebar-w:160px}
-  .sidebar-nav a{padding:10px 8px}
+  :root{--sidebar-w:200px}
+  .sidebar-nav a{padding:10px 16px}
 }
 @media(max-width:900px){
   :root{--sidebar-w:0px}
@@ -881,11 +896,11 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
   /* ── 押しやすさ ── */
   /* ※ メニューは梵鐘ボタン(58x84)。既に十分な大きさなのでサイズは変更しない */
   .sidebar-nav a{
-    display:flex;align-items:center;gap:10px;
-    min-height:50px;padding:12px 22px;
+    display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+    min-height:50px;justify-content:center;padding:10px 20px;
   }
   .sidebar-nav .nav-ja{font-size:15px}
-  .sidebar-nav .nav-en{font-size:11px;opacity:.65}
+  .sidebar-nav .nav-en{font-size:10.5px;opacity:.5}
   .sidebar-lang,.mobile-lang{min-height:44px;padding:0 16px;font-size:13px}
 
   .btn-primary,.btn-outline,.btn-red,.btn-pink{
@@ -980,4 +995,37 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 
 @media(max-width:900px){
   .cv-footer-mark{width:48px;height:48px}
+}
+
+/* ================================================================
+   フッター — 国内の事業者向けサイトへの案内
+   （海外のお客様向けサイトに迷い込んだ国内事業者が、
+     B2B用のサイトへ移動できるようにするための導線）
+================================================================ */
+.footer-b2b{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  flex-wrap:wrap;
+  margin:28px 0 0;padding:16px 20px;
+  background:rgba(196,162,64,.06);
+  border:1px solid rgba(196,162,64,.25);
+}
+.footer-b2b-lead{
+  font-family:var(--ff-ja);font-size:12px;letter-spacing:.1em;
+  color:rgba(244,237,216,.6);margin:0;
+}
+.footer-b2b-link{
+  display:inline-flex;align-items:center;gap:10px;
+  min-height:44px;padding:0 18px;
+  font-family:var(--ff-ja);font-size:13px;letter-spacing:.08em;
+  color:var(--kin2);
+  border:1px solid rgba(196,162,64,.5);
+  transition:background .25s,color .25s;
+  white-space:nowrap;
+}
+.footer-b2b-link:hover{background:rgba(196,162,64,.14);color:var(--washi)}
+.footer-b2b-arrow{font-size:12px;opacity:.75}
+
+@media(max-width:600px){
+  .footer-b2b{flex-direction:column;align-items:stretch;text-align:center;padding:14px 16px}
+  .footer-b2b-link{justify-content:center}
 }

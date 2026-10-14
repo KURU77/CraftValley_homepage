@@ -11,9 +11,23 @@
     window.CV_LANG = lang;
     localStorage.setItem("cv_lang", lang);
     applyTranslations();
+    applyB2BLinks();
     updateLangToggle();
     document.documentElement.lang = lang;
     document.dispatchEvent(new Event("cv-lang-change"));
+  }
+
+  // ================================================================
+  //  国内の事業者向けサイト（B2B）のURL
+  //  ここを書き換えると、全ページのフッターのリンク先が変わります。
+  //  リポジトリ: hina314ry-dev/craft-valley-domestic
+  // ================================================================
+  var CV_B2B_URL = "https://hina314ry-dev.github.io/craft-valley-domestic/";
+
+  function applyB2BLinks() {
+    document.querySelectorAll("[data-cv-b2b]").forEach(function (a) {
+      if (CV_B2B_URL) a.href = CV_B2B_URL;
+    });
   }
 
   function applyTranslations() {

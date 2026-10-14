@@ -231,7 +231,9 @@ const T = {
       "newsletterBtn": "Subscribe",
       "copyright": "© 2026 Craft Valley Initiative. All rights reserved.",
       "privacy": "Privacy Policy",
-      "terms": "Terms of Use"
+      "terms": "Terms of Use",
+      "b2b": "Wholesale / B2B site",
+      "b2bLead": "Are you a business in Japan?"
     }
   },
   "ja": {
@@ -461,7 +463,9 @@ const T = {
       "newsletterBtn": "登録する",
       "copyright": "© 2026 クラフトバレー実行委員会. All rights reserved.",
       "privacy": "プライバシーポリシー",
-      "terms": "利用規約"
+      "terms": "利用規約",
+      "b2b": "卸売・法人向けサイトへ",
+      "b2bLead": "国内の事業者のお客様へ"
     }
   }
 };

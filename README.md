@@ -123,3 +123,23 @@ git push -u origin main
 
 各ページのフッターにある「← Version Select」リンクも `style="display:none"` を外すと復活します。
 
+---
+
+## 国内事業者向けサイト（B2B）へのリンク
+
+海外のお客様向けのこのサイトに国内の事業者がたどり着いた場合に備えて、
+**全ページのフッター**に B2B サイトへの案内を置いています。
+
+- リンク先リポジトリ: `hina314ry-dev/craft-valley-domestic`
+- 現在のリンク先: `https://hina314ry-dev.github.io/craft-valley-domestic/`
+
+**URLを変えるときは `wafuu/js/main.js` の `CV_B2B_URL` を1か所直すだけ**で、
+全ページのリンクに反映されます（各HTMLの `href` は、JSが動かない場合の控えです）。
+
+案内の文言（見出し・リンク文字）は、編集画面の **✏️ ページの文言 → フッター** から直せます。
+
+> ⚠️ **2026年10月時点で、リンク先はまだ表示できません。**
+> `hina314ry-dev/craft-valley-domestic` は公開リポジトリで `index.html` も置かれていますが、
+> **GitHub Pages が有効になっていない**ため 404 になります。
+> 先方のリポジトリで **Settings → Pages → Source を `main` / `(root)`** に設定すると公開されます。
+

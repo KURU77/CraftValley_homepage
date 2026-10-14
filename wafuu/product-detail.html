@@ -30,10 +30,10 @@
 <div class="page-wrapper">
 
   <aside class="sidebar" id="main-sidebar">
-    <div class="sidebar-logo">
+    <a href="index.html" class="sidebar-logo" aria-label="Craft Valley — ホームへ">
       <div class="sidebar-kamon"><img src="../shared/img/logo-mark.png" alt="Craft Valley" class="cv-mark"></div>
       <span class="sidebar-logo-text">クラフトバレー</span>
-    </div>
+    </a>
     <ul class="sidebar-nav">
       <li><a href="index.html"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></a></li>
       <li><a href="about.html"><span class="nav-ja">概要</span><span class="nav-en">About</span></a></li>
@@ -114,6 +114,14 @@
               <button type="submit" data-i18n="footer.newsletterBtn">Subscribe</button>
             </form>
           </div>
+        </div>
+        <!-- 国内の事業者向けサイトへの案内（URLは shared/js/main.js の CV_B2B_URL で一括管理）-->
+        <div class="footer-b2b">
+          <p class="footer-b2b-lead" data-i18n="footer.b2bLead">For Japanese businesses</p>
+          <a class="footer-b2b-link" href="https://hina314ry-dev.github.io/craft-valley-domestic/" data-cv-b2b target="_blank" rel="noopener">
+            <span data-i18n="footer.b2b">Wholesale / B2B</span>
+            <span class="footer-b2b-arrow" aria-hidden="true">↗</span>
+          </a>
         </div>
         <div class="footer-bottom">
           <p class="footer-copy" data-i18n="footer.copyright">© 2026 Craft Valley Initiative. All rights reserved.</p>
