@@ -435,6 +435,16 @@
 (function(){
   "use strict";
 
+  // ================================================================
+  //  アンケートを毎回表示するか
+  //
+  //    true  … 来訪のたびに必ず表示する（いまは試作中なのでこちら）
+  //    false … 一度答えた人には COOKIE_DAYS の間、表示しない（本番向け）
+  //
+  //  ▼ 本実装のときは false に戻してください。
+  // ================================================================
+  var ALWAYS_SHOW_SURVEY = true;
+
   // ── 訪問済みチェック（クッキー） ────────────────────────────
   // すでにサーベイを完了 or スキップした訪問者は即スキップ
   // クッキーは有効期限が設定でき、公開サイトとして適切
@@ -450,6 +460,7 @@
   /** クッキーを書く（公開後は Secure フラグも追加推奨） */
   function setCookie(name, value, days) {
     if (/[?&]cvpreview=1/.test(location.search)) return;  // プレビュー中は記録しない
+    if (ALWAYS_SHOW_SURVEY) return;                       // 毎回表示する間は記録しない
     var expires = new Date(Date.now() + days * 864e5).toUTCString();
     document.cookie = name + "=" + encodeURIComponent(value) +
       "; expires=" + expires +
@@ -475,8 +486,8 @@
     versionPage.classList.add("visible");
   }
 
-  if (getCookie(COOKIE_NAME) && !/[?&]cvpreview=1/.test(location.search)) {
-    // 2回目以降: アンケートを出さずにサイトへ（プレビュー中は除く）
+  if (!ALWAYS_SHOW_SURVEY && getCookie(COOKIE_NAME) && !/[?&]cvpreview=1/.test(location.search)) {
+    // 2回目以降: アンケートを出さずにサイトへ（毎回表示する設定・プレビュー中は除く）
     overlay.style.display = "none";
     goSite();
     return; // 以降のサーベイ初期化をすべてスキップ
