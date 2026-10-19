@@ -116,10 +116,13 @@
             </div>
           </div>
           <div class="concept-image-frame fade-in fade-in-delay-2">
-            <div data-cv-img="about-region" class="image-placeholder" style="aspect-ratio:1;min-height:360px;height:auto">
-              <span class="image-placeholder-label">🗾</span>
-              <div class="image-placeholder-note">REGION IMAGE — Illustrated map or photo collage of all three prefecture areas with cultural icons.</div>
-            </div>
+            <!-- トップページと同じ「対象地域を示す地図」。
+                 中身は shared/data/cv-area.js、描画は shared/js/cv-map.js -->
+            <div class="cv-map" id="cv-map-about"
+                 data-accent="#8B1A1A"
+                 data-basemap="pale"
+                 role="img"
+                 aria-label="Craft Valley / 飛能越 — 対象6市のおよその範囲"></div>
           </div>
         </div>
 
@@ -228,6 +231,8 @@
 <script src="../shared/js/data.js"></script>
 <script src="../shared/js/cv-runtime.js"></script>
 <script src="../shared/js/cv-intro.js"></script>
+<script src="../shared/data/cv-area.js"></script>
+<script src="../shared/js/cv-map.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

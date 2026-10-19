@@ -577,13 +577,6 @@ const CV_DATA = {
       "image": ""
     },
     {
-      "id": "about-region",
-      "label": "About：地域の紹介図",
-      "page": "about.html",
-      "hint": "地図や写真のコラージュ",
-      "image": ""
-    },
-    {
       "id": "about-craft1",
       "label": "About：工芸写真①",
       "page": "about.html",

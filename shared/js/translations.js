@@ -158,11 +158,11 @@ const T = {
       ]
     },
     "about": {
-      "heading": "About Craft Valley",
+      "heading": "What is Craft Valley",
       "visionHeading": "Our Vision",
-      "vision": "We believe that exceptional craft deserves a global audience. Craft Valley is building bridges between Japan's most dedicated artisans and people around the world who value authenticity, beauty and the stories behind objects.",
+      "vision": "We believe Japan's finest crafts deserve to be shared with the world. Craft Valley is building a bridge between Japan's most dedicated artisans and people everywhere who seek authentic quality, beauty, and the stories behind what they own.",
       "missionHeading": "Our Mission",
-      "mission": "To sustain traditional crafts by connecting their makers directly with international markets — starting with the United States — while preserving the landscapes, communities and knowledge that make this region unique.",
+      "mission": "Our mission is to connect the next generation of traditional artisans directly with customers around the world—preserving our region's cultural heritage, keeping its crafts alive for generations to come, and helping people rediscover their timeless appeal and find new ways to enjoy them.",
       "regionHeading": "The Region",
       "region": "The Craft Valley area is known in Japanese as Hinouetsu — a name formed from Hida, Noto and Etchu, the historical provinces that meet here. It covers six cities: Takaoka, Himi, Nanto and Imizu in Toyama, Komatsu in Ishikawa, and Hida in Gifu. Copper casting, lacquerware, woodcarving, handmade paper, cutlery, ceramics and fermented foods have all been handed down in this corridor.",
       "timelineHeading": "Craft Valley Timeline",
@@ -390,11 +390,11 @@ const T = {
       ]
     },
     "about": {
-      "heading": "クラフトバレーについて",
+      "heading": "クラフトバレーとは",
       "visionHeading": "ビジョン",
-      "vision": "私たちは、卓越した工芸品は世界中の人々に届けられるべきだと信じています。クラフトバレーは、日本で最も真摯に仕事に向き合う職人たちと、本物の価値・美しさ・物語を求める世界の人々をつなぐ架け橋を構築しています。",
+      "vision": "私たちは、日本の卓越した工芸品は世界中の人々に届けられるべきだと信じています。クラフトバレーは、日本で最も真摯に工芸品に向き合う職人たちと、本物の価値・美しさ・物語を求める世界の人々をつなぐ架け橋を構築しています。",
       "missionHeading": "ミッション",
-      "mission": "伝統工芸の継承者が国際市場（まずは米国市場）と直接つながれる仕組みを構築し、この地域の自然・地域社会・知識を守りながら工芸を持続させること。",
+      "mission": "伝統工芸の継承者が国際市場と直接つながれる仕組みを構築し、この地域の伝統文化を守りながら工芸を持続させ、工芸品の魅力の再発見と新発見をもたらすこと。",
       "regionHeading": "この地域について",
       "region": "Craft Valley の対象地域は、日本語で「飛能越（ひのうえつ）」と呼びます。飛騨・能登（石川）・越中（富山）の頭文字をとった呼び名です。富山県の高岡市・氷見市・南砺市・射水市、石川県小松市、岐阜県飛騨市の6市からなり、銅器・漆器・木彫・和紙・刃物・陶磁・発酵食品など、多様な手仕事が受け継がれてきた地帯です。",
       "timelineHeading": "クラフトバレー年表",
