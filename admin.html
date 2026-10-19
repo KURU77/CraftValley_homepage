@@ -285,6 +285,27 @@ main{max-width:1180px;margin:0 auto;padding:20px}
   .admin-switch a{flex:1;justify-content:center;min-height:44px;font-size:12px}
 }
 
+
+/* ── ページ画像タブ ── */
+.pimg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.pimg{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  display:flex;flex-direction:column}
+.pimg-head{padding:12px 14px 10px;border-bottom:1px solid var(--line)}
+.pimg-head .t{font-weight:700;font-size:13.5px;display:block}
+.pimg-head .p{font-size:11px;color:var(--sub);margin-top:2px;display:block}
+.pimg-prev{height:172px;background:#f3f1ea center/cover no-repeat;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--sub);font-size:12px;text-align:center;padding:10px}
+.pimg-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.pimg-hint{font-size:11px;color:var(--sub);line-height:1.6}
+.pimg-body input[type=file]{font-size:12px}
+.pimg-actions{display:flex;gap:8px;flex-wrap:wrap}
+.pimg.has .pimg-prev{color:transparent}
+@media(max-width:760px){
+  .pimg-grid{grid-template-columns:1fr}
+  .pimg-prev{height:150px}
+  .pimg-body input[type=file]{min-height:44px}
+}
 </style>
 </head>
 <body>
@@ -345,7 +366,7 @@ main{max-width:1180px;margin:0 auto;padding:20px}
         <code>shared/js/</code> フォルダの中の同名ファイルに上書きすると、サイトに公開されます。</li>
     </ol>
     ※ 英語欄を空にすると、英語サイトには日本語がそのまま表示されます（海外向けのため英語入力を推奨）。
-    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px"><b>上のボタンで3つのモードを切り替えられます。</b><br>📦 <b>コンテンツ</b>… 商品・職人・お知らせなど「一覧に並ぶもの」を追加・編集します（書き出し: data.js）<br>✏️ <b>ページの文言</b>… 見出し・説明文・ボタンの文字など「ページに固定で出る文章」を直します（書き出し: translations.js）<br>🎭 <b>アンケート</b>… 初回訪問時にキャラが話しかける会話の、名前・セリフ・質問・選択肢を直します（書き出し: survey.js）</div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px"><b>上のボタンで3つのモードを切り替えられます。</b><br>📦 <b>コンテンツ</b>… 商品・職人・お知らせなどの追加・編集と、ページ内の固定画像（キービジュアル等）の差し替え（書き出し: data.js）<br>✏️ <b>ページの文言</b>… 見出し・説明文・ボタンの文字など「ページに固定で出る文章」を直します（書き出し: translations.js）<br>🎭 <b>アンケート</b>… 初回訪問時にキャラが話しかける会話の、名前・セリフ・質問・選択肢を直します（書き出し: survey.js）</div>
   </div>
 
   <div class="tabs" id="tabs">
@@ -355,6 +376,7 @@ main{max-width:1180px;margin:0 auto;padding:20px}
     <button class="tab" data-type="events">📅 イベント</button>
     <button class="tab" data-type="sns">📱 SNS投稿</button>
     <button class="tab" data-type="diary">📔 関係者日記</button>
+    <button class="tab" data-type="pageImages">🖼 ページ画像</button>
   </div>
 
   <div class="list-head">
@@ -656,6 +678,7 @@ main{max-width:1180px;margin:0 auto;padding:20px}
       return d[key] || deepCopy(pub[key]) || [];
     }
     d.producers=keep("producers"); d.products=keep("products");
+    d.pageImages=keep("pageImages");
     d.news=keep("news"); d.sns=keep("sns"); d.diary=keep("diary");
     d.events=d.events||deepCopy(pub.events)||{upcoming:[],past:[]};
     var pe=pub.events||{};
@@ -687,6 +710,10 @@ main{max-width:1180px;margin:0 auto;padding:20px}
 
   // ── タブ ───────────────────────────────────────────────────────
   document.getElementById("tabs").addEventListener("click",function(e){
+    var _b=e.target.closest("[data-type]");
+    if(_b && _b.getAttribute("data-type")!=="pageImages"){
+      document.getElementById("btn-add").style.display="";
+    }
     var t=e.target.closest(".tab"); if(!t)return;
     document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active");});
     t.classList.add("active");
@@ -695,7 +722,64 @@ main{max-width:1180px;margin:0 auto;padding:20px}
   });
 
   // ── 一覧描画 ───────────────────────────────────────────────────
+
+  // ── ページ画像（キービジュアル等の固定枠） ────────────────────
+  //   商品などと違い「追加・削除」はせず、決まった枠の写真を入れ替えるだけ。
+  function renderPageImages(){
+    var list=data.pageImages||[];
+    document.getElementById("list-title").textContent="🖼 ページ画像";
+    var done=list.filter(function(o){return isImg(o.image);}).length;
+    document.getElementById("list-count").textContent="（"+done+" / "+list.length+"枚 設定済み）";
+    document.getElementById("btn-add").style.display="none";
+
+    var area=document.getElementById("list-area");
+    if(!list.length){ area.innerHTML='<div class="empty">ページ画像の枠がありません。</div>'; return; }
+
+    var html='<div class="pimg-grid">';
+    list.forEach(function(o,i){
+      var has=isImg(o.image);
+      html+='<div class="pimg'+(has?' has':'')+'">'+
+        '<div class="pimg-head"><span class="t">'+esc(o.label)+'</span>'+
+          '<span class="p">'+esc(o.page)+'</span></div>'+
+        '<div class="pimg-prev" id="pimg_prev_'+i+'"'+
+          (has?' style="background-image:url(\''+o.image.replace(/'/g,"%27")+'\')"':'')+'>'+
+          (has?'':'画像が未設定です')+'</div>'+
+        '<div class="pimg-body">'+
+          '<p class="pimg-hint">'+esc(o.hint||"")+'</p>'+
+          '<input type="file" accept="image/*" id="pimg_file_'+i+'">'+
+          '<div class="pimg-actions">'+
+            (has?'<button class="btn-danger btn-sm" data-pimg-del="'+i+'">画像を削除</button>':'')+
+          '</div>'+
+        '</div></div>';
+    });
+    area.innerHTML=html+'</div>';
+
+    list.forEach(function(o,i){
+      var fi=document.getElementById("pimg_file_"+i);
+      if(fi) fi.onchange=function(){
+        var f=fi.files&&fi.files[0]; if(!f) return;
+        // キービジュアルは画面いっぱいに出るので、少し大きめに取り込む
+        window.CV_IMG_MAX=1600;
+        processImage(f,function(dataUrl){
+          window.CV_IMG_MAX=1200;
+          data.pageImages[i].image=dataUrl;
+          persist(); renderPageImages();
+          toast("画像を設定しました。書き出して反映してください","ok");
+        });
+      };
+    });
+    area.querySelectorAll("[data-pimg-del]").forEach(function(b){
+      b.onclick=function(){
+        var i=+b.getAttribute("data-pimg-del");
+        if(!confirm("この画像を削除します。よろしいですか？")) return;
+        data.pageImages[i].image=""; persist(); renderPageImages();
+        toast("画像を削除しました","ok");
+      };
+    });
+  }
+
   function renderList(){
+    if(currentType==="pageImages"){ renderPageImages(); return; }
     var sc=SCHEMAS[currentType];
     document.getElementById("list-title").textContent=sc.icon+" "+sc.label;
     var list=getList(currentType);
@@ -870,7 +954,7 @@ main{max-width:1180px;margin:0 auto;padding:20px}
     reader.onload=function(){
       var img=new Image();
       img.onload=function(){
-        var max=1200, w=img.width, h=img.height;
+        var max=(window.CV_IMG_MAX||1200), w=img.width, h=img.height;
         if(w>max||h>max){ if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;} }
         var cv=document.createElement("canvas");cv.width=w;cv.height=h;
         cv.getContext("2d").drawImage(img,0,0,w,h);

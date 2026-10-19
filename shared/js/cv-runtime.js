@@ -23,6 +23,30 @@
   }
   window.CV_isRealImage = isRealImage;
 
+
+  // ── ページ内の固定画像（キービジュアル等）を差し替え ──────────
+  //   HTML側に data-cv-img="○○" と書いた枠へ、
+  //   CV_DATA.pageImages の同じ id の画像を流し込む。
+  //   画像が未登録の枠は、これまで通り説明文のまま残す。
+  function applyPageImages() {
+    if (typeof CV_DATA === "undefined" || !CV_DATA.pageImages) return;
+    var map = {};
+    CV_DATA.pageImages.forEach(function (o) { if (o && o.id) map[o.id] = o.image; });
+    document.querySelectorAll("[data-cv-img]").forEach(function (ph) {
+      var src = map[ph.getAttribute("data-cv-img")];
+      if (!isRealImage(src)) return;
+      var note = ph.querySelector(".image-placeholder-note");
+      if (note) note.textContent = src;      // upgradePlaceholder が読む場所に入れる
+      else {
+        var d = document.createElement("div");
+        d.className = "image-placeholder-note";
+        d.textContent = src; ph.appendChild(d);
+      }
+      upgradePlaceholder(ph);
+    });
+  }
+  window.CV_applyPageImages = applyPageImages;
+
   // ── プレースホルダーを実画像に差し替え ──────────────────────────
   function upgradePlaceholder(ph) {
     if (!ph || ph.dataset.cvUpgraded) return;
@@ -93,6 +117,7 @@
         if (parsed.news) CV_DATA.news = parsed.news;
         if (parsed.sns) CV_DATA.sns = parsed.sns;
         if (parsed.diary) CV_DATA.diary = parsed.diary;
+        if (parsed.pageImages) CV_DATA.pageImages = parsed.pageImages;
         // 画面上にプレビュー中バナーを表示
         document.addEventListener("DOMContentLoaded", function () {
           var bar = document.createElement("div");
@@ -289,4 +314,12 @@
     startSns();
     startDiary();
   }
+
+  // ページ内の固定画像を、読み込み完了時に適用する
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyPageImages);
+  } else {
+    applyPageImages();
+  }
+
 })();

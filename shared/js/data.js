@@ -553,5 +553,84 @@ const CV_DATA = {
       "bodyEn": "The mountains outside the studio window have turned brilliant green almost overnight.\nShunkei lacquer dries differently with each season, so these days I keep a close eye on the urushi.\nDuring the holidays we even welcomed visitors from overseas to the studio.",
       "image": ""
     }
+  ],
+  "pageImages": [
+    {
+      "id": "hero",
+      "label": "トップ：キービジュアル",
+      "page": "index.html",
+      "hint": "画面上部の大きな写真。縦長（3:4）・1600px程度",
+      "image": ""
+    },
+    {
+      "id": "concept",
+      "label": "トップ：コンセプト欄の写真",
+      "page": "index.html",
+      "hint": "縦長（3:4）",
+      "image": ""
+    },
+    {
+      "id": "about-hero",
+      "label": "About：上部の大きな写真",
+      "page": "about.html",
+      "hint": "横長。3地域を見渡す風景など",
+      "image": ""
+    },
+    {
+      "id": "about-region",
+      "label": "About：地域の紹介図",
+      "page": "about.html",
+      "hint": "地図や写真のコラージュ",
+      "image": ""
+    },
+    {
+      "id": "about-craft1",
+      "label": "About：工芸写真①",
+      "page": "about.html",
+      "hint": "銅器・鋳物など",
+      "image": ""
+    },
+    {
+      "id": "about-craft2",
+      "label": "About：工芸写真②",
+      "page": "about.html",
+      "hint": "和紙・木彫など",
+      "image": ""
+    },
+    {
+      "id": "about-craft3",
+      "label": "About：工芸写真③",
+      "page": "about.html",
+      "hint": "風景など",
+      "image": ""
+    },
+    {
+      "id": "past-event1",
+      "label": "過去イベント：写真①",
+      "page": "events-past.html",
+      "hint": "横長（16:9）",
+      "image": ""
+    },
+    {
+      "id": "past-event2",
+      "label": "過去イベント：写真②",
+      "page": "events-past.html",
+      "hint": "横長（16:9）",
+      "image": ""
+    },
+    {
+      "id": "past-event3",
+      "label": "過去イベント：写真③",
+      "page": "events-past.html",
+      "hint": "横長（16:9）",
+      "image": ""
+    },
+    {
+      "id": "contact-map",
+      "label": "お問い合わせ：地図・写真",
+      "page": "contact.html",
+      "hint": "所在地の地図画像など",
+      "image": ""
+    }
   ]
 };
